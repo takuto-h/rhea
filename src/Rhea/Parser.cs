@@ -59,7 +59,6 @@ namespace Rhea
         {
             if (mHeadToken == TokenType.Def)
             {
-                SourceInfo info = mLexer.GetSourceInfo();
                 LookAhead();
                 if (mHeadToken != TokenType.Identifier)
                 {
@@ -67,12 +66,50 @@ namespace Rhea
                         Expected("Identifier"), mLexer.GetSourceInfo()
                     );
                 }
-                ValueSymbol selector = ValueSymbol.Intern((string)mLexer.Value);
+                ValueSymbol symbol = ValueSymbol.Intern((string)mLexer.Value);
                 LookAhead();
-                IExpr valueExpr = ParseExpression();
-                return new ExprDefVar(selector, valueExpr, info);
+                if (mHeadToken == TokenType.Colon)
+                {
+                    return ParseMethodDefinition(symbol);
+                }
+                return ParseVariableDefinition(symbol);
             }
             return ParsePrimary();
+        }
+        
+        private IExpr ParseVariableDefinition(ValueSymbol selector)
+        {
+            if (mHeadToken != TokenType.Equal)
+            {
+                throw new RheaException(
+                    Expected("Equal"), mLexer.GetSourceInfo()
+                );
+            }
+            SourceInfo info = mLexer.GetSourceInfo();
+            LookAhead();
+            return new ExprDefVar(selector, ParseExpression(), info);
+        }
+        
+        private IExpr ParseMethodDefinition(ValueSymbol klass)
+        {
+            LookAhead();
+            if (mHeadToken != TokenType.Identifier)
+            {
+                throw new RheaException(
+                    Expected("Identifier"), mLexer.GetSourceInfo()
+                );
+            }
+            ValueSymbol selector = ValueSymbol.Intern((string)mLexer.Value);
+            LookAhead();
+            if (mHeadToken != TokenType.Equal)
+            {
+                throw new RheaException(
+                    Expected("Equal"), mLexer.GetSourceInfo()
+                );
+            }
+            SourceInfo info = mLexer.GetSourceInfo();
+            LookAhead();
+            return new ExprDefMethod(klass, selector, ParseExpression(), info);
         }
         
         private IExpr ParsePrimary()
