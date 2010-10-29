@@ -4,6 +4,11 @@ namespace Rhea
     {
         private int mIntValue;
         
+        public ValueSymbol Klass
+        {
+            get { return ValueSymbol.Intern("Int"); }
+        }
+        
         public ValueInt(int intValue)
         {
             mIntValue = intValue;

@@ -9,6 +9,11 @@ namespace Rhea
         private IEnv mEnv;
         private SourceInfo mInfo;
         
+        public ValueSymbol Klass
+        {
+            get { return ValueSymbol.Intern("Closure"); }
+        }
+        
         public ValueClosure(
             IList<ValueSymbol> paras,
             ISList<IInsn> insns,

@@ -115,12 +115,42 @@ namespace Rhea
         private IExpr ParsePrimary()
         {
             IExpr expr = ParseAtom();
-            while (mHeadToken == TokenType.LeftParen)
+            while (mHeadToken == TokenType.LeftParen ||
+                   mHeadToken == TokenType.Dot)
             {
                 SourceInfo info = mLexer.GetSourceInfo();
-                expr = new ExprCall(expr, ParseArguments(), info);
+                switch (mHeadToken)
+                {
+                case TokenType.LeftParen:
+                    expr = new ExprCall(expr, ParseArguments(), info);
+                    break;
+                case TokenType.Dot:
+                    expr = ParseMessageSend(expr);
+                    break;
+                }
             }
             return expr;
+        }
+        
+        private IExpr ParseMessageSend(IExpr recvExpr)
+        {
+            SourceInfo info = mLexer.GetSourceInfo();
+            LookAhead();
+            if (mHeadToken != TokenType.Identifier)
+            {
+                throw new RheaException(
+                    Expected("Identifier"), mLexer.GetSourceInfo()
+                );
+            }
+            ValueSymbol selector = ValueSymbol.Intern((string)mLexer.Value);
+            LookAhead();
+            if (mHeadToken != TokenType.LeftParen)
+            {
+                throw new RheaException(
+                    Expected("LeftParen"), mLexer.GetSourceInfo()
+                );
+            }
+            return new ExprSend(recvExpr, selector, ParseArguments(), info);
         }
         
         private IList<IExpr> ParseArguments()

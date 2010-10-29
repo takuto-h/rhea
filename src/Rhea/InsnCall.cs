@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Rhea
 {
@@ -16,7 +15,7 @@ namespace Rhea
         
         public void Execute(VM vm)
         {
-            IList<IValue> args = new List<IValue>();
+            List<IValue> args = new List<IValue>();
             for (int i = 0; i < mArgCount; i++)
             {
                 args.Add(vm.Pop());

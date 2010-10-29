@@ -8,6 +8,11 @@ namespace Rhea
         
         public string Name { get; private set; }
         
+        public ValueSymbol Klass
+        {
+            get { return ValueSymbol.Intern("Symbol"); }
+        }
+        
         static ValueSymbol()
         {
             smInstances = new Dictionary<string, ValueSymbol>();

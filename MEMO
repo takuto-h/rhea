@@ -1,4 +1,6 @@
+InsnSend, InsnGetMethod TryGetMethod
 dynamic-wind
 interactive :q symbol literal
 improve interactive printing of line number and lexer
 parse error positioning
+arguments IList -> List

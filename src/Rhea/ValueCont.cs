@@ -8,6 +8,11 @@ namespace Rhea
         private ISList<IValue> mStack;
         private IEnv mEnv;
         
+        public ValueSymbol Klass
+        {
+            get { return ValueSymbol.Intern("Cont"); }
+        }
+        
         public ValueCont(ISList<IInsn> insns, ISList<IValue> stack, IEnv env)
         {
             mInsns = insns;
