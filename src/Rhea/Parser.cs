@@ -156,11 +156,7 @@ namespace Rhea
                 LookAhead();
                 break;
             case TokenType.Identifier:
-                expr = new ExprGetVar(
-                    ValueSymbol.Intern((string)mLexer.Value),
-                    mLexer.GetSourceInfo()
-                );
-                LookAhead();
+                expr = ParseReference();
                 break;
             case TokenType.Colon:
                 expr = ParseSymbolLiteral();
@@ -175,6 +171,33 @@ namespace Rhea
                 );
             }
             return expr;
+        }
+        
+        private IExpr ParseReference()
+        {
+            ValueSymbol symbol = ValueSymbol.Intern((string)mLexer.Value);
+            SourceInfo info = mLexer.GetSourceInfo();
+            LookAhead();
+            if (mHeadToken == TokenType.Colon)
+            {
+                return ParseMethodReference(symbol);
+            }
+            return new ExprGetVar(symbol, info);
+        }
+        
+        private IExpr ParseMethodReference(ValueSymbol klass)
+        {
+            LookAhead();
+            if (mHeadToken != TokenType.Identifier)
+            {
+                throw new RheaException(
+                    Expected("Identifier"), mLexer.GetSourceInfo()
+                );
+            }
+            ValueSymbol selector = ValueSymbol.Intern((string)mLexer.Value);
+            SourceInfo info = mLexer.GetSourceInfo();
+            LookAhead();
+            return new ExprGetMethod(klass, selector, info);
         }
         
         private IExpr ParseSymbolLiteral()
