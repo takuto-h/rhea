@@ -11,7 +11,7 @@ namespace Rhea
         public Interpreter()
         {
             mEnv = new EnvGlobal();
-            mEnv.AddVariable("puts", 1, (args, vm, info) => {
+            mEnv.AddVariable("p", 1, (args, vm, info) => {
                 Console.WriteLine(args[0]);
                 vm.Push(args[0]);
             });
@@ -27,9 +27,18 @@ namespace Rhea
                 vm.Insns = insnStack.ToSList();
                 vm.Stack = SList.List<IValue>(args[0], cont);
             });
-            mEnv.AddMethod("Int", "puts", 1, (args, vm, info) => {
-                Console.WriteLine(args[0]);
-                vm.Push(args[0]);
+            mEnv.AddVariable("callcc", 1, (args, vm, info) => {
+                IValueFunc func = args[0] as IValueFunc;
+                if (func == null)
+                {
+                    throw new RheaException(
+                        string.Format("function required, but got {0}", args[0]),
+                        info
+                    );
+                }
+                ValueCont cont = vm.GetCont();
+                IList<IValue> newArgs = new List<IValue> { cont };
+                func.Call(newArgs, vm, info);
             });
         }
         

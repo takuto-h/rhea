@@ -1,4 +1,6 @@
+InsnSetVar
 dynamic-wind & callcc
+tail call optimization
 --
 debugger showing stack and insn
 parse error positioning

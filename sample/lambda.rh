@@ -18,7 +18,7 @@ def add = ^(m, n){
 def show = ^(n){
   n(
     ^(){ 0; },
-    ^(k){ puts(0); show(k); }
+    ^(k){ p(0); show(k); }
   );
 };
 
