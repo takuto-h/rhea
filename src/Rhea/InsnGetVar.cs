@@ -15,5 +15,15 @@ namespace Rhea
         {
             vm.Push(vm.Env.GetVariable(mSelector, mInfo));
         }
+        
+        public string Show()
+        {
+            return string.Format("(getvar {0} {1})", mSelector.Name, mInfo);
+        }
+        
+        public override string ToString()
+        {
+            return Show();
+        }
     }
 }

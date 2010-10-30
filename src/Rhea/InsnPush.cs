@@ -13,5 +13,15 @@ namespace Rhea
         {
             vm.Push(mValue);
         }
+        
+        public string Show()
+        {
+            return string.Format("(push {0})", mValue);
+        }
+        
+        public override string ToString()
+        {
+            return Show();
+        }
     }
 }

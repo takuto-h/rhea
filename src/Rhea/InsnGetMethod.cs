@@ -17,5 +17,17 @@ namespace Rhea
         {
             vm.Push(vm.Env.GetMethod(mKlass, mSelector, mInfo));
         }
+        
+        public string Show()
+        {
+            return string.Format(
+                "(getmethod {0} {1} {2})", mKlass.Name, mSelector.Name, mInfo
+            );
+        }
+        
+        public override string ToString()
+        {
+            return Show();
+        }
     }
 }

@@ -1,6 +1,6 @@
 namespace Rhea
 {
-    public interface IInsn
+    public interface IInsn : IShowable
     {
         void Execute(VM vm);
     }

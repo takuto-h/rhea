@@ -23,5 +23,15 @@ namespace Rhea
         {
             vm.Push(new ValueClosure(mParams, mInsns, vm.Env, mInfo));
         }
+        
+        public string Show()
+        {
+            return string.Format("(makeclosure {0})", mInfo);
+        }
+        
+        public override string ToString()
+        {
+            return Show();
+        }
     }
 }

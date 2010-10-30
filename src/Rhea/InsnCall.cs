@@ -31,5 +31,15 @@ namespace Rhea
             }
             func.Call(args, vm, mInfo);
         }
+        
+        public string Show()
+        {
+            return string.Format("(call {0} {1})", mArgCount, mInfo);
+        }
+        
+        public override string ToString()
+        {
+            return Show();
+        }
     }
 }

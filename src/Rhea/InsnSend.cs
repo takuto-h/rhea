@@ -38,5 +38,17 @@ namespace Rhea
             newArgs.AddRange(args);
             func.Call(newArgs, vm, mInfo);
         }
+        
+        public string Show()
+        {
+            return string.Format(
+                "(send {0} {1} {2})", mSelector, mArgCount, mInfo
+            );
+        }
+        
+        public override string ToString()
+        {
+            return Show();
+        }
     }
 }

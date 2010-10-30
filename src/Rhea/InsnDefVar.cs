@@ -21,5 +21,15 @@ namespace Rhea
             }
             vm.Env.AddVariable(mSelector, vm.Peek());
         }
+        
+        public string Show()
+        {
+            return string.Format("(defvar {0} {1})", mSelector.Name, mInfo);
+        }
+        
+        public override string ToString()
+        {
+            return Show();
+        }
     }
 }

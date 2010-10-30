@@ -17,5 +17,15 @@ namespace Rhea
         {
             vm.PushWinder(mBefore, mAfter);
         }
+        
+        public string Show()
+        {
+            return string.Format("(pushwinder {0} {1})", mBefore, mAfter);
+        }
+        
+        public override string ToString()
+        {
+            return Show();
+        }
     }
 }

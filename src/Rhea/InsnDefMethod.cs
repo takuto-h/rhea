@@ -30,5 +30,17 @@ namespace Rhea
             }
             vm.Env.AddMethod(mKlass, mSelector, vm.Peek());
         }
+        
+        public string Show()
+        {
+            return string.Format(
+                "(defmethod {0} {1} {2})", mKlass.Name, mSelector.Name, mInfo
+            );
+        }
+        
+        public override string ToString()
+        {
+            return Show();
+        }
     }
 }

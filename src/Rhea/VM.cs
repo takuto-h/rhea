@@ -30,7 +30,9 @@ namespace Rhea
             {
                 IInsn insn = Insns.Head;
                 Insns = Insns.Tail;
+                //Console.WriteLine("insn: {0}", insn);
                 insn.Execute(this);
+                //Console.WriteLine("stack: {0}", Stack);
             }
             return Peek();
         }

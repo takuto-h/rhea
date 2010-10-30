@@ -24,5 +24,15 @@ namespace Rhea
         {
             vm.Pop();
         }
+        
+        public string Show()
+        {
+            return "(pop)";
+        }
+        
+        public override string ToString()
+        {
+            return Show();
+        }
     }
 }
