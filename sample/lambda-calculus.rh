@@ -21,3 +21,19 @@ def show = ^(n){
     ^(k){ puts(0); show(k); }
   );
 };
+
+# def add = ^(m, n):
+#   m.if_zero:
+#   then:
+#     n
+#   else^(k):
+#     succ(add(k, n))
+#   end
+# end
+#
+# def add = ^(m, n):
+#   m.if_zero
+#     then:
+#       n
+#     else^(k):
+#       succ(add(k, n))
