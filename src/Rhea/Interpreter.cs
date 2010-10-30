@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Rhea
 {
@@ -79,7 +80,8 @@ namespace Rhea
                     VM vm = new VM(
                         compiler.GetResult(),
                         SList.Nil<IValue>(),
-                        mEnv
+                        mEnv,
+                        SList.Nil<KeyValuePair<IValueFunc, IValueFunc>>()
                     );
                     IValue result = vm.Run();
                     if (interactive)

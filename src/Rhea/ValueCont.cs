@@ -7,17 +7,24 @@ namespace Rhea
         private ISList<IInsn> mInsns;
         private ISList<IValue> mStack;
         private IEnv mEnv;
+        private ISList<KeyValuePair<IValueFunc, IValueFunc>> mWinders;
         
         public ValueSymbol Klass
         {
             get { return ValueSymbol.Intern("Cont"); }
         }
         
-        public ValueCont(ISList<IInsn> insns, ISList<IValue> stack, IEnv env)
+        public ValueCont(
+            ISList<IInsn> insns,
+            ISList<IValue> stack,
+            IEnv env,
+            ISList<KeyValuePair<IValueFunc, IValueFunc>> winders
+        )
         {
             mInsns = insns;
             mStack = stack;
             mEnv = env;
+            mWinders = winders;
         }
         
         public void Call(IList<IValue> args, VM vm, SourceInfo info)
@@ -28,7 +35,7 @@ namespace Rhea
                     this.WrongNumberOfArguments(1, args.Count), info
                 );
             }
-            vm.SetCont(mInsns, mStack, mEnv);
+            vm.SetDynamicContext(mInsns, mStack, mEnv, mWinders);
             vm.Push(args[0]);
         }
         

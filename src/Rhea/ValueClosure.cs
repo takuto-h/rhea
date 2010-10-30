@@ -29,8 +29,8 @@ namespace Rhea
         
         public void Call(IList<IValue> args, VM vm, SourceInfo info)
         {
-            ValueCont cont = vm.GetCont();
-            vm.SetCont(
+            ValueCont cont = vm.GetDynamicContext();
+            vm.SetStaticContext(
                 Assign(args, info).Append(mInsns),
                 SList.List<IValue>(cont),
                 new EnvLocal(mEnv)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Rhea
 {
@@ -6,14 +7,21 @@ namespace Rhea
     {
         private ISList<IInsn> mInsns;
         private ISList<IValue> mStack;
+        private ISList<KeyValuePair<IValueFunc, IValueFunc>> mWinders;
         
         public IEnv Env { get; private set; }
         
-        public VM(ISList<IInsn> insns, ISList<IValue> stack, IEnv env)
+        public VM(
+            ISList<IInsn> insns,
+            ISList<IValue> stack,
+            IEnv env,
+            ISList<KeyValuePair<IValueFunc, IValueFunc>> winders
+        )
         {
             mInsns = insns;
             mStack = stack;
             Env = env;
+            mWinders = winders;
         }
         
         public IValue Run()
@@ -27,12 +35,29 @@ namespace Rhea
             return Peek();
         }
         
-        public ValueCont GetCont()
+        public ValueCont GetDynamicContext()
         {
-            return new ValueCont(mInsns, mStack, Env);
+            return new ValueCont(mInsns, mStack, Env, mWinders);
         }
         
-        public void SetCont(ISList<IInsn> insns, ISList<IValue> stack, IEnv env)
+        public void SetDynamicContext(
+            ISList<IInsn> insns,
+            ISList<IValue> stack,
+            IEnv env,
+            ISList<KeyValuePair<IValueFunc, IValueFunc>> winders
+        )
+        {
+            mInsns = insns;
+            mStack = stack;
+            Env = env;
+            mWinders = winders;
+        }
+        
+        public void SetStaticContext(
+            ISList<IInsn> insns,
+            ISList<IValue> stack,
+            IEnv env
+        )
         {
             mInsns = insns;
             mStack = stack;
