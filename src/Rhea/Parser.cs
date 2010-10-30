@@ -307,10 +307,11 @@ namespace Rhea
         {
             IList<IExpr> exprs = new List<IExpr>();
             LookAhead();
-            while (mHeadToken != TokenType.RightBrace)
+            do
             {
                 exprs.Add(ParseStatement());
             }
+            while (mHeadToken != TokenType.RightBrace);
             LookAhead();
             return exprs;
         }

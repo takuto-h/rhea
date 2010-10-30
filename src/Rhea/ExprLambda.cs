@@ -25,7 +25,9 @@ namespace Rhea
             foreach (IExpr expr in mBodyExprs)
             {
                 expr.Compile(bodyCompiler);
+                bodyCompiler.Push(InsnPop.Instance);
             }
+            bodyCompiler.Pop();
             bodyCompiler.Push(new InsnCall(1, mInfo));
             ISList<IInsn> insns = bodyCompiler.GetResult();
             compiler.Push(new InsnMakeClosure(mParams, insns, mInfo));
