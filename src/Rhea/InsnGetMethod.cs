@@ -15,16 +15,7 @@ namespace Rhea
         
         public void Execute(VM vm)
         {
-            IValue value;
-            if (!vm.Env.TryGetMethod(mKlass, mSelector, out value))
-            {
-                throw new RheaException(
-                    string.Format(
-                        "unbound method: {0}:{1}", mKlass.Name, mSelector.Name
-                    ), mInfo
-                );
-            }
-            vm.Push(value);
+            vm.Push(vm.Env.GetMethod(mKlass, mSelector, mInfo));
         }
     }
 }

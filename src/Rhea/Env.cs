@@ -37,5 +37,42 @@ namespace Rhea
                 )
             );
         }
+        
+        public static IValue GetVariable(
+            this IEnv env,
+            ValueSymbol selector,
+            SourceInfo info
+        )
+        {
+            IValue value;
+            if (!env.TryGetVariable(selector, out value))
+            {
+                throw new RheaException(
+                    string.Format(
+                        "unbound variable: {0}", selector.Name
+                    ), info
+                );
+            }
+            return value;
+        }
+        
+        public static IValue GetMethod(
+            this IEnv env,
+            ValueSymbol klass,
+            ValueSymbol selector,
+            SourceInfo info
+        )
+        {
+            IValue value;
+            if (!env.TryGetMethod(klass, selector, out value))
+            {
+                throw new RheaException(
+                    string.Format(
+                        "unbound method: {0}:{1}", klass.Name, selector.Name
+                    ), info
+                );
+            }
+            return value;
+        }
     }
 }

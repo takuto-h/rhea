@@ -25,15 +25,7 @@ namespace Rhea
             args.Reverse();
             IValue receiver = vm.Pop();
             ValueSymbol klass = receiver.Klass;
-            IValue value;
-            if (!vm.Env.TryGetMethod(klass, mSelector, out value))
-            {
-                throw new RheaException(
-                    string.Format(
-                        "unbound method: {0}:{1}", klass.Name, mSelector.Name
-                    ), mInfo
-                );
-            }
+            IValue value = vm.Env.GetMethod(klass, mSelector, mInfo);
             IValueFunc func = value as IValueFunc;
             if (func == null)
             {

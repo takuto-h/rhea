@@ -13,14 +13,7 @@ namespace Rhea
         
         public void Execute(VM vm)
         {
-            IValue value;
-            if (!vm.Env.TryGetVariable(mSelector, out value))
-            {
-                throw new RheaException(
-                    string.Format("unbound variable: {0}", mSelector.Name), mInfo
-                );
-            }
-            vm.Push(value);
+            vm.Push(vm.Env.GetVariable(mSelector, mInfo));
         }
     }
 }
