@@ -81,5 +81,27 @@ namespace Rhea
                 )
             );
         }
+        
+        public static bool ContainsSList<T>(this ISList<T> list1, ISList<T> list2)
+        {
+            if (list2.IsNil() || list1 == list2)
+            {
+                return true;
+            }
+            else if (list1.IsNil())
+            {
+                return false;
+            }
+            return ContainsSList(list1.Tail, list2);
+        }
+        
+        public static T GetPreviousElementOf<T>(this ISList<T> list1, ISList<T> list2)
+        {
+            if (list1.Tail == list2)
+            {
+                return list1.Head;
+            }
+            return GetPreviousElementOf(list1.Tail, list2);
+        }
     }
 }

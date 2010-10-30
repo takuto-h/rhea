@@ -35,8 +35,7 @@ namespace Rhea
                     this.WrongNumberOfArguments(1, args.Count), info
                 );
             }
-            vm.SetDynamicContext(mInsns, mStack, mEnv, mWinders);
-            vm.Push(args[0]);
+            vm.SetDynamicContext(args[0], mInsns, mStack, mEnv, mWinders, info);
         }
         
         public string Show()
