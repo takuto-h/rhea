@@ -25,7 +25,7 @@ namespace Rhea
             if (args.Count != 1)
             {
                 throw new RheaException(
-                    "continuation can be called with only 1 argument", info
+                    this.WrongNumberOfArguments(1, args.Count), info
                 );
             }
             vm.SetCont(mInsns, mStack, mEnv);

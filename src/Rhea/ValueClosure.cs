@@ -46,7 +46,7 @@ namespace Rhea
                 if (!argsEtor.MoveNext())
                 {
                     throw new RheaException(
-                        WrongNumberOfArguments(args.Count), info
+                        this.WrongNumberOfArguments(mParams.Count, args.Count), info
                     );
                 }
                 insnStack.Push(new InsnPush(argsEtor.Current));
@@ -56,18 +56,10 @@ namespace Rhea
             if (argsEtor.MoveNext())
             {
                 throw new RheaException(
-                    WrongNumberOfArguments(args.Count), info
+                    this.WrongNumberOfArguments(mParams.Count, args.Count), info
                 );
             }
             return insnStack.ToSList();
-        }
-        
-        private string WrongNumberOfArguments(int argCount)
-        {
-            return string.Format(
-                "wrong number of arguments for {0} (required {1}, got {2})",
-                this, mParams.Count, argCount
-            );
         }
         
         public string Show()

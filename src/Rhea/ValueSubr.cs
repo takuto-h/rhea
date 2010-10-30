@@ -30,10 +30,7 @@ namespace Rhea
             if (argCount != mParamCount)
             {
                 throw new RheaException(
-                    string.Format(
-                        "wrong number of arguments for {0} (required {1}, got {2})",
-                        this, mParamCount, argCount
-                    ), info
+                    this.WrongNumberOfArguments(mParamCount, argCount), info
                 );
             }
             mSubrValue(args, vm, info);
