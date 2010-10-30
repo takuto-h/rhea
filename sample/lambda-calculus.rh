@@ -1,0 +1,23 @@
+def zero = ^(f, g){
+  f();
+};
+def succ = ^(n){
+  ^(f, g){
+    g(n);
+  };
+};
+def one = succ(zero);
+def two = succ(one);
+def three = succ(two);
+def add = ^(m, n){
+  m(
+    ^(){ n; },
+    ^(k){ succ(add(k, n)); }
+  );
+};
+def show = ^(n){
+  n(
+    ^(){ 0; },
+    ^(k){ puts(0); show(k); }
+  );
+};
