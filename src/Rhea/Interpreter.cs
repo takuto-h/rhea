@@ -96,6 +96,10 @@ namespace Rhea
                         SList.Nil<KeyValuePair<IValue, IValue>>()
                     );
                     IValue result = vm.Run();
+                    if (result == null)
+                    {
+                        break;
+                    }
                     if (interactive)
                     {
                         Console.WriteLine(" => {0}", result);
