@@ -5,11 +5,11 @@ namespace Rhea
 {
     public class VM
     {
-        private ISList<IInsn> mInsns;
-        private ISList<IValue> mStack;
-        private ISList<KeyValuePair<IValueFunc, IValueFunc>> mWinders;
+        public ISList<IInsn> Insns { get; set; }
+        public ISList<IValue> Stack { get; set; }
+        public IEnv Env { get; set; }
         
-        public IEnv Env { get; private set; }
+        private ISList<KeyValuePair<IValueFunc, IValueFunc>> mWinders;
         
         public VM(
             ISList<IInsn> insns,
@@ -18,36 +18,29 @@ namespace Rhea
             ISList<KeyValuePair<IValueFunc, IValueFunc>> winders
         )
         {
-            mInsns = insns;
-            mStack = stack;
+            Insns = insns;
+            Stack = stack;
             Env = env;
             mWinders = winders;
         }
         
         public IValue Run()
         {
-            while (!mInsns.IsNil())
+            while (!Insns.IsNil())
             {
-                IInsn insn = mInsns.Head;
-                mInsns = mInsns.Tail;
+                IInsn insn = Insns.Head;
+                Insns = Insns.Tail;
                 insn.Execute(this);
             }
             return Peek();
         }
         
-        public ValueCont GetDynamicContext()
+        public ValueCont GetCont()
         {
-            return new ValueCont(mInsns, mStack, Env, mWinders);
+            return new ValueCont(Insns, Stack, Env, mWinders);
         }
         
-        public void SetDynamicContext(
-            IValue returnValue,
-            ISList<IInsn> insns,
-            ISList<IValue> stack,
-            IEnv env,
-            ISList<KeyValuePair<IValueFunc, IValueFunc>> winders,
-            SourceInfo info
-        )
+        public void SetCont(IValue returnValue, ValueCont cont, SourceInfo info)
         {
             /*先頭があるか
             なかったら、
@@ -61,9 +54,12 @@ namespace Rhea
 　　            　　mWindersのもとでwindersの下層にあるinを実行
     　　        　　mWindersに下層を載せる
         　　    　　windersを含む継続を呼ぶ*/
+            var winders = cont.Winders;
             if (winders == mWinders)
             {
-                SetStaticContext(insns, stack, env);
+                Insns = cont.Insns;
+                Stack = cont.Stack;
+                Env = cont.Env;
                 Push(returnValue);
             }
             else if (winders.ContainsSList(mWinders))
@@ -71,7 +67,6 @@ namespace Rhea
                 var winder = winders.GetPreviousElementOf(mWinders);
                 IValueFunc func = winder.Key;
                 Stack<IInsn> insnStack = new Stack<IInsn>();
-                IValue cont = new ValueCont(insns, stack, env, winders);
                 insnStack.Push(new InsnPush(func));
                 insnStack.Push(new InsnCall(0, info));
                 insnStack.Push(InsnPop.Instance);
@@ -79,55 +74,43 @@ namespace Rhea
                 insnStack.Push(new InsnPush(cont));
                 insnStack.Push(new InsnPush(returnValue));
                 insnStack.Push(new InsnCall(1, info));
-                mInsns = insnStack.ToSList();
-                mStack = SList.Nil<IValue>();
+                Insns = insnStack.ToSList();
+                Stack = SList.Nil<IValue>();
             }
             else
             {
                 IValueFunc func = mWinders.Head.Value;
                 mWinders = mWinders.Tail;
                 Stack<IInsn> insnStack = new Stack<IInsn>();
-                IValue cont = new ValueCont(insns, stack, env, winders);
                 insnStack.Push(new InsnPush(func));
                 insnStack.Push(new InsnCall(0, info));
                 insnStack.Push(InsnPop.Instance);
                 insnStack.Push(new InsnPush(cont));
                 insnStack.Push(new InsnPush(returnValue));
                 insnStack.Push(new InsnCall(1, info));
-                mInsns = insnStack.ToSList();
-                mStack = SList.Nil<IValue>();
+                Insns = insnStack.ToSList();
+                Stack = SList.Nil<IValue>();
             }
-        }
-        
-        public void SetStaticContext(
-            ISList<IInsn> insns,
-            ISList<IValue> stack,
-            IEnv env
-        )
-        {
-            mInsns = insns;
-            mStack = stack;
-            Env = env;
         }
         
         public void Push(IValue value)
         {
-            mStack = SList.Cons<IValue>(value, mStack);
+            Stack = SList.Cons<IValue>(value, Stack);
         }
         
         public IValue Peek()
         {
-            if (mStack.IsNil())
+            if (Stack.IsNil())
             {
                 throw new InvalidOperationException("VM: Stack is empty.");
             }
-            return mStack.Head;
+            return Stack.Head;
         }
         
         public IValue Pop()
         {
             IValue value = Peek();
-            mStack = mStack.Tail;
+            Stack = Stack.Tail;
             return value;
         }
         

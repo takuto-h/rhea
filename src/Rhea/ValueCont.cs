@@ -4,10 +4,10 @@ namespace Rhea
 {
     public class ValueCont : IValueFunc
     {
-        private ISList<IInsn> mInsns;
-        private ISList<IValue> mStack;
-        private IEnv mEnv;
-        private ISList<KeyValuePair<IValueFunc, IValueFunc>> mWinders;
+        public ISList<IInsn> Insns { get; private set; }
+        public ISList<IValue> Stack { get; private set; }
+        public IEnv Env { get; private set; }
+        public ISList<KeyValuePair<IValueFunc, IValueFunc>> Winders { get; private set; }
         
         public ValueSymbol Klass
         {
@@ -21,10 +21,10 @@ namespace Rhea
             ISList<KeyValuePair<IValueFunc, IValueFunc>> winders
         )
         {
-            mInsns = insns;
-            mStack = stack;
-            mEnv = env;
-            mWinders = winders;
+            Insns = insns;
+            Stack = stack;
+            Env = env;
+            Winders = winders;
         }
         
         public void Call(IList<IValue> args, VM vm, SourceInfo info)
@@ -35,7 +35,7 @@ namespace Rhea
                     this.WrongNumberOfArguments(1, args.Count), info
                 );
             }
-            vm.SetDynamicContext(args[0], mInsns, mStack, mEnv, mWinders, info);
+            vm.SetCont(args[0], this, info);
         }
         
         public string Show()

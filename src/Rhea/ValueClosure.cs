@@ -29,12 +29,10 @@ namespace Rhea
         
         public void Call(IList<IValue> args, VM vm, SourceInfo info)
         {
-            ValueCont cont = vm.GetDynamicContext();
-            vm.SetStaticContext(
-                Assign(args, info).Append(mInsns),
-                SList.List<IValue>(cont),
-                new EnvLocal(mEnv)
-            );
+            ValueCont cont = vm.GetCont();
+            vm.Insns = Assign(args, info).Append(mInsns);
+            vm.Stack = SList.List<IValue>(cont);
+            vm.Env = new EnvLocal(mEnv);
         }
         
         private ISList<IInsn> Assign(IList<IValue> args, SourceInfo info)
