@@ -17,18 +17,15 @@ namespace Rhea
             });
             mEnv.AddVariable("dynamic_wind", 3, (args, vm, info) => {
                 ValueCont cont = vm.GetCont();
-                IValueFunc before = args[0] as IValueFunc;
-                IValueFunc after = args[2] as IValueFunc;
-                var winder = new KeyValuePair<IValueFunc, IValueFunc>(before, after);
                 Stack<IInsn> insnStack = new Stack<IInsn>();
                 insnStack.Push(new InsnCall(0, info));
                 insnStack.Push(InsnPop.Instance);
-                insnStack.Push(new InsnPushWinder(winder));
+                insnStack.Push(new InsnPushWinder(args[0], args[2]));
                 insnStack.Push(new InsnPush(args[1]));
                 insnStack.Push(new InsnCall(0, info));
                 insnStack.Push(new InsnCall(1, info));
                 vm.Insns = insnStack.ToSList();
-                vm.Stack = SList.List<IValue>(before, cont);
+                vm.Stack = SList.List<IValue>(args[0], cont);
             });
             mEnv.AddMethod("Int", "puts", 1, (args, vm, info) => {
                 Console.WriteLine(args[0]);
@@ -96,7 +93,7 @@ namespace Rhea
                         compiler.GetResult(),
                         SList.Nil<IValue>(),
                         mEnv,
-                        SList.Nil<KeyValuePair<IValueFunc, IValueFunc>>()
+                        SList.Nil<KeyValuePair<IValue, IValue>>()
                     );
                     IValue result = vm.Run();
                     if (interactive)

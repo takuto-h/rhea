@@ -7,7 +7,7 @@ namespace Rhea
         public ISList<IInsn> Insns { get; private set; }
         public ISList<IValue> Stack { get; private set; }
         public IEnv Env { get; private set; }
-        public ISList<KeyValuePair<IValueFunc, IValueFunc>> Winders { get; private set; }
+        public ISList<KeyValuePair<IValue, IValue>> Winders { get; private set; }
         
         public ValueSymbol Klass
         {
@@ -18,7 +18,7 @@ namespace Rhea
             ISList<IInsn> insns,
             ISList<IValue> stack,
             IEnv env,
-            ISList<KeyValuePair<IValueFunc, IValueFunc>> winders
+            ISList<KeyValuePair<IValue, IValue>> winders
         )
         {
             Insns = insns;

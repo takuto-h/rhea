@@ -4,16 +4,18 @@ namespace Rhea
 {
     public class InsnPushWinder : IInsn
     {
-        private KeyValuePair<IValueFunc, IValueFunc> mWinder;
+        private IValue mBefore;
+        private IValue mAfter;
         
-        public InsnPushWinder(KeyValuePair<IValueFunc, IValueFunc> winder)
+        public InsnPushWinder(IValue before, IValue after)
         {
-            mWinder = winder;
+            mBefore = before;
+            mAfter = after;
         }
         
         public void Execute(VM vm)
         {
-            vm.PushWinder(mWinder);
+            vm.PushWinder(mBefore, mAfter);
         }
     }
 }

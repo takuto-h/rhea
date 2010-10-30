@@ -1,6 +1,5 @@
 dynamic-wind & callcc
-winder func -> value
-debugger showing stack ant insn
+debugger showing stack and insn
 parse error positioning
 improve interactive printing of line number and lexer
 interactive :q symbol literal

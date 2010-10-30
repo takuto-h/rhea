@@ -9,13 +9,13 @@ namespace Rhea
         public ISList<IValue> Stack { get; set; }
         public IEnv Env { get; set; }
         
-        private ISList<KeyValuePair<IValueFunc, IValueFunc>> mWinders;
+        private ISList<KeyValuePair<IValue, IValue>> mWinders;
         
         public VM(
             ISList<IInsn> insns,
             ISList<IValue> stack,
             IEnv env,
-            ISList<KeyValuePair<IValueFunc, IValueFunc>> winders
+            ISList<KeyValuePair<IValue, IValue>> winders
         )
         {
             Insns = insns;
@@ -42,18 +42,6 @@ namespace Rhea
         
         public void SetCont(IValue returnValue, ValueCont cont, SourceInfo info)
         {
-            /*先頭があるか
-            なかったら、
-            　　そいつを除いたmWindersのもとでoutを実行、
-            　　windersを含む継続を呼ぶ
-            あったら、
-            　　windersの上層に変なものがないか探す
-            　　なかったら、
-            　　　　SetStaticContext
-            　　あったら、
-　　            　　mWindersのもとでwindersの下層にあるinを実行
-    　　        　　mWindersに下層を載せる
-        　　    　　windersを含む継続を呼ぶ*/
             var winders = cont.Winders;
             if (winders == mWinders)
             {
@@ -65,12 +53,13 @@ namespace Rhea
             else if (winders.ContainsSList(mWinders))
             {
                 var winder = winders.GetPreviousElementOf(mWinders);
-                IValueFunc func = winder.Key;
+                IValue before = winder.Key;
+                IValue after = winder.Value;
                 Stack<IInsn> insnStack = new Stack<IInsn>();
-                insnStack.Push(new InsnPush(func));
+                insnStack.Push(new InsnPush(before));
                 insnStack.Push(new InsnCall(0, info));
                 insnStack.Push(InsnPop.Instance);
-                insnStack.Push(new InsnPushWinder(winder));
+                insnStack.Push(new InsnPushWinder(before, after));
                 insnStack.Push(new InsnPush(cont));
                 insnStack.Push(new InsnPush(returnValue));
                 insnStack.Push(new InsnCall(1, info));
@@ -79,10 +68,10 @@ namespace Rhea
             }
             else
             {
-                IValueFunc func = mWinders.Head.Value;
+                IValue after = mWinders.Head.Value;
                 mWinders = mWinders.Tail;
                 Stack<IInsn> insnStack = new Stack<IInsn>();
-                insnStack.Push(new InsnPush(func));
+                insnStack.Push(new InsnPush(after));
                 insnStack.Push(new InsnCall(0, info));
                 insnStack.Push(InsnPop.Instance);
                 insnStack.Push(new InsnPush(cont));
@@ -114,9 +103,11 @@ namespace Rhea
             return value;
         }
         
-        public void PushWinder(KeyValuePair<IValueFunc, IValueFunc> winder)
+        public void PushWinder(IValue before, IValue after)
         {
-            mWinders = SList.Cons<KeyValuePair<IValueFunc, IValueFunc>>(winder, mWinders);
+            mWinders = SList.Cons(
+                new KeyValuePair<IValue, IValue>(before, after), mWinders
+            );
         }
     }
 }
