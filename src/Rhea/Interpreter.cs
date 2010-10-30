@@ -10,11 +10,11 @@ namespace Rhea
         public Interpreter()
         {
             mEnv = new EnvGlobal();
-            AddVariable("puts", 1, (args, vm, info) => {
+            mEnv.AddVariable("puts", 1, (args, vm, info) => {
                 Console.WriteLine(args[0]);
                 vm.Push(args[0]);
             });
-            AddMethod("Int", "puts", 1, (args, vm, info) => {
+            mEnv.AddMethod("Int", "puts", 1, (args, vm, info) => {
                 Console.WriteLine(args[0]);
                 vm.Push(args[0]);
             });
@@ -92,40 +92,6 @@ namespace Rhea
             {
                 Console.WriteLine("{0}: {1}", e.Info, e.Message);
             }
-        }
-        
-        private void AddVariable(
-            string selectorName,
-            int paramCount,
-            Subr subrValue
-        )
-        {
-            mEnv.AddVariable(
-                ValueSymbol.Intern(selectorName),
-                new ValueSubr(
-                    string.Format("{0}", selectorName),
-                    paramCount,
-                    subrValue
-                )
-            );
-        }
-        
-        private void AddMethod(
-            string klassName,
-            string selectorName,
-            int paramCount,
-            Subr subrValue
-        )
-        {
-            mEnv.AddMethod(
-                ValueSymbol.Intern(klassName),
-                ValueSymbol.Intern(selectorName),
-                new ValueSubr(
-                    string.Format("{0}:{1}", klassName, selectorName),
-                    paramCount,
-                    subrValue
-                )
-            );
         }
     }
 }
