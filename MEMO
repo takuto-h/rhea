@@ -1,6 +1,5 @@
-def load twice
-tail call optimization
 --
+tail call optimization
 debugger showing stack and insn
 parse error positioning
 improve interactive printing of line number and lexer

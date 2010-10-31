@@ -45,13 +45,14 @@ namespace Rhea
             SourceInfo info
         )
         {
-            if (env.ContainsVariable(selector))
+            /*if (env.ContainsVariable(selector))
             {
                 throw new RheaException(
                     string.Format("variable is already defined: {0}", selector.Name), info
                 );
             }
-            env.AddVariable(selector, value);
+            env.AddVariable(selector, value);*/
+            env[selector] = value;
         }
         
         public static void DefineMethod(
@@ -62,7 +63,7 @@ namespace Rhea
             SourceInfo info
         )
         {
-            if (env.ContainsMethod(klass, selector))
+            /*if (env.ContainsMethod(klass, selector))
             {
                 throw new RheaException(
                     string.Format(
@@ -71,7 +72,8 @@ namespace Rhea
                     ), info
                 );
             }
-            env.AddMethod(klass, selector, value);
+            env.AddMethod(klass, selector, value);*/
+            env[klass, selector] = value;
         }
         
         public static IValue GetVariable(
