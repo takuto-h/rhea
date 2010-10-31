@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Rhea
@@ -7,15 +8,20 @@ namespace Rhea
         private IDictionary<ValueSymbol, IValue> mVariables;
         private IDictionary<KeyValuePair<ValueSymbol, ValueSymbol>, IValue> mMethods;
         
+        public IEnv OuterEnv
+        {
+            get { throw new NotSupportedException(); }
+        }
+        
         public EnvGlobal()
         {
             mVariables = new Dictionary<ValueSymbol, IValue>();
             mMethods = new Dictionary<KeyValuePair<ValueSymbol, ValueSymbol>, IValue>();
         }
         
-        private static KeyValuePair<ValueSymbol, ValueSymbol> MakePair(ValueSymbol klass, ValueSymbol selector)
+        public bool IsGlobal()
         {
-            return new KeyValuePair<ValueSymbol, ValueSymbol>(klass, selector);
+            return true;
         }
         
         public void AddVariable(ValueSymbol selector, IValue value)
@@ -28,12 +34,12 @@ namespace Rhea
             mMethods.Add(MakePair(klass, selector), value);
         }
         
-        public virtual bool TryGetVariable(ValueSymbol selector, out IValue value)
+        public bool TryGetVariable(ValueSymbol selector, out IValue value)
         {
             return mVariables.TryGetValue(selector, out value);
         }
         
-        public virtual bool TryGetMethod(ValueSymbol klass, ValueSymbol selector, out IValue value)
+        public bool TryGetMethod(ValueSymbol klass, ValueSymbol selector, out IValue value)
         {
             return mMethods.TryGetValue(MakePair(klass, selector), out value);
         }
@@ -46,6 +52,11 @@ namespace Rhea
         public bool ContainsMethod(ValueSymbol klass, ValueSymbol selector)
         {
             return mMethods.ContainsKey(MakePair(klass, selector));
+        }
+        
+        private static KeyValuePair<ValueSymbol, ValueSymbol> MakePair(ValueSymbol klass, ValueSymbol selector)
+        {
+            return new KeyValuePair<ValueSymbol, ValueSymbol>(klass, selector);
         }
     }
 }

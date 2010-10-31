@@ -19,16 +19,7 @@ namespace Rhea
         
         public void Execute(VM vm)
         {
-            if (vm.Env.ContainsMethod(mKlass, mSelector))
-            {
-                throw new RheaException(
-                    string.Format(
-                        "method is already defined: {0}:{1}",
-                        mKlass.Name, mSelector.Name
-                    ), mInfo
-                );
-            }
-            vm.Env.AddMethod(mKlass, mSelector, vm.Peek());
+            vm.Env.DefineMethod(mKlass, mSelector, vm.Peek(), mInfo);
         }
         
         public string Show()

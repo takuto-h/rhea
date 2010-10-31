@@ -13,13 +13,7 @@ namespace Rhea
         
         public void Execute(VM vm)
         {
-            if (vm.Env.ContainsVariable(mSelector))
-            {
-                throw new RheaException(
-                    string.Format("variable is already defined: {0}", mSelector.Name), mInfo
-                );
-            }
-            vm.Env.AddVariable(mSelector, vm.Peek());
+            vm.Env.DefineVariable(mSelector, vm.Peek(), mInfo);
         }
         
         public string Show()

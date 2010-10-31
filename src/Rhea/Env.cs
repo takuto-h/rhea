@@ -38,6 +38,42 @@ namespace Rhea
             );
         }
         
+        public static void DefineVariable(
+            this IEnv env,
+            ValueSymbol selector,
+            IValue value,
+            SourceInfo info
+        )
+        {
+            if (env.ContainsVariable(selector))
+            {
+                throw new RheaException(
+                    string.Format("variable is already defined: {0}", selector.Name), info
+                );
+            }
+            env.AddVariable(selector, value);
+        }
+        
+        public static void DefineMethod(
+            this IEnv env,
+            ValueSymbol klass,
+            ValueSymbol selector,
+            IValue value,
+            SourceInfo info
+        )
+        {
+            if (env.ContainsMethod(klass, selector))
+            {
+                throw new RheaException(
+                    string.Format(
+                        "method is already defined: {0}:{1}",
+                        klass.Name, selector.Name
+                    ), info
+                );
+            }
+            env.AddMethod(klass, selector, value);
+        }
+        
         public static IValue GetVariable(
             this IEnv env,
             ValueSymbol selector,
@@ -45,15 +81,21 @@ namespace Rhea
         )
         {
             IValue value;
-            if (!env.TryGetVariable(selector, out value))
+            while (!env.IsGlobal())
             {
-                throw new RheaException(
-                    string.Format(
-                        "unbound variable: {0}", selector.Name
-                    ), info
-                );
+                if (env.TryGetVariable(selector, out value))
+                {
+                    return value;
+                }
+                env = env.OuterEnv;
             }
-            return value;
+            if (env.TryGetVariable(selector, out value))
+            {
+                return value;
+            }
+            throw new RheaException(
+                string.Format("unbound variable: {0}", selector.Name), info
+            );
         }
         
         public static IValue GetMethod(
@@ -64,15 +106,20 @@ namespace Rhea
         )
         {
             IValue value;
-            if (!env.TryGetMethod(klass, selector, out value))
+            while (!env.IsGlobal())
             {
-                throw new RheaException(
-                    string.Format(
-                        "unbound method: {0}:{1}", klass.Name, selector.Name
-                    ), info
-                );
+                if (env.TryGetMethod(klass, selector, out value))
+                {
+                    return value;
+                }
             }
-            return value;
+            if (env.TryGetMethod(klass, selector, out value))
+            {
+                return value;
+            }
+            throw new RheaException(
+                string.Format("unbound method: {0}:{1}", klass.Name, selector.Name), info
+            );
         }
     }
 }

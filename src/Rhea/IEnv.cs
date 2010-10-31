@@ -2,6 +2,8 @@ namespace Rhea
 {
     public interface IEnv
     {
+        IEnv OuterEnv { get; }
+        bool IsGlobal();
         void AddVariable(ValueSymbol selector, IValue value);
         void AddMethod(ValueSymbol klass, ValueSymbol selector, IValue value);
         bool TryGetVariable(ValueSymbol selector, out IValue value);

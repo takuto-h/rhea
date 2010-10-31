@@ -1,24 +1,50 @@
 namespace Rhea
 {
-    public class EnvLocal : EnvGlobal
+    public class EnvLocal : IEnv
     {
-        private IEnv mOuterEnv;
+        private IEnv mInnerEnv;
         
-        public EnvLocal(IEnv outerEnv) : base()
+        public IEnv OuterEnv { get; private set; }
+        
+        public EnvLocal(IEnv outerEnv)
         {
-            mOuterEnv = outerEnv;
+            mInnerEnv = new EnvGlobal();
+            OuterEnv = outerEnv;
         }
         
-        public override bool TryGetVariable(ValueSymbol selector, out IValue value)
+        public bool IsGlobal()
         {
-            return base.TryGetVariable(selector, out value)
-              || mOuterEnv.TryGetVariable(selector, out value);
+            return false;
         }
         
-        public override bool TryGetMethod(ValueSymbol klass, ValueSymbol selector, out IValue value)
+        public void AddVariable(ValueSymbol selector, IValue value)
         {
-            return base.TryGetMethod(klass, selector, out value)
-              || mOuterEnv.TryGetMethod(klass, selector, out value);
+            mInnerEnv.AddVariable(selector, value);
+        }
+        
+        public void AddMethod(ValueSymbol klass, ValueSymbol selector, IValue value)
+        {
+            mInnerEnv.AddMethod(klass, selector, value);
+        }
+        
+        public bool TryGetVariable(ValueSymbol selector, out IValue value)
+        {
+            return mInnerEnv.TryGetVariable(selector, out value);
+        }
+        
+        public bool TryGetMethod(ValueSymbol klass, ValueSymbol selector, out IValue value)
+        {
+            return mInnerEnv.TryGetMethod(klass, selector, out value);
+        }
+        
+        public bool ContainsVariable(ValueSymbol selector)
+        {
+            return mInnerEnv.ContainsVariable(selector);
+        }
+        
+        public bool ContainsMethod(ValueSymbol klass, ValueSymbol selector)
+        {
+            return mInnerEnv.ContainsMethod(klass, selector);
         }
     }
 }
