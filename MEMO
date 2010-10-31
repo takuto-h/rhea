@@ -1,4 +1,3 @@
-BUG: sample/cont.rh
 def load twice
 tail call optimization
 --

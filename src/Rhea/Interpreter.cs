@@ -17,10 +17,12 @@ namespace Rhea
             });
             mEnv.AddVariable("dynamic_wind", 3, (args, vm, info) => {
                 ValueCont cont = vm.GetCont();
+                var winder = new KeyValuePair<IValue, IValue>(args[0], args[2]);
+                var winders = SList.Cons(winder, vm.Winders);
                 Stack<IInsn> insnStack = new Stack<IInsn>();
                 insnStack.Push(new InsnCall(0, info));
                 insnStack.Push(InsnPop.Instance);
-                insnStack.Push(new InsnPushWinder(args[0], args[2]));
+                insnStack.Push(new InsnSetWinders(winders));
                 insnStack.Push(new InsnPush(args[1]));
                 insnStack.Push(new InsnCall(0, info));
                 insnStack.Push(new InsnCall(1, info));

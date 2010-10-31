@@ -82,7 +82,7 @@ namespace Rhea
             );
         }
         
-        public static bool ContainsSList<T>(this ISList<T> list1, ISList<T> list2)
+        public static bool ContainsList<T>(this ISList<T> list1, ISList<T> list2)
         {
             if (list2.IsNil() || list1 == list2)
             {
@@ -92,16 +92,16 @@ namespace Rhea
             {
                 return false;
             }
-            return ContainsSList(list1.Tail, list2);
+            return ContainsList(list1.Tail, list2);
         }
         
-        public static T GetPreviousElementOf<T>(this ISList<T> list1, ISList<T> list2)
+        public static ISList<T> GetPreviousList<T>(this ISList<T> list1, ISList<T> list2)
         {
             if (list1.Tail == list2)
             {
-                return list1.Head;
+                return list1;
             }
-            return GetPreviousElementOf(list1.Tail, list2);
+            return GetPreviousList(list1.Tail, list2);
         }
     }
 }

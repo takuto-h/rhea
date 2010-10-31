@@ -8,8 +8,7 @@ namespace Rhea
         public ISList<IInsn> Insns { get; set; }
         public ISList<IValue> Stack { get; set; }
         public IEnv Env { get; set; }
-        
-        private ISList<KeyValuePair<IValue, IValue>> mWinders;
+        public ISList<KeyValuePair<IValue, IValue>> Winders { get; set; }
         
         public VM(
             ISList<IInsn> insns,
@@ -21,7 +20,7 @@ namespace Rhea
             Insns = insns;
             Stack = stack;
             Env = env;
-            mWinders = winders;
+            Winders = winders;
         }
         
         public IValue Run()
@@ -53,29 +52,28 @@ namespace Rhea
         
         public ValueCont GetCont()
         {
-            return new ValueCont(Insns, Stack, Env, mWinders);
+            return new ValueCont(Insns, Stack, Env, Winders);
         }
         
         public void SetCont(IValue returnValue, ValueCont cont, SourceInfo info)
         {
             var winders = cont.Winders;
-            if (winders == mWinders)
+            if (winders == Winders)
             {
                 Insns = cont.Insns;
                 Stack = cont.Stack;
                 Env = cont.Env;
                 Push(returnValue);
             }
-            else if (winders.ContainsSList(mWinders))
+            else if (winders.ContainsList(Winders))
             {
-                var winder = winders.GetPreviousElementOf(mWinders);
-                IValue before = winder.Key;
-                IValue after = winder.Value;
+                var newWinders = winders.GetPreviousList(Winders);
+                IValue before = newWinders.Head.Key;
                 Stack<IInsn> insnStack = new Stack<IInsn>();
                 insnStack.Push(new InsnPush(before));
                 insnStack.Push(new InsnCall(0, info));
                 insnStack.Push(InsnPop.Instance);
-                insnStack.Push(new InsnPushWinder(before, after));
+                insnStack.Push(new InsnSetWinders(newWinders));
                 insnStack.Push(new InsnPush(cont));
                 insnStack.Push(new InsnPush(returnValue));
                 insnStack.Push(new InsnCall(1, info));
@@ -84,8 +82,8 @@ namespace Rhea
             }
             else
             {
-                IValue after = mWinders.Head.Value;
-                mWinders = mWinders.Tail;
+                IValue after = Winders.Head.Value;
+                Winders = Winders.Tail;
                 Stack<IInsn> insnStack = new Stack<IInsn>();
                 insnStack.Push(new InsnPush(after));
                 insnStack.Push(new InsnCall(0, info));
@@ -117,13 +115,6 @@ namespace Rhea
             IValue value = Peek();
             Stack = Stack.Tail;
             return value;
-        }
-        
-        public void PushWinder(IValue before, IValue after)
-        {
-            mWinders = SList.Cons(
-                new KeyValuePair<IValue, IValue>(before, after), mWinders
-            );
         }
     }
 }
