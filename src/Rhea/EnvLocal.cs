@@ -17,6 +17,18 @@ namespace Rhea
             return false;
         }
         
+        public IValue this[ValueSymbol selector]
+        {
+            get { return mInnerEnv[selector]; }
+            set {  mInnerEnv[selector] = value; }
+        }
+        
+        public IValue this[ValueSymbol klass, ValueSymbol selector]
+        {
+            get { return mInnerEnv[klass, selector]; }
+            set { mInnerEnv[klass, selector] = value; }
+        }
+        
         public void AddVariable(ValueSymbol selector, IValue value)
         {
             mInnerEnv.AddVariable(selector, value);

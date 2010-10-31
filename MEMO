@@ -2,6 +2,7 @@ InsnSetVar
 dynamic-wind & callcc
 tail call optimization
 --
+defined variable error
 debugger showing stack and insn
 parse error positioning
 improve interactive printing of line number and lexer

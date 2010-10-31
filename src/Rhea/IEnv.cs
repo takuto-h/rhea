@@ -4,6 +4,8 @@ namespace Rhea
     {
         IEnv OuterEnv { get; }
         bool IsGlobal();
+        IValue this[ValueSymbol selector] { get; set; }
+        IValue this[ValueSymbol klass, ValueSymbol selector] { get; set; }
         void AddVariable(ValueSymbol selector, IValue value);
         void AddMethod(ValueSymbol klass, ValueSymbol selector, IValue value);
         bool TryGetVariable(ValueSymbol selector, out IValue value);

@@ -24,6 +24,30 @@ namespace Rhea
             return true;
         }
         
+        public IValue this[ValueSymbol selector]
+        {
+            get
+            {
+                return mVariables[selector];
+            }
+            set
+            {
+                mVariables[selector] = value;
+            }
+        }
+        
+        public IValue this[ValueSymbol klass, ValueSymbol selector]
+        {
+            get
+            {
+                return mMethods[MakePair(klass, selector)];
+            }
+            set
+            {
+                mMethods[MakePair(klass, selector)] = value;
+            }
+        }
+        
         public void AddVariable(ValueSymbol selector, IValue value)
         {
             mVariables.Add(selector, value);

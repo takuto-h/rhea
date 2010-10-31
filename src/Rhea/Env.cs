@@ -94,7 +94,7 @@ namespace Rhea
                 return value;
             }
             throw new RheaException(
-                string.Format("unbound variable: {0}", selector.Name), info
+                string.Format("undefined variable: {0}", selector.Name), info
             );
         }
         
@@ -118,7 +118,60 @@ namespace Rhea
                 return value;
             }
             throw new RheaException(
-                string.Format("unbound method: {0}:{1}", klass.Name, selector.Name), info
+                string.Format("undefined method: {0}:{1}", klass.Name, selector.Name), info
+            );
+        }
+        
+        public static IValue SetVariable(
+            this IEnv env,
+            ValueSymbol selector,
+            IValue value,
+            SourceInfo info
+        )
+        {
+            while (!env.IsGlobal())
+            {
+                if (env.ContainsVariable(selector))
+                {
+                    env[selector] = value;
+                    return value;
+                }
+                env = env.OuterEnv;
+            }
+            if (env.ContainsVariable(selector))
+            {
+                env[selector] = value;
+                return value;
+            }
+            throw new RheaException(
+                string.Format("undefined variable: {0}", selector.Name), info
+            );
+        }
+        
+        public static IValue SetMethod(
+            this IEnv env,
+            ValueSymbol klass,
+            ValueSymbol selector,
+            IValue value,
+            SourceInfo info
+        )
+        {
+            while (!env.IsGlobal())
+            {
+                if (env.ContainsMethod(klass, selector))
+                {
+                    env[klass, selector] = value;
+                    return value;
+                }
+                env = env.OuterEnv;
+            }
+            if (env.ContainsMethod(klass, selector))
+            {
+                env[klass, selector] = value;
+                return value;
+            }
+            throw new RheaException(
+                string.Format("undefined method: {0}:{1}", klass.Name, selector.Name), info
             );
         }
     }
