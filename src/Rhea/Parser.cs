@@ -212,7 +212,7 @@ namespace Rhea
             {
                 return ParseMethodReference(symbol);
             }
-            return new ExprGetVar(symbol, info);
+            return ParseVariableReference(symbol, info);
         }
         
         private IExpr ParseMethodReference(ValueSymbol klass)
@@ -228,6 +228,17 @@ namespace Rhea
             SourceInfo info = mLexer.GetSourceInfo();
             LookAhead();
             return new ExprGetMethod(klass, selector, info);
+        }
+        
+        private IExpr ParseVariableReference(ValueSymbol selector, SourceInfo info)
+        {
+            if (mHeadToken == TokenType.Equal)
+            {
+                info = mLexer.GetSourceInfo();
+                LookAhead();
+                return new ExprSetVar(selector, ParseExpression(), info);
+            }
+            return new ExprGetVar(selector, info);
         }
         
         private IExpr ParseSymbolLiteral()

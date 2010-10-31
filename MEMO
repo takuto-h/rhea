@@ -1,4 +1,3 @@
-InsnSetVar
 dynamic-wind & callcc
 tail call optimization
 --

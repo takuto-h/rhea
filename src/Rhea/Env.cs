@@ -94,7 +94,7 @@ namespace Rhea
                 return value;
             }
             throw new RheaException(
-                string.Format("undefined variable: {0}", selector.Name), info
+                string.Format("variable is not defined: {0}", selector.Name), info
             );
         }
         
@@ -118,7 +118,7 @@ namespace Rhea
                 return value;
             }
             throw new RheaException(
-                string.Format("undefined method: {0}:{1}", klass.Name, selector.Name), info
+                string.Format("method is not defined: {0}:{1}", klass.Name, selector.Name), info
             );
         }
         
@@ -144,7 +144,7 @@ namespace Rhea
                 return value;
             }
             throw new RheaException(
-                string.Format("undefined variable: {0}", selector.Name), info
+                string.Format("variable is not defined: {0}", selector.Name), info
             );
         }
         
@@ -171,7 +171,7 @@ namespace Rhea
                 return value;
             }
             throw new RheaException(
-                string.Format("undefined method: {0}:{1}", klass.Name, selector.Name), info
+                string.Format("method is not defined: {0}:{1}", klass.Name, selector.Name), info
             );
         }
     }
