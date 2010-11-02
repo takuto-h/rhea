@@ -1,26 +1,30 @@
-def zero = ^(f, g){
+def zero = ^(f, g):
   f()
-}
-def succ = ^(n){
-  ^(f, g){
+end
+
+def succ = ^(n):
+  ^(f, g):
     g(n)
-  }
-}
+  end
+end
+
 def one = succ(zero)
 def two = succ(one)
 def three = succ(two)
-def add = ^(m, n){
+
+def add = ^(m, n):
   m(
-    ^(){ n; },
-    ^(k){ succ(add(k, n)); }
+    ^(){ n },
+    ^(k){ succ(add(k, n)) }
     )
-}
-def show = ^(n){
+end
+
+def show = ^(n):
   n(
-    ^(){ 0; },
-    ^(k){ p(0); show(k); }
+    ^(){ 0 },
+    ^(k){ p(0); show(k) }
     )
-}
+end
 
 # def add = ^(m, n):
 #   m:

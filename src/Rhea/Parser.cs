@@ -317,9 +317,11 @@ namespace Rhea
             {
             case TokenType.LeftBrace:
                 return ParseBracedBlock();
+            case TokenType.Colon:
+                return ParseIndentedBlock();
             default:
                 throw new RheaException(
-                    Expected("LeftBrace"), mLexer.GetSourceInfo()
+                    Expected("Colon or LeftBrace"), mLexer.GetSourceInfo()
                 );
             }
         }
@@ -327,14 +329,54 @@ namespace Rhea
         private IList<IExpr> ParseBracedBlock()
         {
             IList<IExpr> exprs = new List<IExpr>();
+            LookAhead();
+            if (mHeadToken != TokenType.RightBrace)
+            {
+                exprs.Add(ParseExpression());
+                while (mHeadToken == TokenType.Semicolon)
+                {
+                    LookAhead();
+                    exprs.Add(ParseExpression());
+                }
+                if (mHeadToken != TokenType.RightBrace)
+                {
+                    throw new RheaException(
+                        Expected("RightBrace"), mLexer.GetSourceInfo()
+                    );
+                }
+            }
+            LookAhead();
+            return exprs;
+        }
+        
+        private IList<IExpr> ParseIndentedBlock()
+        {
+            IList<IExpr> exprs = new List<IExpr>();
             mLexer.BeginBlock();
             LookAhead();
-            do
+            if (mHeadToken != TokenType.NewBlock)
             {
-                exprs.Add(ParseStatement());
+                exprs.Add(ParseExpression());
+                while (mHeadToken == TokenType.Semicolon ||
+                       mHeadToken == TokenType.NewLine)
+                {
+                    LookAhead();
+                    exprs.Add(ParseExpression());
+                }
+                if (mHeadToken != TokenType.NewBlock)
+                {
+                    throw new RheaException(
+                        Expected("NewBlock"), mLexer.GetSourceInfo()
+                    );
+                }
             }
-            while (mHeadToken != TokenType.RightBrace);
-            mLexer.EndBlock();
+            LookAhead();
+            if (mHeadToken != TokenType.End)
+            {
+                throw new RheaException(
+                    Expected("End"), mLexer.GetSourceInfo()
+                );
+            }
             LookAhead();
             return exprs;
         }

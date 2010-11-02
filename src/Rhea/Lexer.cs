@@ -24,6 +24,7 @@ namespace Rhea
         {
             smReserved = new Dictionary<string, TokenType>();
             smReserved.Add("def", TokenType.Def);
+            smReserved.Add("end", TokenType.End);
         }
         
         public Lexer(SourceReader reader)
@@ -57,11 +58,6 @@ namespace Rhea
             mBeginningOfBlock = true;
         }
         
-        public void EndBlock()
-        {
-            mOffsideLines.Pop();
-        }
-        
         private void LexToken()
         {
             if (mBeginningOfLine && mBeginningOfBlock)
@@ -86,10 +82,16 @@ namespace Rhea
                     mBeginningOfLine = false;
                     LexVisibleToken();
                 }
-                else
+                else if (column == offsideLine)
                 {
                     mBeginningOfLine = false;
                     Token = TokenType.NewLine;
+                }
+                else
+                {
+                    mOffsideLines.Pop();
+                    mBeginningOfLine = false;
+                    Token = TokenType.NewBlock;
                 }
             }
             else
