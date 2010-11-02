@@ -271,7 +271,27 @@ namespace Rhea
                 );
             }
             IList<ValueSymbol> paras = ParseParameters();
-            IList<IExpr> bodyExprs = ParseBlock();
+            IList<IExpr> bodyExprs;
+            switch (mHeadToken)
+            {
+            case TokenType.LeftBrace:
+                bodyExprs = ParseBracedBlock();
+                break;
+            case TokenType.Colon:
+                bodyExprs = ParseIndentedBlock();
+                if (mHeadToken != TokenType.End)
+                {
+                    throw new RheaException(
+                        Expected("End"), mLexer.GetSourceInfo()
+                    );
+                }
+                LookAhead();
+                break;
+            default:
+                throw new RheaException(
+                    Expected("Colon or LeftBrace"), mLexer.GetSourceInfo()
+                );
+            }
             return new ExprLambda(paras, bodyExprs, info);
         }
         
@@ -309,21 +329,6 @@ namespace Rhea
             ValueSymbol param = ValueSymbol.Intern((string)mLexer.Value);
             LookAhead();
             return param;
-        }
-        
-        private IList<IExpr> ParseBlock()
-        {
-            switch (mHeadToken)
-            {
-            case TokenType.LeftBrace:
-                return ParseBracedBlock();
-            case TokenType.Colon:
-                return ParseIndentedBlock();
-            default:
-                throw new RheaException(
-                    Expected("Colon or LeftBrace"), mLexer.GetSourceInfo()
-                );
-            }
         }
         
         private IList<IExpr> ParseBracedBlock()
@@ -369,13 +374,6 @@ namespace Rhea
                         Expected("NewBlock"), mLexer.GetSourceInfo()
                     );
                 }
-            }
-            LookAhead();
-            if (mHeadToken != TokenType.End)
-            {
-                throw new RheaException(
-                    Expected("End"), mLexer.GetSourceInfo()
-                );
             }
             LookAhead();
             return exprs;
