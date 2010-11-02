@@ -327,6 +327,7 @@ namespace Rhea
                 exprs.Add(ParseStatement());
             }
             while (mHeadToken != TokenType.RightBrace);
+            mLexer.EndBlock();
             LookAhead();
             return exprs;
         }

@@ -11,36 +11,22 @@ def two = succ(one)
 def three = succ(two)
 def add = ^(m, n){
   m(
-    ^(){
-      n
-    },
-    ^(k){
-      succ(add(k, n))
-    })
+    ^(){ n; },
+    ^(k){ succ(add(k, n)); }
+    )
 }
 def show = ^(n){
   n(
-    ^(){
-      0
-    },
-    ^(k){
-      p(0)
-      show(k)
-    })
+    ^(){ 0; },
+    ^(k){ p(0); show(k); }
+    )
 }
 
 # def add = ^(m, n):
-#   m.if_zero:
-#   then:
+#   m:
+#   zero:
 #     n
-#   else^(k):
+#   succ^(k):
 #     succ(add(k, n))
 #   end
 # end
-#
-# def add = ^(m, n):
-#   m.if_zero
-#     then:
-#       n
-#     else^(k):
-#       succ(add(k, n))

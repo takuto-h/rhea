@@ -57,6 +57,11 @@ namespace Rhea
             mBeginningOfBlock = true;
         }
         
+        public void EndBlock()
+        {
+            mOffsideLines.Pop();
+        }
+        
         private void LexToken()
         {
             if (mBeginningOfLine && mBeginningOfBlock)
@@ -81,14 +86,8 @@ namespace Rhea
                     mBeginningOfLine = false;
                     LexVisibleToken();
                 }
-                else if (column == offsideLine)
-                {
-                    mBeginningOfLine = false;
-                    Token = TokenType.NewLine;
-                }
                 else
                 {
-                    mOffsideLines.Pop();
                     mBeginningOfLine = false;
                     Token = TokenType.NewLine;
                 }
