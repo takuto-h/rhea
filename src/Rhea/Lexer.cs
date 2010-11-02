@@ -10,7 +10,7 @@ namespace Rhea
         private SourceReader mReader;
         private Stack<int> mOffsideLines;
         private bool mBeginningOfLine;
-        public bool BeginningOfBlock { get; set; }
+        private bool mBeginningOfBlock;
         
         public TokenType Token { get; private set; }
         public object Value { get; private set; }
@@ -30,7 +30,7 @@ namespace Rhea
         {
             mReader = reader;
             mBeginningOfLine = false;
-            BeginningOfBlock = false;
+            mBeginningOfBlock = false;
             mOffsideLines = new Stack<int>();
             mOffsideLines.Push(1);
         }
@@ -52,19 +52,24 @@ namespace Rhea
             }
         }
         
+        public void BeginBlock()
+        {
+            mBeginningOfBlock = true;
+        }
+        
         private void LexToken()
         {
-            if (mBeginningOfLine && BeginningOfBlock)
+            if (mBeginningOfLine && mBeginningOfBlock)
             {
                 mOffsideLines.Push(mReader.Column);
                 mBeginningOfLine = false;
-                BeginningOfBlock = false;
+                mBeginningOfBlock = false;
                 LexVisibleToken();
             }
-            else if (BeginningOfBlock)
+            else if (mBeginningOfBlock)
             {
                 mOffsideLines.Push(mReader.Column);
-                BeginningOfBlock = false;
+                mBeginningOfBlock = false;
                 LexVisibleToken();
             }
             else if (mBeginningOfLine)

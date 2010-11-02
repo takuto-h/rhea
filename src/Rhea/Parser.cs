@@ -39,6 +39,8 @@ namespace Rhea
             IExpr expr = ParseExpression();
             switch (mHeadToken)
             {
+            case TokenType.EOF:
+                break;
             case TokenType.Semicolon:
             case TokenType.NewLine:
                 LookAhead();
@@ -318,7 +320,7 @@ namespace Rhea
         private IList<IExpr> ParseBlock()
         {
             IList<IExpr> exprs = new List<IExpr>();
-            mLexer.BeginningOfBlock = true;
+            mLexer.BeginBlock();
             LookAhead();
             do
             {

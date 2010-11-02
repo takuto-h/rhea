@@ -27,7 +27,7 @@ def show = ^(n){
       p(0)
       show(k)
     })
-};
+}
 
 # def add = ^(m, n):
 #   m.if_zero:
