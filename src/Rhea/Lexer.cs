@@ -8,6 +8,9 @@ namespace Rhea
         private static Dictionary<string, TokenType> smReserved;
         
         private SourceReader mReader;
+        private Stack<int> mOffsideLines;
+        private bool mBeginningOfLine;
+        public bool BeginningOfBlock { get; set; }
         
         public TokenType Token { get; private set; }
         public object Value { get; private set; }
@@ -26,6 +29,10 @@ namespace Rhea
         public Lexer(SourceReader reader)
         {
             mReader = reader;
+            mBeginningOfLine = false;
+            BeginningOfBlock = false;
+            mOffsideLines = new Stack<int>();
+            mOffsideLines.Push(1);
         }
         
         public bool Advance()
@@ -39,6 +46,59 @@ namespace Rhea
             case '#':
                 SkipLineComment();
                 return Advance();
+            default:
+                LexToken();
+                return true;
+            }
+        }
+        
+        private void LexToken()
+        {
+            if (mBeginningOfLine && BeginningOfBlock)
+            {
+                mOffsideLines.Push(mReader.Column);
+                mBeginningOfLine = false;
+                BeginningOfBlock = false;
+                LexVisibleToken();
+            }
+            else if (BeginningOfBlock)
+            {
+                mOffsideLines.Push(mReader.Column);
+                BeginningOfBlock = false;
+                LexVisibleToken();
+            }
+            else if (mBeginningOfLine)
+            {
+                int column = mReader.Column;
+                int offsideLine = mOffsideLines.Peek();
+                if (column > offsideLine)
+                {
+                    mBeginningOfLine = false;
+                    LexVisibleToken();
+                }
+                else if (column == offsideLine)
+                {
+                    mBeginningOfLine = false;
+                    Token = TokenType.NewLine;
+                }
+                else
+                {
+                    mOffsideLines.Pop();
+                    mBeginningOfLine = false;
+                    Token = TokenType.NewLine;
+                }
+            }
+            else
+            {
+                LexVisibleToken();
+            }
+        }
+        
+        private void LexVisibleToken()
+        {
+            int c = mReader.Peek();
+            switch (c)
+            {
             case '(':
             case ')':
             case ',':
@@ -69,7 +129,6 @@ namespace Rhea
                 }
                 break;
             }
-            return true;
         }
         
         private bool IsIdentifierStart(char c)
@@ -123,6 +182,10 @@ namespace Rhea
             int c = mReader.Peek();
             while (c != -1 && char.IsWhiteSpace((char)c))
             {
+                if (c == '\n')
+                {
+                    mBeginningOfLine = true;
+                }
                 mReader.Read();
                 c = mReader.Peek();
             }

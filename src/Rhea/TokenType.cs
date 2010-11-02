@@ -3,10 +3,13 @@ namespace Rhea
     public enum TokenType
     {
         EOF        = -1,
-        Int        = -2,
-        Identifier = -3,
         
-        Def = -4,
+        NewLine    = -2,
+        
+        Int        = -3,
+        Identifier = -4,
+        
+        Def = -5,
         
         ExclamationMark = 33,
         Dollar          = 36,

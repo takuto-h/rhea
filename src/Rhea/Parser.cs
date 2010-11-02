@@ -40,11 +40,12 @@ namespace Rhea
             switch (mHeadToken)
             {
             case TokenType.Semicolon:
+            case TokenType.NewLine:
                 LookAhead();
                 break;
             default:
                 throw new RheaException(
-                    Expected("Semicolon"), mLexer.GetSourceInfo()
+                    Expected("NewLine or Semicolon"), mLexer.GetSourceInfo()
                 );
             }
             return expr;
@@ -317,6 +318,7 @@ namespace Rhea
         private IList<IExpr> ParseBlock()
         {
             IList<IExpr> exprs = new List<IExpr>();
+            mLexer.BeginningOfBlock = true;
             LookAhead();
             do
             {
