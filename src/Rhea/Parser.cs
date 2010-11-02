@@ -271,12 +271,6 @@ namespace Rhea
                 );
             }
             IList<ValueSymbol> paras = ParseParameters();
-            if (mHeadToken != TokenType.LeftBrace)
-            {
-                throw new RheaException(
-                    Expected("LeftBrace"), mLexer.GetSourceInfo()
-                );
-            }
             IList<IExpr> bodyExprs = ParseBlock();
             return new ExprLambda(paras, bodyExprs, info);
         }
@@ -318,6 +312,19 @@ namespace Rhea
         }
         
         private IList<IExpr> ParseBlock()
+        {
+            switch (mHeadToken)
+            {
+            case TokenType.LeftBrace:
+                return ParseBracedBlock();
+            default:
+                throw new RheaException(
+                    Expected("LeftBrace"), mLexer.GetSourceInfo()
+                );
+            }
+        }
+        
+        private IList<IExpr> ParseBracedBlock()
         {
             IList<IExpr> exprs = new List<IExpr>();
             mLexer.BeginBlock();
