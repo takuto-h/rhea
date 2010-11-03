@@ -412,7 +412,6 @@ namespace Rhea
         private IList<IExpr> ParseIndentedBlock()
         {
             IList<IExpr> exprs = new List<IExpr>();
-            mLexer.BeginBlock();
             LookAhead();
             exprs.Add(ParseExpression());
             while (mHeadToken == TokenType.Semicolon ||

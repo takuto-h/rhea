@@ -48,59 +48,70 @@ namespace Rhea
                 SkipLineComment();
                 return Advance();
             default:
-                LexToken();
+                return LexToken();
+            }
+        }
+        
+        private bool LexToken()
+        {
+            if (mBeginningOfBlock)
+            {
+                return LexBeginningOfBlock();
+            }
+            else if (mBeginningOfLine)
+            {
+                return LexBeginningOfLine();
+            }
+            else
+            {
+                return LexVisibleToken();
+            }
+        }
+        
+        private bool LexBeginningOfBlock()
+        {
+            mBeginningOfBlock = false;
+            if (mBeginningOfLine)
+            {
+                mBeginningOfLine = false;
+            }
+            int column = mReader.Column;
+            int offsideLine = mOffsideLines.Peek();
+            if (column > offsideLine)
+            {
+                mOffsideLines.Push(column);
+                Token = TokenType.BeginBlock;
+                return true;
+            }
+            else
+            {
+                return LexVisibleToken();
+            }
+        }
+        
+        private bool LexBeginningOfLine()
+        {
+            mBeginningOfLine = false;
+            int column = mReader.Column;
+            int offsideLine = mOffsideLines.Peek();
+            if (column > offsideLine)
+            {
+                return LexVisibleToken();
+            }
+            else if (column == offsideLine)
+            {
+                Token = TokenType.NewLine;
+                return true;
+            }
+            else
+            {
+                mOffsideLines.Pop();
+                Token = TokenType.EndBlock;
                 return true;
             }
         }
         
-        public void BeginBlock()
-        {
-            mBeginningOfBlock = true;
-        }
-        
-        private void LexToken()
-        {
-            if (mBeginningOfLine && mBeginningOfBlock)
-            {
-                mOffsideLines.Push(mReader.Column);
-                mBeginningOfLine = false;
-                mBeginningOfBlock = false;
-                LexVisibleToken();
-            }
-            else if (mBeginningOfBlock)
-            {
-                mOffsideLines.Push(mReader.Column);
-                mBeginningOfBlock = false;
-                LexVisibleToken();
-            }
-            else if (mBeginningOfLine)
-            {
-                int column = mReader.Column;
-                int offsideLine = mOffsideLines.Peek();
-                if (column > offsideLine)
-                {
-                    mBeginningOfLine = false;
-                    LexVisibleToken();
-                }
-                else if (column == offsideLine)
-                {
-                    mBeginningOfLine = false;
-                    Token = TokenType.NewLine;
-                }
-                else
-                {
-                    mOffsideLines.Pop();
-                    mBeginningOfLine = false;
-                    Token = TokenType.EndBlock;
-                }
-            }
-            else
-            {
-                LexVisibleToken();
-            }
-        }
-        
-        private void LexVisibleToken()
+        private bool LexVisibleToken()
         {
             int c = mReader.Peek();
             switch (c)
@@ -121,8 +132,8 @@ namespace Rhea
                 c = mReader.Peek();
                 if (c != -1 && char.IsWhiteSpace((char)c))
                 {
-                    Token = TokenType.BeginBlock;
-                    break;
+                    mBeginningOfBlock = true;
+                    return Advance();
                 }
                 Token = TokenType.Colon;
                 break;
@@ -144,6 +155,7 @@ namespace Rhea
                 }
                 break;
             }
+            return true;
         }
         
         private bool IsIdentifierStart(char c)
