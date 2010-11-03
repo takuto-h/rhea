@@ -196,6 +196,10 @@ namespace Rhea
                 break;
             case TokenType.Hat:
                 expr = ParseLambdaExpression();
+                if (mHeadToken == TokenType.End)
+                {
+                    LookAhead();
+                }
                 break;
             default:
                 throw new RheaException(
@@ -279,13 +283,6 @@ namespace Rhea
                 break;
             case TokenType.Colon:
                 bodyExprs = ParseIndentedBlock();
-                if (mHeadToken != TokenType.End)
-                {
-                    throw new RheaException(
-                        Expected("End"), mLexer.GetSourceInfo()
-                    );
-                }
-                LookAhead();
                 break;
             default:
                 throw new RheaException(
@@ -335,20 +332,17 @@ namespace Rhea
         {
             IList<IExpr> exprs = new List<IExpr>();
             LookAhead();
+            exprs.Add(ParseExpression());
+            while (mHeadToken == TokenType.Semicolon)
+            {
+                LookAhead();
+                exprs.Add(ParseExpression());
+            }
             if (mHeadToken != TokenType.RightBrace)
             {
-                exprs.Add(ParseExpression());
-                while (mHeadToken == TokenType.Semicolon)
-                {
-                    LookAhead();
-                    exprs.Add(ParseExpression());
-                }
-                if (mHeadToken != TokenType.RightBrace)
-                {
-                    throw new RheaException(
-                        Expected("RightBrace"), mLexer.GetSourceInfo()
-                    );
-                }
+                throw new RheaException(
+                    Expected("RightBrace"), mLexer.GetSourceInfo()
+                );
             }
             LookAhead();
             return exprs;
@@ -359,21 +353,18 @@ namespace Rhea
             IList<IExpr> exprs = new List<IExpr>();
             mLexer.BeginBlock();
             LookAhead();
+            exprs.Add(ParseExpression());
+            while (mHeadToken == TokenType.Semicolon ||
+                   mHeadToken == TokenType.NewLine)
+            {
+                LookAhead();
+                exprs.Add(ParseExpression());
+            }
             if (mHeadToken != TokenType.NewBlock)
             {
-                exprs.Add(ParseExpression());
-                while (mHeadToken == TokenType.Semicolon ||
-                       mHeadToken == TokenType.NewLine)
-                {
-                    LookAhead();
-                    exprs.Add(ParseExpression());
-                }
-                if (mHeadToken != TokenType.NewBlock)
-                {
-                    throw new RheaException(
-                        Expected("NewBlock"), mLexer.GetSourceInfo()
-                    );
-                }
+                throw new RheaException(
+                    Expected("NewBlock"), mLexer.GetSourceInfo()
+                );
             }
             LookAhead();
             return exprs;

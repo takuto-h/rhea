@@ -1,4 +1,4 @@
-parser: omit semicolon at the end of block
+^(){}
 --
 tail call optimization
 debugger showing stack and insn
