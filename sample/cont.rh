@@ -1,8 +1,8 @@
-dynamic_wind^():
+dynamic_wind:
   p(:a)
-body^():
+body:
   p(:b)
-after^():
+after:
   p(:c)
 end
 
@@ -14,23 +14,23 @@ def cont = 0
   p(:f)
 end()
 
-dynamic_wind^():
+dynamic_wind:
   p(:g)
-body^():
+body:
   p(:h)
   cont(:i)
   p(:j)
-after^():
+after:
   p(:k)
 end
 
-dynamic_wind^():
+dynamic_wind:
   p(:l)
-body^():
+body:
   p(:m)
   p(callcc^(c){ cont = c; :n })
   p(:o)
-after^():
+after:
   p(:p)
 end
 

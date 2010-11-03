@@ -120,14 +120,17 @@ namespace Rhea
             IExpr expr = ParseAtom();
             while (mHeadToken == TokenType.LeftParen ||
                    mHeadToken == TokenType.Hat ||
+                   mHeadToken == TokenType.BeginBlock ||
+                   mHeadToken == TokenType.LeftBrace ||
                    mHeadToken == TokenType.Dot)
             {
-                SourceInfo info = mLexer.GetSourceInfo();
                 switch (mHeadToken)
                 {
                 case TokenType.LeftParen:
                 case TokenType.Hat:
-                    expr = new ExprCall(expr, ParseArguments(), info);
+                case TokenType.BeginBlock:
+                case TokenType.LeftBrace:
+                    expr = ParseFunctionCall(expr);
                     break;
                 case TokenType.Dot:
                     expr = ParseMessageSend(expr);
@@ -135,6 +138,12 @@ namespace Rhea
                 }
             }
             return expr;
+        }
+        
+        private IExpr ParseFunctionCall(IExpr funcExpr)
+        {
+            SourceInfo info = mLexer.GetSourceInfo();
+            return new ExprCall(funcExpr, ParseArguments(), info);
         }
         
         private IExpr ParseMessageSend(IExpr recvExpr)
@@ -180,6 +189,10 @@ namespace Rhea
             case TokenType.Hat:
                 argExprs.Add(ParseLambdaExpression());
                 break;
+            case TokenType.BeginBlock:
+            case TokenType.LeftBrace:
+                argExprs.Add(ParseLambdaExpressionOmittingParameters());
+                break;
             }
             return argExprs;
         }
@@ -213,8 +226,7 @@ namespace Rhea
             switch (mHeadToken)
             {
             case TokenType.Int:
-                expr = new ExprConst(new ValueInt((int)mLexer.Value));
-                LookAhead();
+                expr = ParseInt();
                 break;
             case TokenType.Identifier:
                 expr = ParseReference();
@@ -235,6 +247,13 @@ namespace Rhea
                     mLexer.GetSourceInfo()
                 );
             }
+            return expr;
+        }
+        
+        private IExpr ParseInt()
+        {
+            IExpr expr = new ExprConst(new ValueInt((int)mLexer.Value));
+            LookAhead();
             return expr;
         }
         
@@ -303,20 +322,15 @@ namespace Rhea
                 );
             }
             IList<ValueSymbol> paras = ParseParameters();
-            IList<IExpr> bodyExprs;
-            switch (mHeadToken)
-            {
-            case TokenType.LeftBrace:
-                bodyExprs = ParseBracedBlock();
-                break;
-            case TokenType.BeginBlock:
-                bodyExprs = ParseIndentedBlock();
-                break;
-            default:
-                throw new RheaException(
-                    Expected("BeginBlock or LeftBrace"), mLexer.GetSourceInfo()
-                );
-            }
+            IList<IExpr> bodyExprs = ParseBlock();
+            return new ExprLambda(paras, bodyExprs, info);
+        }
+        
+        private IExpr ParseLambdaExpressionOmittingParameters()
+        {
+            SourceInfo info = mLexer.GetSourceInfo();
+            IList<ValueSymbol> paras = new List<ValueSymbol>();
+            IList<IExpr> bodyExprs = ParseBlock();
             return new ExprLambda(paras, bodyExprs, info);
         }
         
@@ -354,6 +368,25 @@ namespace Rhea
             ValueSymbol param = ValueSymbol.Intern((string)mLexer.Value);
             LookAhead();
             return param;
+        }
+        
+        private IList<IExpr> ParseBlock()
+        {
+            IList<IExpr> bodyExprs;
+            switch (mHeadToken)
+            {
+            case TokenType.LeftBrace:
+                bodyExprs = ParseBracedBlock();
+                break;
+            case TokenType.BeginBlock:
+                bodyExprs = ParseIndentedBlock();
+                break;
+            default:
+                throw new RheaException(
+                    Expected("BeginBlock or LeftBrace"), mLexer.GetSourceInfo()
+                );
+            }
+            return bodyExprs;
         }
         
         private IList<IExpr> ParseBracedBlock()
