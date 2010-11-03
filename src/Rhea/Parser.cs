@@ -119,12 +119,14 @@ namespace Rhea
         {
             IExpr expr = ParseAtom();
             while (mHeadToken == TokenType.LeftParen ||
+                   mHeadToken == TokenType.Hat ||
                    mHeadToken == TokenType.Dot)
             {
                 SourceInfo info = mLexer.GetSourceInfo();
                 switch (mHeadToken)
                 {
                 case TokenType.LeftParen:
+                case TokenType.Hat:
                     expr = new ExprCall(expr, ParseArguments(), info);
                     break;
                 case TokenType.Dot:
@@ -147,18 +149,44 @@ namespace Rhea
             }
             ValueSymbol selector = ValueSymbol.Intern((string)mLexer.Value);
             LookAhead();
-            if (mHeadToken != TokenType.LeftParen)
-            {
-                throw new RheaException(
-                    Expected("LeftParen"), mLexer.GetSourceInfo()
-                );
-            }
             return new ExprSend(recvExpr, selector, ParseArguments(), info);
         }
         
         private IList<IExpr> ParseArguments()
         {
-            IList<IExpr> argExprs = new List<IExpr>();
+            List<IExpr> argExprs = new List<IExpr>();
+            argExprs.AddRange(ParseBlockArguments());
+            while (mHeadToken == TokenType.Identifier)
+            {
+                LookAhead();
+                argExprs.AddRange(ParseBlockArguments());
+            }
+            if (mHeadToken == TokenType.End)
+            {
+                LookAhead();
+            }
+            return argExprs;
+        }
+        
+        private IList<IExpr> ParseBlockArguments()
+        {
+            List<IExpr> argExprs = new List<IExpr>();
+            if (mHeadToken == TokenType.LeftParen)
+            {
+                argExprs.AddRange(ParseParenthesizedArguments());
+            }
+            switch (mHeadToken)
+            {
+            case TokenType.Hat:
+                argExprs.Add(ParseLambdaExpression());
+                break;
+            }
+            return argExprs;
+        }
+        
+        private IList<IExpr> ParseParenthesizedArguments()
+        {
+            List<IExpr> argExprs = new List<IExpr>();
             LookAhead();
             if (mHeadToken != TokenType.RightParen)
             {

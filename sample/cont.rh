@@ -1,25 +1,37 @@
-dynamic_wind(
-  ^(){ p(:a) },
-  ^(){ p(:b) },
-  ^(){ p(:c) }
-  )
+dynamic_wind^():
+  p(:a)
+body^():
+  p(:b)
+after^():
+  p(:c)
+end
 
 def cont = 0
 
 ^():
   p(:d)
-  p(callcc(^(c){ cont = c; :e }))
+  p(callcc^(c){ cont = c; :e })
   p(:f)
 end()
 
-dynamic_wind(
-  ^(){ p(:g) },
-  ^(){ p(:h); cont(:i); p(:j) },
-  ^(){ p(:k) }
-  )
-dynamic_wind(
-  ^(){ p(:l) },
-  ^(){ p(:m); p(callcc(^(c){ cont = c; :n })); p(:o) },
-  ^(){ p(:p) }
-  )
+dynamic_wind^():
+  p(:g)
+body^():
+  p(:h)
+  cont(:i)
+  p(:j)
+after^():
+  p(:k)
+end
+
+dynamic_wind^():
+  p(:l)
+body^():
+  p(:m)
+  p(callcc^(c){ cont = c; :n })
+  p(:o)
+after^():
+  p(:p)
+end
+
 cont(:q)
