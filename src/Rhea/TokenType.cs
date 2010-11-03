@@ -10,9 +10,10 @@ namespace Rhea
         
         Int             = -5,
         Identifier      = -6,
+        String          = -7,
         
-        Def             = -7,
-        End             = -8,
+        Def             = -8,
+        End             = -9,
         
         ExclamationMark = 33,
         Dollar          = 36,

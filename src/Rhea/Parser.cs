@@ -230,6 +230,9 @@ namespace Rhea
             case TokenType.Int:
                 expr = ParseInt();
                 break;
+            case TokenType.String:
+                expr = ParseString();
+                break;
             case TokenType.Identifier:
                 expr = ParseReference();
                 break;
@@ -255,6 +258,13 @@ namespace Rhea
         private IExpr ParseInt()
         {
             IExpr expr = new ExprConst(new ValueInt((int)mLexer.Value));
+            LookAhead();
+            return expr;
+        }
+        
+        private IExpr ParseString()
+        {
+            IExpr expr = new ExprConst(new ValueString((string)mLexer.Value));
             LookAhead();
             return expr;
         }

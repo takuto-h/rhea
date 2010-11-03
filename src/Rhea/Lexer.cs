@@ -137,6 +137,9 @@ namespace Rhea
                 }
                 Token = TokenType.Colon;
                 break;
+            case '"':
+                LexString();
+                break;
             default:
                 if (char.IsDigit((char)c))
                 {
@@ -166,6 +169,27 @@ namespace Rhea
         private bool IsIdentifierPart(char c)
         {
             return char.IsLetterOrDigit(c) || c == '_';
+        }
+        
+        private void LexString()
+        {
+            StringBuilder sb = new StringBuilder();
+            mReader.Read();
+            int c = mReader.Peek();
+            while (c != '"')
+            {
+                if (c == -1)
+                {
+                    throw new RheaException(
+                        "EOF inside a string", GetSourceInfo()
+                    );
+                }
+                sb.Append((char)mReader.Read());
+                c = mReader.Peek();
+            }
+            mReader.Read();
+            Token = TokenType.String;
+            Value = sb.ToString();
         }
         
         private void LexInt()
