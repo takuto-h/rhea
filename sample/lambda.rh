@@ -14,6 +14,7 @@ def three = succ(two)
 
 def add = ^(m, n):
   m:
+  zero:
     n
   succ^(k):
     succ(add(k, n))
@@ -22,18 +23,10 @@ end
 
 def show = ^(n):
   n:
+  zero:
     0
   succ^(k):
     p(0)
     show(k)
   end
 end
-
-# def add = ^(m, n):
-#   m:
-#   zero:
-#     n
-#   succ^(k):
-#     succ(add(k, n))
-#   end
-# end

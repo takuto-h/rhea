@@ -122,6 +122,7 @@ namespace Rhea
                    mHeadToken == TokenType.Hat ||
                    mHeadToken == TokenType.BeginBlock ||
                    mHeadToken == TokenType.LeftBrace ||
+                   mHeadToken == TokenType.Identifier ||
                    mHeadToken == TokenType.Dot)
             {
                 switch (mHeadToken)
@@ -130,6 +131,7 @@ namespace Rhea
                 case TokenType.Hat:
                 case TokenType.BeginBlock:
                 case TokenType.LeftBrace:
+                case TokenType.Identifier:
                     expr = ParseFunctionCall(expr);
                     break;
                 case TokenType.Dot:
