@@ -309,12 +309,12 @@ namespace Rhea
             case TokenType.LeftBrace:
                 bodyExprs = ParseBracedBlock();
                 break;
-            case TokenType.Colon:
+            case TokenType.BeginBlock:
                 bodyExprs = ParseIndentedBlock();
                 break;
             default:
                 throw new RheaException(
-                    Expected("Colon or LeftBrace"), mLexer.GetSourceInfo()
+                    Expected("BeginBlock or LeftBrace"), mLexer.GetSourceInfo()
                 );
             }
             return new ExprLambda(paras, bodyExprs, info);
@@ -388,10 +388,10 @@ namespace Rhea
                 LookAhead();
                 exprs.Add(ParseExpression());
             }
-            if (mHeadToken != TokenType.NewBlock)
+            if (mHeadToken != TokenType.EndBlock)
             {
                 throw new RheaException(
-                    Expected("NewBlock"), mLexer.GetSourceInfo()
+                    Expected("EndBlock"), mLexer.GetSourceInfo()
                 );
             }
             LookAhead();

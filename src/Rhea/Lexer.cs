@@ -91,7 +91,7 @@ namespace Rhea
                 {
                     mOffsideLines.Pop();
                     mBeginningOfLine = false;
-                    Token = TokenType.NewBlock;
+                    Token = TokenType.EndBlock;
                 }
             }
             else
@@ -109,13 +109,22 @@ namespace Rhea
             case ')':
             case ',':
             case '.':
-            case ':':
             case ';':
             case '=':
             case '^':
             case '{':
             case '}':
                 Token = (TokenType)mReader.Read();
+                break;
+            case ':':
+                mReader.Read();
+                c = mReader.Peek();
+                if (c != -1 && char.IsWhiteSpace((char)c))
+                {
+                    Token = TokenType.BeginBlock;
+                    break;
+                }
+                Token = TokenType.Colon;
                 break;
             default:
                 if (char.IsDigit((char)c))

@@ -5,13 +5,14 @@ namespace Rhea
         EOF             = -1,
         
         NewLine         = -2,
-        NewBlock        = -3,
+        BeginBlock      = -3,
+        EndBlock        = -4,
         
-        Int             = -4,
-        Identifier      = -5,
+        Int             = -5,
+        Identifier      = -6,
         
-        Def             = -6,
-        End             = -7,
+        Def             = -7,
+        End             = -8,
         
         ExclamationMark = 33,
         Dollar          = 36,
