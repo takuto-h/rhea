@@ -70,10 +70,11 @@ namespace Rhea
                     );
                 }
                 ValueSymbol symbol = ValueSymbol.Intern((string)mLexer.Value);
+                SourceInfo info = mLexer.GetSourceInfo();
                 LookAhead();
                 if (mHeadToken == TokenType.Colon)
                 {
-                    return ParseMethodDefinition(symbol);
+                    return ParseMethodDefinition(new ExprGetVar(symbol, info));
                 }
                 return ParseVariableDefinition(symbol);
             }
@@ -93,7 +94,7 @@ namespace Rhea
             return new ExprDefVar(selector, ParseExpression(), info);
         }
         
-        private IExpr ParseMethodDefinition(ValueSymbol klass)
+        private IExpr ParseMethodDefinition(IExpr klassExpr)
         {
             LookAhead();
             if (mHeadToken != TokenType.Identifier)
@@ -112,7 +113,7 @@ namespace Rhea
             }
             SourceInfo info = mLexer.GetSourceInfo();
             LookAhead();
-            return new ExprDefMethod(klass, selector, ParseExpression(), info);
+            return new ExprDefMethod(klassExpr, selector, ParseExpression(), info);
         }
         
         private IExpr ParsePrimary()
@@ -276,12 +277,12 @@ namespace Rhea
             LookAhead();
             if (mHeadToken == TokenType.Colon)
             {
-                return ParseMethodReference(symbol);
+                return ParseMethodReference(new ExprGetVar(symbol, info));
             }
             return ParseVariableReference(symbol, info);
         }
         
-        private IExpr ParseMethodReference(ValueSymbol klass)
+        private IExpr ParseMethodReference(IExpr klassExpr)
         {
             LookAhead();
             if (mHeadToken != TokenType.Identifier)
@@ -293,7 +294,7 @@ namespace Rhea
             ValueSymbol selector = ValueSymbol.Intern((string)mLexer.Value);
             SourceInfo info = mLexer.GetSourceInfo();
             LookAhead();
-            return new ExprGetMethod(klass, selector, info);
+            return new ExprGetMethod(klassExpr, selector, info);
         }
         
         private IExpr ParseVariableReference(ValueSymbol selector, SourceInfo info)

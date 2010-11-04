@@ -2,27 +2,32 @@ namespace Rhea
 {
     public class InsnGetMethod : IInsn
     {
-        private ValueSymbol mKlass;
         private ValueSymbol mSelector;
         private SourceInfo mInfo;
         
-        public InsnGetMethod(ValueSymbol klass, ValueSymbol selector, SourceInfo info)
+        public InsnGetMethod(ValueSymbol selector, SourceInfo info)
         {
-            mKlass = klass;
             mSelector = selector;
             mInfo = info;
         }
         
         public void Execute(VM vm)
         {
-            vm.Push(vm.Env.GetMethod(mKlass, mSelector, mInfo));
+            IValue value = vm.Pop();
+            ValueSymbol klass = value as ValueSymbol;
+            if (klass == null)
+            {
+                throw new RheaException(
+                    string.Format("symbol required, but got {0}", value),
+                    mInfo
+                );
+            }
+            vm.Push(vm.Env.GetMethod(klass, mSelector, mInfo));
         }
         
         public string Show()
         {
-            return string.Format(
-                "(getmethod {0} {1} {2})", mKlass.Name, mSelector.Name, mInfo
-            );
+            return string.Format("(getmethod {0} {1})", mSelector.Name, mInfo);
         }
         
         public override string ToString()

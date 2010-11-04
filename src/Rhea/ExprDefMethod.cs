@@ -2,19 +2,19 @@ namespace Rhea
 {
     public class ExprDefMethod : IExpr
     {
-        private ValueSymbol mKlass;
+        private IExpr mKlassExpr;
         private ValueSymbol mSelector;
         private IExpr mValueExpr;
         private SourceInfo mInfo;
         
         public ExprDefMethod(
-            ValueSymbol klass,
+            IExpr klassExpr,
             ValueSymbol selector,
             IExpr valueExpr,
             SourceInfo info
         )
         {
-            mKlass = klass;
+            mKlassExpr = klassExpr;
             mSelector = selector;
             mValueExpr = valueExpr;
             mInfo = info;
@@ -22,8 +22,9 @@ namespace Rhea
         
         public void Compile(Compiler compiler)
         {
+            mKlassExpr.Compile(compiler);
             mValueExpr.Compile(compiler);
-            compiler.Push(new InsnDefMethod(mKlass, mSelector, mInfo));
+            compiler.Push(new InsnDefMethod(mSelector, mInfo));
         }
     }
 }
