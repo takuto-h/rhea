@@ -2,11 +2,20 @@ namespace Rhea
 {
     public class ValueString : IValue
     {
+        private static ValueSymbol smKlass;
+        
         private string mStringValue;
         
         public ValueSymbol Klass
         {
-            get { return ValueSymbol.Intern("String"); }
+            get
+            {
+                if (smKlass == null)
+                {
+                    smKlass = ValueSymbol.Generate("String");
+                }
+                return smKlass;
+            }
         }
         
         public ValueString(string stringValue)

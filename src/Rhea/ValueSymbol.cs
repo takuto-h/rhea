@@ -4,13 +4,22 @@ namespace Rhea
 {
     public class ValueSymbol : IValue
     {
+        private static ValueSymbol smKlass;
+        
         private static IDictionary<string, ValueSymbol> smInstances;
         
         public string Name { get; private set; }
         
         public ValueSymbol Klass
         {
-            get { return ValueSymbol.Intern("Symbol"); }
+            get
+            {
+                if (smKlass == null)
+                {
+                    smKlass = ValueSymbol.Generate("Symbol");
+                }
+                return smKlass;
+            }
         }
         
         static ValueSymbol()
@@ -32,6 +41,11 @@ namespace Rhea
                 smInstances[name] = symbol;
             }
             return symbol;
+        }
+        
+        public static ValueSymbol Generate(string name)
+        {
+            return new ValueSymbol(name);
         }
         
         public string Show()

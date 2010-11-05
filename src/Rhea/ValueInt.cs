@@ -2,11 +2,20 @@ namespace Rhea
 {
     public class ValueInt : IValue
     {
+        private static ValueSymbol smKlass;
+        
         private int mIntValue;
         
         public ValueSymbol Klass
         {
-            get { return ValueSymbol.Intern("Int"); }
+            get
+            {
+                if (smKlass == null)
+                {
+                    smKlass = ValueSymbol.Generate("Int");
+                }
+                return smKlass;
+            }
         }
         
         public ValueInt(int intValue)

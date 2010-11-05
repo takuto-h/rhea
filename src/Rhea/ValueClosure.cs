@@ -4,6 +4,8 @@ namespace Rhea
 {
     public class ValueClosure : IValueFunc
     {
+        private static ValueSymbol smKlass;
+        
         private IList<ValueSymbol> mParams;
         private ISList<IInsn> mInsns;
         private IEnv mEnv;
@@ -11,7 +13,14 @@ namespace Rhea
         
         public ValueSymbol Klass
         {
-            get { return ValueSymbol.Intern("Closure"); }
+            get
+            {
+                if (smKlass == null)
+                {
+                    smKlass = ValueSymbol.Generate("Closure");
+                }
+                return smKlass;
+            }
         }
         
         public ValueClosure(

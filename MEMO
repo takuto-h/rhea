@@ -1,5 +1,6 @@
-^(){}
+uninterned klasses
 --
+^(){}
 tail call optimization
 debugger showing stack and insn
 parse error positioning

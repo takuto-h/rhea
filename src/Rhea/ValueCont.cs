@@ -4,6 +4,8 @@ namespace Rhea
 {
     public class ValueCont : IValueFunc
     {
+        private static ValueSymbol smKlass;
+        
         public ISList<IInsn> Insns { get; private set; }
         public ISList<IValue> Stack { get; private set; }
         public IEnv Env { get; private set; }
@@ -11,7 +13,14 @@ namespace Rhea
         
         public ValueSymbol Klass
         {
-            get { return ValueSymbol.Intern("Cont"); }
+            get
+            {
+                if (smKlass == null)
+                {
+                    smKlass = ValueSymbol.Generate("Cont");
+                }
+                return smKlass;
+            }
         }
         
         public ValueCont(

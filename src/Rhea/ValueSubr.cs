@@ -6,13 +6,22 @@ namespace Rhea
     
     public class ValueSubr : IValueFunc
     {
+        private static ValueSymbol smKlass;
+        
         private string mName;
         private int mParamCount;
         private Subr mSubrValue;
         
         public ValueSymbol Klass
         {
-            get { return ValueSymbol.Intern("Subr"); }
+            get
+            {
+                if (smKlass == null)
+                {
+                    smKlass = ValueSymbol.Generate("Subr");
+                }
+                return smKlass;
+            }
         }
         
         public ValueSubr(
