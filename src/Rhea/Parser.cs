@@ -78,7 +78,7 @@ namespace Rhea
                 }
                 return ParseVariableDefinition(symbol);
             }
-            return ParsePrimary();
+            return ParseSimpleExpression();
         }
         
         private IExpr ParseVariableDefinition(ValueSymbol symbol)
@@ -114,6 +114,64 @@ namespace Rhea
             SourceInfo info = mLexer.GetSourceInfo();
             LookAhead();
             return new ExprDefMethod(klassExpr, selector, ParseExpression(), info);
+        }
+        
+        private IExpr ParseSimpleExpression()
+        {
+            return ParseAdditiveExpression();
+        }
+        
+        private IExpr ParseAdditiveExpression()
+        {
+            IExpr expr = ParseMultiplicativeExpression();
+            while (mHeadToken == TokenType.Plus ||
+                   mHeadToken == TokenType.Minus)
+            {
+                SourceInfo info = mLexer.GetSourceInfo();
+                ValueSymbol selector = null;
+                switch (mHeadToken)
+                {
+                case TokenType.Plus:
+                    selector = ValueSymbol.Intern("__add__");
+                    break;
+                case TokenType.Minus:
+                    selector = ValueSymbol.Intern("__sub__");
+                    break;
+                }
+                LookAhead();
+                IList<IExpr> argExprs = new List<IExpr> {
+                    ParseMultiplicativeExpression()
+                };
+                expr = new ExprSend(expr, selector, argExprs, info);
+            }
+            return expr;
+        }
+        
+        private IExpr ParseMultiplicativeExpression()
+        {
+            IExpr expr = ParseUnaryExpression();
+            while (mHeadToken == TokenType.Asterisk)
+            {
+                SourceInfo info = mLexer.GetSourceInfo();
+                ValueSymbol selector = null;
+                switch (mHeadToken)
+                {
+                case TokenType.Asterisk:
+                    selector = ValueSymbol.Intern("__mul__");
+                    break;
+                }
+                LookAhead();
+                IList<IExpr> argExprs = new List<IExpr> {
+                    ParseUnaryExpression()
+                };
+                expr = new ExprSend(expr, selector, argExprs, info);
+            }
+            return expr;
+        }
+        
+        private IExpr ParseUnaryExpression()
+        {
+            return ParsePrimary();
         }
         
         private IExpr ParsePrimary()
