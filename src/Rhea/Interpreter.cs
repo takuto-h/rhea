@@ -88,11 +88,12 @@ namespace Rhea
         
         private void Interpret(SourceReader reader, bool interactive)
         {
-            try
+            Lexer lexer = new Lexer(reader);
+            Parser parser = new Parser(lexer);
+            while (true)
             {
-                Lexer lexer = new Lexer(reader);
-                Parser parser = new Parser(lexer);
-                while (true)
+                VM vm;
+                try
                 {
                     IExpr expr = parser.Parse();
                     if (expr == null)
@@ -101,26 +102,27 @@ namespace Rhea
                     }
                     Compiler compiler = new Compiler();
                     expr.Compile(compiler);
-                    VM vm = new VM(
+                    vm = new VM(
                         compiler.GetResult(),
                         SList.Nil<IValue>(),
                         mEnv,
                         SList.Nil<KeyValuePair<IValue, IValue>>()
                     );
-                    IValue result = vm.Run();
-                    if (result == null)
-                    {
-                        break;
-                    }
-                    if (interactive)
-                    {
-                        Console.WriteLine(" => {0}", result);
-                    }
                 }
-            }
-            catch (RheaException e)
-            {
-                Console.WriteLine("{0}: {1}", e.Info, e.Message);
+                catch (RheaException e)
+                {
+                    Console.WriteLine("{0}: {1}", e.Info, e.Message);
+                    break;
+                }
+                IValue result = vm.Run();
+                if (result == null)
+                {
+                    break;
+                }
+                if (interactive)
+                {
+                    Console.WriteLine(" => {0}", result);
+                }
             }
         }
     }
