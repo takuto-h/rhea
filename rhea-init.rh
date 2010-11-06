@@ -5,3 +5,15 @@ end
 def if = ^(bool, when_true, when_false):
   bool.match_bool(when_true, when_false)
 end
+
+def Int:times = ^(self, func):
+  def loop = ^(count):
+    if(count == self - 1):
+      func(count)
+    else:
+      func(count)
+      loop(count + 1)
+    end
+  end
+  loop(0)
+end
