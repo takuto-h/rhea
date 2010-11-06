@@ -332,6 +332,9 @@ namespace Rhea
                     LookAhead();
                 }
                 break;
+            case TokenType.LeftParen:
+                expr = ParseParenthesizedExpression();
+                break;
             default:
                 throw new RheaException(
                     string.Format("unexpected {0}", mHeadToken),
@@ -526,6 +529,20 @@ namespace Rhea
             }
             LookAhead();
             return exprs;
+        }
+        
+        private IExpr ParseParenthesizedExpression()
+        {
+            LookAhead();
+            IExpr expr = ParseExpression();
+            if (mHeadToken != TokenType.RightParen)
+            {
+                throw new RheaException(
+                    Expected("RightParen"), mLexer.GetSourceInfo()
+                );
+            }
+            LookAhead();
+            return expr;
         }
         
         private string Expected(string expectedTokenNames)
