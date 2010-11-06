@@ -49,6 +49,17 @@ namespace Rhea
                 }
                 vm.Push(ValueSymbol.Generate(str.StringValue));
             });
+            this.AddVariable("make_object", 1, (args, vm, info) => {
+                ValueSymbol klass = args[0] as ValueSymbol;
+                if (klass == null)
+                {
+                    throw new RheaException(
+                        string.Format("symbol required, but got {0}", args[0]),
+                        info
+                    );
+                }
+                vm.Push(new ValueObject(klass));
+            });
             this.AddVariable("Closure", ValueClosure.GetKlass());
             this.AddVariable("Cont", ValueCont.GetKlass());
             this.AddVariable("Int", ValueInt.GetKlass());
