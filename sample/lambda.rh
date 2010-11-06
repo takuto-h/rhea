@@ -11,6 +11,13 @@ end
 def one = succ(zero)
 def two = succ(one)
 def three = succ(two)
+def four = succ(three)
+def five = succ(four)
+def six = succ(five)
+def seven = succ(six)
+def eight = succ(seven)
+def nine = succ(eight)
+def ten = succ(nine)
 
 def add = ^(m, n):
   m:
@@ -21,12 +28,20 @@ def add = ^(m, n):
   end
 end
 
-def show = ^(n):
+def mul = ^(m, n):
+  m:
+  zero:
+    zero
+  succ^(k):
+    add(n, mul(k, n))
+  end
+end
+
+def nat_to_int = ^(n):
   n:
   zero:
     0
   succ^(k):
-    p(0)
-    show(k)
+    1 + nat_to_int(k)
   end
 end

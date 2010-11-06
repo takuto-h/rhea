@@ -13,21 +13,21 @@ def cons = ^(head, tail):
   obj
 end
 
-def Nil:List = ^(self, when_nil, when_cons):
+def Nil:match_list = ^(self, when_nil, when_cons):
   when_nil()
 end
 
-def Cons:List = ^(self, when_nil, when_cons):
+def Cons:match_list = ^(self, when_nil, when_cons):
   def head = get_slot(self, sym_head)
   def tail = get_slot(self, sym_tail)
   when_cons(head, tail)
 end
 
 def map = ^(list, func):
-  list.List:
-  nil:
+  list.match_list:
+  when_nil:
     nil
-  cons^(head, tail):
+  when_cons^(head, tail):
     cons(func(head), map(tail, func))
   end
 end
