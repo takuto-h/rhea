@@ -50,5 +50,13 @@ namespace Rhea.Subrs
             );
             vm.Push(newInteger);
         }
+        
+        public static void Eq(IList<IValue> args, VM vm, SourceInfo info)
+        {
+            Check(args, 2, info);
+            ValueInt integer1 = (ValueInt)args[0];
+            ValueInt integer2 = (ValueInt)args[1];
+            vm.Push((integer1.IntValue == integer2.IntValue).ToValueBool());
+        }
     }
 }

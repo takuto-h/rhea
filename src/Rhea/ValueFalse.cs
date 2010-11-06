@@ -1,6 +1,6 @@
 namespace Rhea
 {
-    public class ValueFalse : IValue
+    public class ValueFalse : IValueBool
     {
         private static ValueSymbol smKlass;
         private static ValueFalse smInstance;

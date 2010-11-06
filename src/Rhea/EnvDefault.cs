@@ -16,6 +16,7 @@ namespace Rhea
             this.AddMethod(ValueInt.GetKlass(), "__add__", 2, Subrs.Int.Add);
             this.AddMethod(ValueInt.GetKlass(), "__sub__", 2, Subrs.Int.Sub);
             this.AddMethod(ValueInt.GetKlass(), "__mul__", 2, Subrs.Int.Mul);
+            this.AddMethod(ValueInt.GetKlass(), "__eq__",  2, Subrs.Int.Eq);
             
             this.AddVariable("True", ValueTrue.GetKlass());
             this.AddVariable("true", ValueTrue.Instance);
