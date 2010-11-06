@@ -11,15 +11,19 @@ namespace Rhea
             this.AddVariable("make_object",  1, Subrs.Primitive.MakeObject);
             this.AddVariable("get_slot",     2, Subrs.Primitive.GetSlot);
             this.AddVariable("set_slot",     3, Subrs.Primitive.SetSlot);
-            this.AddVariable("Closure", ValueClosure.GetKlass());
-            this.AddVariable("Cont",    ValueCont.GetKlass());
             this.AddVariable("Int",     ValueInt.GetKlass());
-            this.AddVariable("String",  ValueString.GetKlass());
-            this.AddVariable("Subr",    ValueSubr.GetKlass());
             this.AddVariable("Symbol",  ValueSymbol.GetKlass());
+            this.AddVariable("String",  ValueString.GetKlass());
+            this.AddVariable("True",    ValueTrue.GetKlass());
+            this.AddVariable("False",   ValueFalse.GetKlass());
+            this.AddVariable("Closure", ValueClosure.GetKlass());
+            this.AddVariable("Subr",    ValueSubr.GetKlass());
+            this.AddVariable("Cont",    ValueCont.GetKlass());
             this.AddMethod(ValueInt.GetKlass(), "__add__", 2, Subrs.Int.Add);
             this.AddMethod(ValueInt.GetKlass(), "__sub__", 2, Subrs.Int.Sub);
             this.AddMethod(ValueInt.GetKlass(), "__mul__", 2, Subrs.Int.Mul);
+            this.AddVariable("true",  ValueTrue.Instance);
+            this.AddVariable("false", ValueFalse.Instance);
         }
     }
 }
