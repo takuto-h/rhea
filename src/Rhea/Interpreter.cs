@@ -59,7 +59,7 @@ namespace Rhea
             string input;
             do
             {
-                Console.Write("irh:{0:d3}> ", currentLineNumber++);
+                Console.Write("irh:{0:d3}* ", currentLineNumber++);
                 input = Console.ReadLine();
                 sb.AppendFormat("{0}{1}", input, Environment.NewLine);
             }
@@ -92,29 +92,12 @@ namespace Rhea
             Parser parser = new Parser(lexer);
             while (true)
             {
-                VM vm;
-                try
+                ISList<IInsn> insns = Compile(parser);
+                if (insns == null)
                 {
-                    IExpr expr = parser.Parse();
-                    if (expr == null)
-                    {
-                        break;
-                    }
-                    Compiler compiler = new Compiler();
-                    expr.Compile(compiler);
-                    vm = new VM(
-                        compiler.GetResult(),
-                        SList.Nil<IValue>(),
-                        mEnv,
-                        SList.Nil<KeyValuePair<IValue, IValue>>()
-                    );
-                }
-                catch (RheaException e)
-                {
-                    Console.WriteLine("{0}: {1}", e.Info, e.Message);
                     break;
                 }
-                IValue result = vm.Run();
+                IValue result = Run(insns);
                 if (result == null)
                 {
                     break;
@@ -123,6 +106,53 @@ namespace Rhea
                 {
                     Console.WriteLine(" => {0}", result);
                 }
+            }
+        }
+        
+        private ISList<IInsn> Compile(Parser parser)
+        {
+            try
+            {
+                IExpr expr = parser.Parse();
+                if (expr == null)
+                {
+                    return null;
+                }
+                Compiler compiler = new Compiler();
+                expr.Compile(compiler);
+                return compiler.GetResult();
+            }
+            catch (RheaException e)
+            {
+                Console.WriteLine("{0}: {1}", e.Info, e.Message);
+                return null;
+            }
+        }
+        
+        private IValue Run(ISList<IInsn> insns)
+        {
+            VM vm = new VM(
+                insns,
+                SList.Nil<IValue>(),
+                mEnv,
+                SList.Nil<KeyValuePair<IValue, IValue>>()
+            );
+        BEGIN:
+            try
+            {
+                return vm.Run();
+            }
+            catch (RheaException e)
+            {
+                Console.WriteLine("{0}: {1}", e.Info, e.Message);
+                ValueCont cont = new ValueCont(
+                    SList.Nil<IInsn>(),
+                    SList.Nil<IValue>(),
+                    vm.Env,
+                    SList.Nil<KeyValuePair<IValue, IValue>>()
+                );
+                vm.SetCont(null, cont, e.Info);
+                goto BEGIN;
             }
         }
     }

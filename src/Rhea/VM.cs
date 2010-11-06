@@ -29,23 +29,9 @@ namespace Rhea
             {
                 IInsn insn = Insns.Head;
                 Insns = Insns.Tail;
-                try
-                {
-                    //Console.WriteLine("insn: {0}", insn);
-                    insn.Execute(this);
-                    //Console.WriteLine("stack: {0}", Stack);
-                }
-                catch (RheaException e)
-                {
-                    Console.WriteLine("{0}: {1}", e.Info, e.Message);
-                    ValueCont cont = new ValueCont(
-                        SList.Nil<IInsn>(),
-                        SList.Nil<IValue>(),
-                        Env,
-                        SList.Nil<KeyValuePair<IValue, IValue>>()
-                    );
-                    SetCont(null, cont, e.Info);
-                }
+                //Console.WriteLine("insn: {0}", insn);
+                insn.Execute(this);
+                //Console.WriteLine("stack: {0}", Stack);
             }
             return Peek();
         }
