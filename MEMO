@@ -1,5 +1,8 @@
 operators
-user defined object
+class
+trait
+composition
+macro
 stream
 pattern matching
 interface, covering all patterns

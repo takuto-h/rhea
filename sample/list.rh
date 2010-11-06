@@ -1,0 +1,33 @@
+def Nil = make_symbol("Nil")
+def Cons = make_symbol("Cons")
+
+def sym_head = make_symbol("head")
+def sym_tail = make_symbol("tail")
+
+def nil = make_object(Nil)
+
+def cons = ^(head, tail):
+  def obj = make_object(Cons)
+  set_slot(obj, sym_head, head)
+  set_slot(obj, sym_tail, tail)
+  obj
+end
+
+def Nil:List = ^(self, when_nil, when_cons):
+  when_nil()
+end
+
+def Cons:List = ^(self, when_nil, when_cons):
+  def head = get_slot(self, sym_head)
+  def tail = get_slot(self, sym_tail)
+  when_cons(head, tail)
+end
+
+def map = ^(list, func):
+  list.List:
+  nil:
+    nil
+  cons^(head, tail):
+    cons(func(head), map(tail, func))
+  end
+end

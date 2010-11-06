@@ -139,6 +139,7 @@ namespace Rhea
                 {
                     return value;
                 }
+                env = env.OuterEnv;
             }
             if (env.TryGetMethod(klass, selector, out value))
             {
