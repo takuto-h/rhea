@@ -6,16 +6,18 @@ namespace Rhea
         
         private int mIntValue;
         
+        public static ValueSymbol GetKlass()
+        {
+            if (smKlass == null)
+            {
+                smKlass = ValueSymbol.Generate("Int");
+            }
+            return smKlass;
+        }
+        
         public ValueSymbol Klass
         {
-            get
-            {
-                if (smKlass == null)
-                {
-                    smKlass = ValueSymbol.Generate("Int");
-                }
-                return smKlass;
-            }
+            get { return GetKlass(); }
         }
         
         public ValueInt(int intValue)

@@ -38,6 +38,12 @@ namespace Rhea
                 IList<IValue> newArgs = new List<IValue> { cont };
                 func.Call(newArgs, vm, info);
             });
+            this.AddVariable("Closure", ValueClosure.GetKlass());
+            this.AddVariable("Cont", ValueCont.GetKlass());
+            this.AddVariable("Int", ValueInt.GetKlass());
+            this.AddVariable("String", ValueString.GetKlass());
+            this.AddVariable("Subr", ValueSubr.GetKlass());
+            this.AddVariable("Symbol", ValueSymbol.GetKlass());
         }
     }
 }

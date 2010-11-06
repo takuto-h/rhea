@@ -11,16 +11,18 @@ namespace Rhea
         public IEnv Env { get; private set; }
         public ISList<KeyValuePair<IValue, IValue>> Winders { get; private set; }
         
+        public static ValueSymbol GetKlass()
+        {
+            if (smKlass == null)
+            {
+                smKlass = ValueSymbol.Generate("Cont");
+            }
+            return smKlass;
+        }
+        
         public ValueSymbol Klass
         {
-            get
-            {
-                if (smKlass == null)
-                {
-                    smKlass = ValueSymbol.Generate("Cont");
-                }
-                return smKlass;
-            }
+            get { return GetKlass(); }
         }
         
         public ValueCont(

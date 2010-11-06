@@ -11,16 +11,18 @@ namespace Rhea
         private IEnv mEnv;
         private SourceInfo mInfo;
         
+        public static ValueSymbol GetKlass()
+        {
+            if (smKlass == null)
+            {
+                smKlass = ValueSymbol.Generate("Closure");
+            }
+            return smKlass;
+        }
+        
         public ValueSymbol Klass
         {
-            get
-            {
-                if (smKlass == null)
-                {
-                    smKlass = ValueSymbol.Generate("Closure");
-                }
-                return smKlass;
-            }
+            get { return GetKlass(); }
         }
         
         public ValueClosure(

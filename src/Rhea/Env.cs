@@ -5,12 +5,36 @@ namespace Rhea
         public static void AddVariable(
             this IEnv env,
             string selectorName,
+            IValue value
+        )
+        {
+            env.AddVariable(
+                ValueSymbol.Intern(selectorName), value
+            );
+        }
+        
+        public static void AddMethod(
+            this IEnv env,
+            ValueSymbol klass,
+            string selectorName,
+            IValue value
+        )
+        {
+            env.AddMethod(
+                klass, ValueSymbol.Intern(selectorName), value
+            );
+        }
+        
+        public static void AddVariable(
+            this IEnv env,
+            string selectorName,
             int paramCount,
             Subr subrValue
         )
         {
-            env.AddVariable(
-                ValueSymbol.Intern(selectorName),
+            AddVariable(
+                env,
+                selectorName,
                 new ValueSubr(
                     string.Format("{0}", selectorName),
                     paramCount,
@@ -21,17 +45,18 @@ namespace Rhea
         
         public static void AddMethod(
             this IEnv env,
-            string klassName,
+            ValueSymbol klass,
             string selectorName,
             int paramCount,
             Subr subrValue
         )
         {
-            env.AddMethod(
-                ValueSymbol.Intern(klassName),
-                ValueSymbol.Intern(selectorName),
+            AddMethod(
+                env,
+                klass,
+                selectorName,
                 new ValueSubr(
-                    string.Format("{0}:{1}", klassName, selectorName),
+                    string.Format("{0}:{1}", klass.Name, selectorName),
                     paramCount,
                     subrValue
                 )

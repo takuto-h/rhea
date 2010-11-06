@@ -12,16 +12,18 @@ namespace Rhea
         private int mParamCount;
         private Subr mSubrValue;
         
+        public static ValueSymbol GetKlass()
+        {
+            if (smKlass == null)
+            {
+                smKlass = ValueSymbol.Generate("Subr");
+            }
+            return smKlass;
+        }
+        
         public ValueSymbol Klass
         {
-            get
-            {
-                if (smKlass == null)
-                {
-                    smKlass = ValueSymbol.Generate("Subr");
-                }
-                return smKlass;
-            }
+            get { return GetKlass(); }
         }
         
         public ValueSubr(

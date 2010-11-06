@@ -10,16 +10,18 @@ namespace Rhea
         
         public string Name { get; private set; }
         
+        public static ValueSymbol GetKlass()
+        {
+            if (smKlass == null)
+            {
+                smKlass = ValueSymbol.Generate("Symbol");
+            }
+            return smKlass;
+        }
+        
         public ValueSymbol Klass
         {
-            get
-            {
-                if (smKlass == null)
-                {
-                    smKlass = ValueSymbol.Generate("Symbol");
-                }
-                return smKlass;
-            }
+            get { return GetKlass(); }
         }
         
         static ValueSymbol()

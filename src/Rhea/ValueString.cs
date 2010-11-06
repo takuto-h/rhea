@@ -6,16 +6,18 @@ namespace Rhea
         
         private string mStringValue;
         
+        public static ValueSymbol GetKlass()
+        {
+            if (smKlass == null)
+            {
+                smKlass = ValueSymbol.Generate("String");
+            }
+            return smKlass;
+        }
+        
         public ValueSymbol Klass
         {
-            get
-            {
-                if (smKlass == null)
-                {
-                    smKlass = ValueSymbol.Generate("String");
-                }
-                return smKlass;
-            }
+            get { return GetKlass(); }
         }
         
         public ValueString(string stringValue)
