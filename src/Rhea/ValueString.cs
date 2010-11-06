@@ -4,7 +4,7 @@ namespace Rhea
     {
         private static ValueSymbol smKlass;
         
-        private string mStringValue;
+        public string StringValue { get; private set; }
         
         public static ValueSymbol GetKlass()
         {
@@ -22,12 +22,12 @@ namespace Rhea
         
         public ValueString(string stringValue)
         {
-            mStringValue = stringValue;
+            StringValue = stringValue;
         }
         
         public string Show()
         {
-            return string.Format("\"{0}\"", mStringValue);
+            return string.Format("\"{0}\"", StringValue);
         }
         
         public override string ToString()

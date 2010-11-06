@@ -38,6 +38,17 @@ namespace Rhea
                 IList<IValue> newArgs = new List<IValue> { cont };
                 func.Call(newArgs, vm, info);
             });
+            this.AddVariable("make_class", 1, (args, vm, info) => {
+                ValueString str = args[0] as ValueString;
+                if (str == null)
+                {
+                    throw new RheaException(
+                        string.Format("string required, but got {0}", args[0]),
+                        info
+                    );
+                }
+                vm.Push(ValueSymbol.Generate(str.StringValue));
+            });
             this.AddVariable("Closure", ValueClosure.GetKlass());
             this.AddVariable("Cont", ValueCont.GetKlass());
             this.AddVariable("Int", ValueInt.GetKlass());
