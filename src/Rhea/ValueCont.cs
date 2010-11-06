@@ -51,7 +51,7 @@ namespace Rhea
         
         public string Show()
         {
-            return string.Format("#<cont 0x{0:x8}>", GetHashCode());
+            return string.Format("$<cont 0x{0:x8}>", GetHashCode());
         }
         
         public override string ToString()

@@ -5,8 +5,9 @@ namespace Rhea
     public class ValueSymbol : IValue
     {
         private static ValueSymbol smKlass;
-        
         private static IDictionary<string, ValueSymbol> smInstances;
+        
+        private bool mInterned;
         
         public string Name { get; private set; }
         
@@ -29,8 +30,9 @@ namespace Rhea
             smInstances = new Dictionary<string, ValueSymbol>();
         }
         
-        private ValueSymbol(string name)
+        private ValueSymbol(string name, bool interned)
         {
+            mInterned = interned;
             Name = name;
         }
         
@@ -39,7 +41,7 @@ namespace Rhea
             ValueSymbol symbol;
             if (!smInstances.TryGetValue(name, out symbol))
             {
-                symbol = new ValueSymbol(name);
+                symbol = new ValueSymbol(name, true);
                 smInstances[name] = symbol;
             }
             return symbol;
@@ -47,11 +49,15 @@ namespace Rhea
         
         public static ValueSymbol Generate(string name)
         {
-            return new ValueSymbol(name);
+            return new ValueSymbol(name, false);
         }
         
         public string Show()
         {
+            if (!mInterned)
+            {
+                return string.Format("$:{0}", Name);
+            }
             return string.Format(":{0}", Name);
         }
         

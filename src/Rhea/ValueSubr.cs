@@ -49,7 +49,7 @@ namespace Rhea
         
         public string Show()
         {
-            return string.Format("#<subr {0}>", mName);
+            return string.Format("$<subr {0}>", mName);
         }
         
         public override string ToString()

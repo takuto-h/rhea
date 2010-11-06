@@ -73,7 +73,7 @@ namespace Rhea
         
         public string Show()
         {
-            return string.Format("#<closure {0}>", mInfo);
+            return string.Format("$<closure {0}>", mInfo);
         }
         
         public override string ToString()
