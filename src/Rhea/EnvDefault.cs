@@ -38,7 +38,7 @@ namespace Rhea
                 IList<IValue> newArgs = new List<IValue> { cont };
                 func.Call(newArgs, vm, info);
             });
-            this.AddVariable("make_class", 1, (args, vm, info) => {
+            this.AddVariable("make_symbol", 1, (args, vm, info) => {
                 ValueString str = args[0] as ValueString;
                 if (str == null)
                 {
