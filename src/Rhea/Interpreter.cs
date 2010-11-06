@@ -16,9 +16,11 @@ namespace Rhea
         
         public void InterpretInteractively()
         {
+            int currentLineNumber = 1;
             while (true)
             {
-                Console.Write(">>> ");
+                int startLineNumber = currentLineNumber;
+                Console.Write("irh:{0:d3}> ", currentLineNumber++);
                 string input = Console.ReadLine();
                 if (input == "")
                 {
@@ -30,7 +32,7 @@ namespace Rhea
                 }
                 else if (input == ":l")
                 {
-                    Console.Write("file name: ");
+                    Console.Write("file: ");
                     string fileName = Console.ReadLine();
                     if (fileName == "" || fileName == ":q")
                     {
@@ -40,35 +42,35 @@ namespace Rhea
                 }
                 else if (input[input.Length - 1] == ':')
                 {
-                    input = InputMultiline(input);
-                    InterpretString(input, true);
+                    input = InputMultiline(input, ref currentLineNumber);
+                    InterpretString(input, startLineNumber);
                 }
                 else
                 {
-                    InterpretString(input, true);
+                    InterpretString(input, startLineNumber);
                 }
             }
         }
         
-        public void InterpretString(string input, bool interactive)
-        {
-            TextReader reader = new StringReader(input);
-            Interpret(new SourceReader("<interactive>", reader), interactive);
-        }
-        
-        private string InputMultiline(string firstLine)
+        private string InputMultiline(string firstLine, ref int currentLineNumber)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendFormat("{0}{1}", firstLine, Environment.NewLine);
             string input;
             do
             {
-                Console.Write("... ");
+                Console.Write("irh:{0:d3}> ", currentLineNumber++);
                 input = Console.ReadLine();
                 sb.AppendFormat("{0}{1}", input, Environment.NewLine);
             }
             while (input != "end");
             return sb.ToString();
+        }
+        
+        private void InterpretString(string input, int startLineNumber)
+        {
+            TextReader reader = new StringReader(input);
+            Interpret(new SourceReader("<interactive>", startLineNumber, 1, reader), true);
         }
         
         public void InterpretFile(string fileName)
@@ -80,11 +82,11 @@ namespace Rhea
             }
             using (TextReader reader = new StreamReader(fileName))
             {
-                Interpret(new SourceReader(fileName, reader), false);
+                Interpret(new SourceReader(fileName, 1, 1, reader), false);
             }
         }
         
-        public void Interpret(SourceReader reader, bool interactive)
+        private void Interpret(SourceReader reader, bool interactive)
         {
             try
             {

@@ -1,9 +1,13 @@
+exception handling
 operators
+user defined object
+stream
+pattern matching
+interface, covering all patterns
 --
 ^(){}
 tail call optimization
 debugger showing stack and insn
 parse error positioning
-improve interactive printing of line number and lexer
 interactive :q symbol literal
 Cont or Continuation

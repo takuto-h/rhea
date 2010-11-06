@@ -10,11 +10,11 @@ namespace Rhea
         public int Line { get; private set; }
         public int Column { get; private set; }
         
-        public SourceReader(string name, TextReader reader)
+        public SourceReader(string name, int line, int column, TextReader reader)
         {
             Name = name;
-            Line = 1;
-            Column = 1;
+            Line = line;
+            Column = column;
             mReader = reader;
         }
         
