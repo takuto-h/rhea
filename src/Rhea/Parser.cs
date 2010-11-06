@@ -118,6 +118,33 @@ namespace Rhea
         
         private IExpr ParseSimpleExpression()
         {
+            return ParseEqualityExpression();
+        }
+        
+        private IExpr ParseEqualityExpression()
+        {
+            IExpr expr = ParseRelationalExpression();
+            if (mHeadToken == TokenType.DoubleEqual)
+            {
+                SourceInfo info = mLexer.GetSourceInfo();
+                ValueSymbol selector = null;
+                switch (mHeadToken)
+                {
+                case TokenType.DoubleEqual:
+                    selector = ValueSymbol.Intern("__eq__");
+                    break;
+                }
+                LookAhead();
+                IList<IExpr> argExprs = new List<IExpr> {
+                    ParseRelationalExpression()
+                };
+                expr = new ExprSend(expr, selector, argExprs, info);
+            }
+            return expr;
+        }
+        
+        private IExpr ParseRelationalExpression()
+        {
             return ParseAdditiveExpression();
         }
         

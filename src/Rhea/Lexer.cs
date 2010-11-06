@@ -124,7 +124,6 @@ namespace Rhea
             case '-':
             case '.':
             case ';':
-            case '=':
             case '^':
             case '{':
             case '}':
@@ -139,6 +138,16 @@ namespace Rhea
                     return Advance();
                 }
                 Token = TokenType.Colon;
+                break;
+            case '=':
+                mReader.Read();
+                if (mReader.Peek() == '=')
+                {
+                    mReader.Read();
+                    Token = TokenType.DoubleEqual;
+                    break;
+                }
+                Token = TokenType.Equal;
                 break;
             case '"':
                 LexString();

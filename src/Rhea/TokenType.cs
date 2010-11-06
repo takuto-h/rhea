@@ -15,6 +15,8 @@ namespace Rhea
         Def             = -8,
         End             = -9,
         
+        DoubleEqual     = -10,
+        
         ExclamationMark = 33,
         Dollar          = 36,
         Percent         = 37,
