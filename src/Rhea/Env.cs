@@ -4,12 +4,12 @@ namespace Rhea
     {
         public static void AddVariable(
             this IEnv env,
-            string selectorName,
+            string symbolName,
             IValue value
         )
         {
             env.AddVariable(
-                ValueSymbol.Intern(selectorName), value
+                ValueSymbol.Intern(symbolName), value
             );
         }
         
@@ -27,16 +27,16 @@ namespace Rhea
         
         public static void AddVariable(
             this IEnv env,
-            string selectorName,
+            string symbolName,
             int paramCount,
             Subr subrValue
         )
         {
             AddVariable(
                 env,
-                selectorName,
+                symbolName,
                 new ValueSubr(
-                    string.Format("{0}", selectorName),
+                    string.Format("{0}", symbolName),
                     paramCount,
                     subrValue
                 )
@@ -65,19 +65,19 @@ namespace Rhea
         
         public static void DefineVariable(
             this IEnv env,
-            ValueSymbol selector,
+            ValueSymbol symbol,
             IValue value,
             SourceInfo info
         )
         {
-            /*if (env.ContainsVariable(selector))
+            /*if (env.ContainsVariable(symbol))
             {
                 throw new RheaException(
-                    string.Format("variable is already defined: {0}", selector.Name), info
+                    string.Format("variable is already defined: {0}", symbol.Name), info
                 );
             }
-            env.AddVariable(selector, value);*/
-            env[selector] = value;
+            env.AddVariable(symbol, value);*/
+            env[symbol] = value;
         }
         
         public static void DefineMethod(
@@ -103,25 +103,25 @@ namespace Rhea
         
         public static IValue GetVariable(
             this IEnv env,
-            ValueSymbol selector,
+            ValueSymbol symbol,
             SourceInfo info
         )
         {
             IValue value;
             while (!env.IsGlobal())
             {
-                if (env.TryGetVariable(selector, out value))
+                if (env.TryGetVariable(symbol, out value))
                 {
                     return value;
                 }
                 env = env.OuterEnv;
             }
-            if (env.TryGetVariable(selector, out value))
+            if (env.TryGetVariable(symbol, out value))
             {
                 return value;
             }
             throw new RheaException(
-                string.Format("variable is not defined: {0}", selector.Name), info
+                string.Format("variable is not defined: {0}", symbol.Name), info
             );
         }
         
@@ -151,27 +151,27 @@ namespace Rhea
         
         public static IValue SetVariable(
             this IEnv env,
-            ValueSymbol selector,
+            ValueSymbol symbol,
             IValue value,
             SourceInfo info
         )
         {
             while (!env.IsGlobal())
             {
-                if (env.ContainsVariable(selector))
+                if (env.ContainsVariable(symbol))
                 {
-                    env[selector] = value;
+                    env[symbol] = value;
                     return value;
                 }
                 env = env.OuterEnv;
             }
-            if (env.ContainsVariable(selector))
+            if (env.ContainsVariable(symbol))
             {
-                env[selector] = value;
+                env[symbol] = value;
                 return value;
             }
             throw new RheaException(
-                string.Format("variable is not defined: {0}", selector.Name), info
+                string.Format("variable is not defined: {0}", symbol.Name), info
             );
         }
         

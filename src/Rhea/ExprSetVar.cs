@@ -2,13 +2,13 @@ namespace Rhea
 {
     public class ExprSetVar : IExpr
     {
-        private ValueSymbol mSelector;
+        private ValueSymbol mSymbol;
         private IExpr mValueExpr;
         private SourceInfo mInfo;
         
-        public ExprSetVar(ValueSymbol selector, IExpr valueExpr, SourceInfo info)
+        public ExprSetVar(ValueSymbol symbol, IExpr valueExpr, SourceInfo info)
         {
-            mSelector = selector;
+            mSymbol = symbol;
             mValueExpr = valueExpr;
             mInfo = info;
         }
@@ -16,7 +16,7 @@ namespace Rhea
         public void Compile(Compiler compiler)
         {
             mValueExpr.Compile(compiler);
-            compiler.Push(new InsnSetVar(mSelector, mInfo));
+            compiler.Push(new InsnSetVar(mSymbol, mInfo));
         }
     }
 }

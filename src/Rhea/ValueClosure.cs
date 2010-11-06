@@ -50,7 +50,7 @@ namespace Rhea
         {
             Stack<IInsn> insnStack = new Stack<IInsn>();
             IEnumerator<IValue> argsEtor = args.GetEnumerator();
-            foreach (ValueSymbol selector in mParams)
+            foreach (ValueSymbol symbol in mParams)
             {
                 if (!argsEtor.MoveNext())
                 {
@@ -59,7 +59,7 @@ namespace Rhea
                     );
                 }
                 insnStack.Push(new InsnPush(argsEtor.Current));
-                insnStack.Push(new InsnDefVar(selector, mInfo));
+                insnStack.Push(new InsnDefVar(symbol, mInfo));
                 insnStack.Push(InsnPop.Instance);
             }
             if (argsEtor.MoveNext())

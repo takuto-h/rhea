@@ -17,10 +17,10 @@ namespace Rhea
             return false;
         }
         
-        public IValue this[ValueSymbol selector]
+        public IValue this[ValueSymbol symbol]
         {
-            get { return mInnerEnv[selector]; }
-            set {  mInnerEnv[selector] = value; }
+            get { return mInnerEnv[symbol]; }
+            set {  mInnerEnv[symbol] = value; }
         }
         
         public IValue this[ValueSymbol klass, ValueSymbol selector]
@@ -29,9 +29,9 @@ namespace Rhea
             set { mInnerEnv[klass, selector] = value; }
         }
         
-        public void AddVariable(ValueSymbol selector, IValue value)
+        public void AddVariable(ValueSymbol symbol, IValue value)
         {
-            mInnerEnv.AddVariable(selector, value);
+            mInnerEnv.AddVariable(symbol, value);
         }
         
         public void AddMethod(ValueSymbol klass, ValueSymbol selector, IValue value)
@@ -39,9 +39,9 @@ namespace Rhea
             mInnerEnv.AddMethod(klass, selector, value);
         }
         
-        public bool TryGetVariable(ValueSymbol selector, out IValue value)
+        public bool TryGetVariable(ValueSymbol symbol, out IValue value)
         {
-            return mInnerEnv.TryGetVariable(selector, out value);
+            return mInnerEnv.TryGetVariable(symbol, out value);
         }
         
         public bool TryGetMethod(ValueSymbol klass, ValueSymbol selector, out IValue value)
@@ -49,9 +49,9 @@ namespace Rhea
             return mInnerEnv.TryGetMethod(klass, selector, out value);
         }
         
-        public bool ContainsVariable(ValueSymbol selector)
+        public bool ContainsVariable(ValueSymbol symbol)
         {
-            return mInnerEnv.ContainsVariable(selector);
+            return mInnerEnv.ContainsVariable(symbol);
         }
         
         public bool ContainsMethod(ValueSymbol klass, ValueSymbol selector)

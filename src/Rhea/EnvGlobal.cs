@@ -24,15 +24,15 @@ namespace Rhea
             return true;
         }
         
-        public IValue this[ValueSymbol selector]
+        public IValue this[ValueSymbol symbol]
         {
             get
             {
-                return mVariables[selector];
+                return mVariables[symbol];
             }
             set
             {
-                mVariables[selector] = value;
+                mVariables[symbol] = value;
             }
         }
         
@@ -48,9 +48,9 @@ namespace Rhea
             }
         }
         
-        public void AddVariable(ValueSymbol selector, IValue value)
+        public void AddVariable(ValueSymbol symbol, IValue value)
         {
-            mVariables.Add(selector, value);
+            mVariables.Add(symbol, value);
         }
         
         public void AddMethod(ValueSymbol klass, ValueSymbol selector, IValue value)
@@ -58,9 +58,9 @@ namespace Rhea
             mMethods.Add(MakePair(klass, selector), value);
         }
         
-        public bool TryGetVariable(ValueSymbol selector, out IValue value)
+        public bool TryGetVariable(ValueSymbol symbol, out IValue value)
         {
-            return mVariables.TryGetValue(selector, out value);
+            return mVariables.TryGetValue(symbol, out value);
         }
         
         public bool TryGetMethod(ValueSymbol klass, ValueSymbol selector, out IValue value)
@@ -68,9 +68,9 @@ namespace Rhea
             return mMethods.TryGetValue(MakePair(klass, selector), out value);
         }
         
-        public bool ContainsVariable(ValueSymbol selector)
+        public bool ContainsVariable(ValueSymbol symbol)
         {
-            return mVariables.ContainsKey(selector);
+            return mVariables.ContainsKey(symbol);
         }
         
         public bool ContainsMethod(ValueSymbol klass, ValueSymbol selector)

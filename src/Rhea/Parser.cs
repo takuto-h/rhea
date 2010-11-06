@@ -81,7 +81,7 @@ namespace Rhea
             return ParsePrimary();
         }
         
-        private IExpr ParseVariableDefinition(ValueSymbol selector)
+        private IExpr ParseVariableDefinition(ValueSymbol symbol)
         {
             if (mHeadToken != TokenType.Equal)
             {
@@ -91,7 +91,7 @@ namespace Rhea
             }
             SourceInfo info = mLexer.GetSourceInfo();
             LookAhead();
-            return new ExprDefVar(selector, ParseExpression(), info);
+            return new ExprDefVar(symbol, ParseExpression(), info);
         }
         
         private IExpr ParseMethodDefinition(IExpr klassExpr)
@@ -297,15 +297,15 @@ namespace Rhea
             return new ExprGetMethod(klassExpr, selector, info);
         }
         
-        private IExpr ParseVariableReference(ValueSymbol selector, SourceInfo info)
+        private IExpr ParseVariableReference(ValueSymbol symbol, SourceInfo info)
         {
             if (mHeadToken == TokenType.Equal)
             {
                 info = mLexer.GetSourceInfo();
                 LookAhead();
-                return new ExprSetVar(selector, ParseExpression(), info);
+                return new ExprSetVar(symbol, ParseExpression(), info);
             }
-            return new ExprGetVar(selector, info);
+            return new ExprGetVar(symbol, info);
         }
         
         private IExpr ParseSymbolLiteral()

@@ -2,18 +2,18 @@ namespace Rhea
 {
     public class ExprGetVar : IExpr
     {
-        private ValueSymbol mSelector;
+        private ValueSymbol mSymbol;
         private SourceInfo mInfo;
         
-        public ExprGetVar(ValueSymbol selector, SourceInfo info)
+        public ExprGetVar(ValueSymbol symbol, SourceInfo info)
         {
-            mSelector = selector;
+            mSymbol = symbol;
             mInfo = info;
         }
         
         public void Compile(Compiler compiler)
         {
-            compiler.Push(new InsnGetVar(mSelector, mInfo));
+            compiler.Push(new InsnGetVar(mSymbol, mInfo));
         }
     }
 }

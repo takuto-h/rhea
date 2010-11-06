@@ -2,23 +2,23 @@ namespace Rhea
 {
     public class InsnGetVar : IInsn
     {
-        private ValueSymbol mSelector;
+        private ValueSymbol mSymbol;
         private SourceInfo mInfo;
         
-        public InsnGetVar(ValueSymbol selector, SourceInfo info)
+        public InsnGetVar(ValueSymbol symbol, SourceInfo info)
         {
-            mSelector = selector;
+            mSymbol = symbol;
             mInfo = info;
         }
         
         public void Execute(VM vm)
         {
-            vm.Push(vm.Env.GetVariable(mSelector, mInfo));
+            vm.Push(vm.Env.GetVariable(mSymbol, mInfo));
         }
         
         public string Show()
         {
-            return string.Format("(getvar {0} {1})", mSelector.Name, mInfo);
+            return string.Format("(getvar {0} {1})", mSymbol.Name, mInfo);
         }
         
         public override string ToString()
