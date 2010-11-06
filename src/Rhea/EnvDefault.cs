@@ -60,6 +60,52 @@ namespace Rhea
                 }
                 vm.Push(new ValueObject(klass));
             });
+            this.AddVariable("get_slot", 2, (args, vm, info) => {
+                ValueObject obj = args[0] as ValueObject;
+                ValueSymbol symbol = args[1] as ValueSymbol;
+                if (obj == null)
+                {
+                    throw new RheaException(
+                        string.Format("object required, but got {0}", args[0]),
+                        info
+                    );
+                }
+                if (symbol == null)
+                {
+                    throw new RheaException(
+                        string.Format("symbol required, but got {0}", args[1]),
+                        info
+                    );
+                }
+                IValue value;
+                if (!obj.TryGetSlot(symbol, out value))
+                {
+                    throw new RheaException(
+                        string.Format("slot is not defined in {0}: {1}", obj, symbol.Name),
+                        info
+                    );
+                }
+                vm.Push(value);
+            });
+            this.AddVariable("set_slot", 3, (args, vm, info) => {
+                ValueObject obj = args[0] as ValueObject;
+                ValueSymbol symbol = args[1] as ValueSymbol;
+                if (obj == null)
+                {
+                    throw new RheaException(
+                        string.Format("object required, but got {0}", args[0]),
+                        info
+                    );
+                }
+                if (symbol == null)
+                {
+                    throw new RheaException(
+                        string.Format("symbol required, but got {0}", args[1]),
+                        info
+                    );
+                }
+                vm.Push(obj.SetSlot(symbol, args[2]));
+            });
             this.AddVariable("Closure", ValueClosure.GetKlass());
             this.AddVariable("Cont", ValueCont.GetKlass());
             this.AddVariable("Int", ValueInt.GetKlass());
