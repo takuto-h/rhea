@@ -1,3 +1,7 @@
 def id = ^(x):
   x
 end
+
+def if = ^(bool, when_true, when_false):
+  bool.match_bool(when_true, when_false)
+end
