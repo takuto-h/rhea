@@ -5,7 +5,7 @@ RUNTIME = "mono"
 
 MAIN_PROJ = "Rhea"
 MAIN_BIN = "#{BIN_DIR}/#{MAIN_PROJ}.exe"
-MAIN_SRC_FILE_PAT = "#{SRC_DIR}/#{MAIN_PROJ}/*.cs"
+MAIN_SRC_FILE_PAT = "#{SRC_DIR}/#{MAIN_PROJ}/**/*.cs"
 MAIN_SRC_FILES = FileList[MAIN_SRC_FILE_PAT]
 MAIN_OPTIONS = "-target:exe -out:#{MAIN_BIN}"
 
