@@ -17,6 +17,9 @@ namespace Rhea
             this.AddVariable("String",  ValueString.GetKlass());
             this.AddVariable("Subr",    ValueSubr.GetKlass());
             this.AddVariable("Symbol",  ValueSymbol.GetKlass());
+            this.AddMethod(ValueInt.GetKlass(), "__add__", 2, Subrs.Int.Add);
+            this.AddMethod(ValueInt.GetKlass(), "__sub__", 2, Subrs.Int.Sub);
+            this.AddMethod(ValueInt.GetKlass(), "__mul__", 2, Subrs.Int.Mul);
         }
     }
 }

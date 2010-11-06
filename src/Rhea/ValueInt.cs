@@ -4,7 +4,7 @@ namespace Rhea
     {
         private static ValueSymbol smKlass;
         
-        private int mIntValue;
+        public int IntValue { get; private set; }
         
         public static ValueSymbol GetKlass()
         {
@@ -22,12 +22,12 @@ namespace Rhea
         
         public ValueInt(int intValue)
         {
-            mIntValue = intValue;
+            IntValue = intValue;
         }
         
         public string Show()
         {
-            return mIntValue.ToString();
+            return IntValue.ToString();
         }
         
         public override string ToString()
