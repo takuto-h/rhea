@@ -11,6 +11,7 @@ namespace Rhea
             this.AddVariable("make_object",  1, Subrs.Primitive.MakeObject);
             this.AddVariable("get_slot",     2, Subrs.Primitive.GetSlot);
             this.AddVariable("set_slot",     3, Subrs.Primitive.SetSlot);
+            this.AddVariable("load",         1, Subrs.Primitive.Load);
             
             this.AddVariable("Int", ValueInt.GetKlass());
             this.AddMethod(ValueInt.GetKlass(), "__add__", 2, Subrs.Int.Add);

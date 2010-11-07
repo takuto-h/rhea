@@ -30,16 +30,6 @@ namespace Rhea
                 {
                     break;
                 }
-                else if (input == ":l")
-                {
-                    Console.Write("file: ");
-                    string fileName = Console.ReadLine();
-                    if (fileName == "" || fileName == ":q")
-                    {
-                        continue;
-                    }
-                    InterpretFile(fileName);
-                }
                 else if (input[input.Length - 1] == ':')
                 {
                     input = InputMultiline(input, ref currentLineNumber);

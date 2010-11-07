@@ -117,5 +117,21 @@ namespace Rhea.Subrs
             }
             vm.Push(obj.SetSlot(symbol, args[2]));
         }
+        
+        public static void Load(IList<IValue> args, VM vm, SourceInfo info)
+        {
+            ValueString str = args[0] as ValueString;
+            if (str == null)
+            {
+                throw new RheaException(
+                    string.Format("string required, but got {0}", args[0]),
+                    info
+                );
+            }
+            string fileName = str.StringValue;
+            Interpreter interp = new Interpreter(vm.Env);
+            bool result = interp.InterpretFile(fileName);
+            vm.Push(result.ToValueBool());
+        }
     }
 }
