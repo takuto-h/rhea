@@ -9,9 +9,9 @@ namespace Rhea
     {
         private IEnv mEnv;
         
-        public Interpreter()
+        public Interpreter(IEnv env)
         {
-            mEnv = new EnvDefault();
+            mEnv = env;
         }
         
         public void InterpretInteractively()
@@ -67,40 +67,44 @@ namespace Rhea
             return sb.ToString();
         }
         
-        private void InterpretString(string input, int startLineNumber)
+        private bool InterpretString(string input, int startLineNumber)
         {
             TextReader reader = new StringReader(input);
-            Interpret(new SourceReader("<interactive>", startLineNumber, 1, reader), true);
+            return Interpret(new SourceReader("<interactive>", startLineNumber, 1, reader), true);
         }
         
-        public void InterpretFile(string fileName)
+        public bool InterpretFile(string fileName)
         {
             if (!File.Exists(fileName))
             {
                 Console.WriteLine("file not found: {0}", fileName);
-                return;
+                return false;
             }
             using (TextReader reader = new StreamReader(fileName))
             {
-                Interpret(new SourceReader(fileName, 1, 1, reader), false);
+                return Interpret(new SourceReader(fileName, 1, 1, reader), false);
             }
         }
         
-        private void Interpret(SourceReader reader, bool interactive)
+        private bool Interpret(SourceReader reader, bool interactive)
         {
             Lexer lexer = new Lexer(reader);
             Parser parser = new Parser(lexer);
             while (true)
             {
-                ISList<IInsn> insns = Compile(parser);
+                ISList<IInsn> insns;
+                if (!Compile(parser, out insns))
+                {
+                    return false;
+                }
                 if (insns == null)
                 {
-                    break;
+                    return true;
                 }
                 IValue result = Run(insns);
                 if (result == null)
                 {
-                    break;
+                    return false;
                 }
                 if (interactive)
                 {
@@ -109,23 +113,26 @@ namespace Rhea
             }
         }
         
-        private ISList<IInsn> Compile(Parser parser)
+        private bool Compile(Parser parser, out ISList<IInsn> insns)
         {
             try
             {
                 IExpr expr = parser.Parse();
                 if (expr == null)
                 {
-                    return null;
+                    insns = null;
+                    return true;
                 }
                 Compiler compiler = new Compiler();
                 expr.Compile(compiler);
-                return compiler.GetResult();
+                insns = compiler.GetResult();
+                return true;
             }
             catch (RheaException e)
             {
                 Console.WriteLine("{0}: {1}", e.Info, e.Message);
-                return null;
+                insns = null;
+                return false;
             }
         }
         

@@ -11,7 +11,7 @@ namespace Rhea
         
         static void Main(string[] args)
         {
-            Interpreter interp = new Interpreter();
+            Interpreter interp = new Interpreter(new EnvDefault());
             interp.InterpretFile("rhea-init.rh");
             switch (args.Length)
             {
