@@ -1,0 +1,105 @@
+# not yet.
+
+def reserved_words = %{
+  "def" => :def_,
+  "end" => :end_
+  }
+
+def make_lexer(reader):
+  def beginning_of_line = false
+  def beginning_of_block = false
+  def offside_lines = make_stack_from_list([1])
+  def token
+  def value
+  
+  def get_token:
+    token
+  end
+  
+  def get_value:
+    value
+  end
+  
+  def lex:
+    skip_whitespace()
+    def c = reader.peek
+    given(c):
+    when(none):
+      false
+    when('#'):
+      skip_line_comment()
+      lex()
+    else:
+      lex_token()
+    end
+  end
+  
+  def lex_token:
+    cond:
+    when(beginning_of_block):
+      lex_beginning_of_block()
+    when(beginning_of_line):
+      lex_beginning_of_line()
+    else:
+      lex_visible_token()
+    end
+  end
+  
+  def lex_beginning_of_block:
+    beginning_of_block = false
+    if(beginning_of_line):
+      beginning_of_line = false
+    end
+    def column = reader.column
+    def offside_line = offside_lines.peek
+    if(column > offside_line):
+      offside_lines.push(column)
+      token = :begin_block
+      true
+    else:
+      lex_visible_token()
+    end
+  end
+  
+  def lex_beginning_of_line:
+    beginning_of_line = false
+    def column = reader.column
+    def offside_line = offside_lines.peek
+    cond:
+    when(column > offside_line):
+      lex_visible_token()
+    when(column == offside_line):
+      token = :newline
+      true
+    else:
+      offside_lines.pop
+      token = :end_block
+      true
+    end
+  end
+  
+  def lex_visible_token:
+    callcc^(return):
+      def c = reader.peek
+      given(c):
+      when('(', ')', '*', '+', ',', '-', '.', ';', '^', '{', '}'):
+        token = reader.read.int_to_char
+      when(':'):
+        reader.read
+        c = reader.peek
+        if (c != none && c.is_whitespace):
+          beginning_of_block = true
+          return(lex())
+        else:
+          token = :colon
+        end
+      when():
+        
+      end
+    end
+  end
+  
+  def skip_whitespace:
+    
+  end
+end
