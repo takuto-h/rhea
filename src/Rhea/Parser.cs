@@ -63,57 +63,47 @@ namespace Rhea
             if (mHeadToken == TokenType.Def)
             {
                 LookAhead();
-                if (mHeadToken != TokenType.Identifier)
+                IExpr expr = ParsePrimary();
+                if (mHeadToken != TokenType.Equal)
                 {
                     throw new RheaException(
-                        Expected("Identifier"), mLexer.GetSourceInfo()
+                        Expected("Equal"), mLexer.GetSourceInfo()
                     );
                 }
-                ValueSymbol symbol = ValueSymbol.Intern((string)mLexer.Value);
-                SourceInfo info = mLexer.GetSourceInfo();
-                LookAhead();
-                if (mHeadToken == TokenType.Colon)
+                if (expr is ExprGetVar)
                 {
-                    return ParseMethodDefinition(new ExprGetVar(symbol, info));
+                    return ParseVariableDefinition((ExprGetVar)expr);
                 }
-                return ParseVariableDefinition(symbol);
+                else if (expr is ExprGetMethod)
+                {
+                    return ParseMethodDefinition((ExprGetMethod)expr);
+                }
+                throw new RheaException(Unexpected(), mLexer.GetSourceInfo());
             }
             return ParseAssignment();
         }
         
-        private IExpr ParseVariableDefinition(ValueSymbol symbol)
+        private IExpr ParseVariableDefinition(ExprGetVar variableRef)
         {
-            if (mHeadToken != TokenType.Equal)
-            {
-                throw new RheaException(
-                    Expected("Equal"), mLexer.GetSourceInfo()
-                );
-            }
             SourceInfo info = mLexer.GetSourceInfo();
             LookAhead();
-            return new ExprDefVar(symbol, ParseExpression(), info);
+            return new ExprDefVar(
+                variableRef.Symbol,
+                ParseExpression(),
+                info
+            );
         }
         
-        private IExpr ParseMethodDefinition(IExpr klassExpr)
+        private IExpr ParseMethodDefinition(ExprGetMethod methodRef)
         {
-            LookAhead();
-            if (mHeadToken != TokenType.Identifier)
-            {
-                throw new RheaException(
-                    Expected("Identifier"), mLexer.GetSourceInfo()
-                );
-            }
-            ValueSymbol selector = ValueSymbol.Intern((string)mLexer.Value);
-            LookAhead();
-            if (mHeadToken != TokenType.Equal)
-            {
-                throw new RheaException(
-                    Expected("Equal"), mLexer.GetSourceInfo()
-                );
-            }
             SourceInfo info = mLexer.GetSourceInfo();
             LookAhead();
-            return new ExprDefMethod(klassExpr, selector, ParseExpression(), info);
+            return new ExprDefMethod(
+                methodRef.KlassExpr,
+                methodRef.Selector,
+                ParseExpression(),
+                info
+            );
         }
         
         private IExpr ParseAssignment()
@@ -121,31 +111,40 @@ namespace Rhea
             IExpr expr = ParseSimpleExpression();
             if (mHeadToken == TokenType.Equal)
             {
-                SourceInfo info = mLexer.GetSourceInfo();
                 if (expr is ExprGetVar)
                 {
-                    ExprGetVar variableRef = (ExprGetVar)expr;
-                    LookAhead();
-                    return new ExprSetVar(
-                        variableRef.Symbol,
-                        ParseExpression(),
-                        info
-                    );
+                    return ParseVariableAssignment((ExprGetVar)expr);
                 }
                 else if (expr is ExprGetMethod)
                 {
-                    ExprGetMethod methodRef = (ExprGetMethod)expr;
-                    LookAhead();
-                    return new ExprSetMethod(
-                        methodRef.KlassExpr,
-                        methodRef.Selector,
-                        ParseExpression(),
-                        info
-                    );
+                    return ParseMethodAssignment((ExprGetMethod)expr);
                 }
                 throw new RheaException(Unexpected(), mLexer.GetSourceInfo());
             }
             return expr;
+        }
+        
+        private IExpr ParseVariableAssignment(ExprGetVar variableRef)
+        {
+            SourceInfo info = mLexer.GetSourceInfo();
+            LookAhead();
+            return new ExprSetVar(
+                variableRef.Symbol,
+                ParseExpression(),
+                info
+            );
+        }
+        
+        private IExpr ParseMethodAssignment(ExprGetMethod methodRef)
+        {
+            SourceInfo info = mLexer.GetSourceInfo();
+            LookAhead();
+            return new ExprSetMethod(
+                methodRef.KlassExpr,
+                methodRef.Selector,
+                ParseExpression(),
+                info
+            );
         }
         
         private IExpr ParseSimpleExpression()
