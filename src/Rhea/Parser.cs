@@ -63,7 +63,7 @@ namespace Rhea
             if (mHeadToken == TokenType.Def)
             {
                 LookAhead();
-                IExpr expr = ParsePrimary();
+                IExpr expr = ParsePrimaryExpression();
                 if (mHeadToken != TokenType.Equal)
                 {
                     throw new RheaException(
@@ -229,10 +229,10 @@ namespace Rhea
         
         private IExpr ParseUnaryExpression()
         {
-            return ParsePrimary();
+            return ParsePrimaryExpression();
         }
         
-        private IExpr ParsePrimary()
+        private IExpr ParsePrimaryExpression()
         {
             IExpr expr = ParseAtom();
             while (mHeadToken == TokenType.LeftParen ||
@@ -240,7 +240,8 @@ namespace Rhea
                    mHeadToken == TokenType.BeginBlock ||
                    mHeadToken == TokenType.LeftBrace ||
                    mHeadToken == TokenType.Identifier ||
-                   mHeadToken == TokenType.Dot)
+                   mHeadToken == TokenType.Dot ||
+                   mHeadToken == TokenType.Colon)
             {
                 switch (mHeadToken)
                 {
@@ -253,6 +254,9 @@ namespace Rhea
                     break;
                 case TokenType.Dot:
                     expr = ParseMessageSend(expr);
+                    break;
+                case TokenType.Colon:
+                    expr = ParseMethodReference(expr);
                     break;
                 }
             }
@@ -339,6 +343,21 @@ namespace Rhea
             return argExprs;
         }
         
+        private IExpr ParseMethodReference(IExpr klassExpr)
+        {
+            LookAhead();
+            if (mHeadToken != TokenType.Identifier)
+            {
+                throw new RheaException(
+                    Expected("Identifier"), mLexer.GetSourceInfo()
+                );
+            }
+            ValueSymbol selector = ValueSymbol.Intern((string)mLexer.Value);
+            SourceInfo info = mLexer.GetSourceInfo();
+            LookAhead();
+            return new ExprGetMethod(klassExpr, selector, info);
+        }
+        
         private IExpr ParseAtom()
         {
             IExpr expr;
@@ -351,7 +370,7 @@ namespace Rhea
                 expr = ParseString();
                 break;
             case TokenType.Identifier:
-                expr = ParseReference();
+                expr = ParseVariableReference();
                 break;
             case TokenType.Colon:
                 expr = ParseSymbolLiteral();
@@ -386,35 +405,11 @@ namespace Rhea
             return expr;
         }
         
-        private IExpr ParseReference()
+        private IExpr ParseVariableReference()
         {
             ValueSymbol symbol = ValueSymbol.Intern((string)mLexer.Value);
             SourceInfo info = mLexer.GetSourceInfo();
             LookAhead();
-            if (mHeadToken == TokenType.Colon)
-            {
-                return ParseMethodReference(new ExprGetVar(symbol, info));
-            }
-            return ParseVariableReference(symbol, info);
-        }
-        
-        private IExpr ParseMethodReference(IExpr klassExpr)
-        {
-            LookAhead();
-            if (mHeadToken != TokenType.Identifier)
-            {
-                throw new RheaException(
-                    Expected("Identifier"), mLexer.GetSourceInfo()
-                );
-            }
-            ValueSymbol selector = ValueSymbol.Intern((string)mLexer.Value);
-            SourceInfo info = mLexer.GetSourceInfo();
-            LookAhead();
-            return new ExprGetMethod(klassExpr, selector, info);
-        }
-        
-        private IExpr ParseVariableReference(ValueSymbol symbol, SourceInfo info)
-        {
             return new ExprGetVar(symbol, info);
         }
         
