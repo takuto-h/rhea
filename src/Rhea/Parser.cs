@@ -78,7 +78,7 @@ namespace Rhea
                 }
                 return ParseVariableDefinition(symbol);
             }
-            return ParseSimpleExpression();
+            return ParseAssignment();
         }
         
         private IExpr ParseVariableDefinition(ValueSymbol symbol)
@@ -114,6 +114,38 @@ namespace Rhea
             SourceInfo info = mLexer.GetSourceInfo();
             LookAhead();
             return new ExprDefMethod(klassExpr, selector, ParseExpression(), info);
+        }
+        
+        private IExpr ParseAssignment()
+        {
+            IExpr expr = ParseSimpleExpression();
+            if (mHeadToken == TokenType.Equal)
+            {
+                SourceInfo info = mLexer.GetSourceInfo();
+                if (expr is ExprGetVar)
+                {
+                    ExprGetVar variableRef = (ExprGetVar)expr;
+                    LookAhead();
+                    return new ExprSetVar(
+                        variableRef.Symbol,
+                        ParseExpression(),
+                        info
+                    );
+                }
+                else if (expr is ExprGetMethod)
+                {
+                    ExprGetMethod methodRef = (ExprGetMethod)expr;
+                    LookAhead();
+                    return new ExprSetMethod(
+                        methodRef.KlassExpr,
+                        methodRef.Selector,
+                        ParseExpression(),
+                        info
+                    );
+                }
+                throw new RheaException(Unexpected(), mLexer.GetSourceInfo());
+            }
+            return expr;
         }
         
         private IExpr ParseSimpleExpression()
@@ -336,10 +368,7 @@ namespace Rhea
                 expr = ParseParenthesizedExpression();
                 break;
             default:
-                throw new RheaException(
-                    string.Format("unexpected {0}", mHeadToken),
-                    mLexer.GetSourceInfo()
-                );
+                throw new RheaException(Unexpected(), mLexer.GetSourceInfo());
             }
             return expr;
         }
@@ -387,12 +416,6 @@ namespace Rhea
         
         private IExpr ParseVariableReference(ValueSymbol symbol, SourceInfo info)
         {
-            if (mHeadToken == TokenType.Equal)
-            {
-                info = mLexer.GetSourceInfo();
-                LookAhead();
-                return new ExprSetVar(symbol, ParseExpression(), info);
-            }
             return new ExprGetVar(symbol, info);
         }
         
@@ -543,6 +566,11 @@ namespace Rhea
             }
             LookAhead();
             return expr;
+        }
+        
+        private string Unexpected()
+        {
+            return string.Format("unexpected {0}", mHeadToken);
         }
         
         private string Expected(string expectedTokenNames)

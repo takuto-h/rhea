@@ -2,8 +2,8 @@ namespace Rhea
 {
     public class ExprGetMethod : IExpr
     {
-        private IExpr mKlassExpr;
-        private ValueSymbol mSelector;
+        public IExpr KlassExpr { get; private set; }
+        public ValueSymbol Selector { get; private set; }
         private SourceInfo mInfo;
         
         public ExprGetMethod(
@@ -12,15 +12,15 @@ namespace Rhea
             SourceInfo info
         )
         {
-            mKlassExpr = klassExpr;
-            mSelector = selector;
+            KlassExpr = klassExpr;
+            Selector = selector;
             mInfo = info;
         }
         
         public void Compile(Compiler compiler)
         {
-            mKlassExpr.Compile(compiler);
-            compiler.Push(new InsnGetMethod(mSelector, mInfo));
+            KlassExpr.Compile(compiler);
+            compiler.Push(new InsnGetMethod(Selector, mInfo));
         }
     }
 }
