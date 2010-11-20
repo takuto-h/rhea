@@ -1,4 +1,5 @@
-(method|slot) is IValueFunc?
+trait must not have klasses!
+make_trait(Hash)
 --
 rhea in Rhea
 nil is convenient

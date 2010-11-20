@@ -13,13 +13,21 @@ namespace Rhea
         
         public void Execute(VM vm)
         {
-            IValue method = vm.Pop();
-            IValue value = vm.Pop();
-            ValueSymbol klass = value as ValueSymbol;
+            IValue value1 = vm.Pop();
+            IValue value2 = vm.Pop();
+            IValueFunc method = value1 as IValueFunc;
+            ValueSymbol klass = value2 as ValueSymbol;
+            if (method == null)
+            {
+                throw new RheaException(
+                    string.Format("function required, but got {0}", value1),
+                    mInfo
+                );
+            }
             if (klass == null)
             {
                 throw new RheaException(
-                    string.Format("symbol required, but got {0}", value),
+                    string.Format("symbol required, but got {0}", value2),
                     mInfo
                 );
             }

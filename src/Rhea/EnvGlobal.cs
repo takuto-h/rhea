@@ -6,7 +6,7 @@ namespace Rhea
     public class EnvGlobal : IEnv
     {
         private IDictionary<ValueSymbol, IValue> mVariables;
-        private IDictionary<KeyValuePair<ValueSymbol, ValueSymbol>, IValue> mMethods;
+        private IDictionary<KeyValuePair<ValueSymbol, ValueSymbol>, IValueFunc> mMethods;
         
         public IEnv OuterEnv
         {
@@ -16,7 +16,7 @@ namespace Rhea
         public EnvGlobal()
         {
             mVariables = new Dictionary<ValueSymbol, IValue>();
-            mMethods = new Dictionary<KeyValuePair<ValueSymbol, ValueSymbol>, IValue>();
+            mMethods = new Dictionary<KeyValuePair<ValueSymbol, ValueSymbol>, IValueFunc>();
         }
         
         public bool IsGlobal()
@@ -36,7 +36,7 @@ namespace Rhea
             }
         }
         
-        public IValue this[ValueSymbol klass, ValueSymbol selector]
+        public IValueFunc this[ValueSymbol klass, ValueSymbol selector]
         {
             get
             {
@@ -53,9 +53,9 @@ namespace Rhea
             mVariables.Add(symbol, value);
         }
         
-        public void AddMethod(ValueSymbol klass, ValueSymbol selector, IValue value)
+        public void AddMethod(ValueSymbol klass, ValueSymbol selector, IValueFunc func)
         {
-            mMethods.Add(MakePair(klass, selector), value);
+            mMethods.Add(MakePair(klass, selector), func);
         }
         
         public bool TryGetVariable(ValueSymbol symbol, out IValue value)
@@ -63,9 +63,9 @@ namespace Rhea
             return mVariables.TryGetValue(symbol, out value);
         }
         
-        public bool TryGetMethod(ValueSymbol klass, ValueSymbol selector, out IValue value)
+        public bool TryGetMethod(ValueSymbol klass, ValueSymbol selector, out IValueFunc func)
         {
-            return mMethods.TryGetValue(MakePair(klass, selector), out value);
+            return mMethods.TryGetValue(MakePair(klass, selector), out func);
         }
         
         public bool ContainsVariable(ValueSymbol symbol)

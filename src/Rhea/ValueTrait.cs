@@ -5,11 +5,11 @@ namespace Rhea
     public class ValueTrait : IValue
     {
         private KlassHolder mKlassHolder;
-        private Dictionary<ValueSymbol, IValue> mSlots;
+        private Dictionary<ValueSymbol, IValueFunc> mSlots;
         
         public ValueTrait(
             IList<ValueSymbol> klasses,
-            Dictionary<ValueSymbol, IValue> slots
+            Dictionary<ValueSymbol, IValueFunc> slots
         )
         {
             mKlassHolder = new KlassHolder(klasses);
@@ -18,16 +18,9 @@ namespace Rhea
         
         public void Send(ValueSymbol selector, IList<IValue> args, VM vm, SourceInfo info)
         {
-            IValue value;
-            if (mSlots.TryGetValue(selector, out value))
+            IValueFunc func;
+            if (mSlots.TryGetValue(selector, out func))
             {
-                IValueFunc func = value as IValueFunc;
-                if (func == null)
-                {
-                    throw new RheaException(
-                        string.Format("function required, but got {0}", value), info
-                    );
-                }
                 List<IValue> newArgs = new List<IValue>();
                 newArgs.Add(this);
                 newArgs.AddRange(args);

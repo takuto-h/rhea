@@ -17,11 +17,11 @@ namespace Rhea
             this IEnv env,
             ValueSymbol klass,
             string selectorName,
-            IValue value
+            IValueFunc func
         )
         {
             env.AddMethod(
-                klass, ValueSymbol.Intern(selectorName), value
+                klass, ValueSymbol.Intern(selectorName), func
             );
         }
         
@@ -84,7 +84,7 @@ namespace Rhea
             this IEnv env,
             ValueSymbol klass,
             ValueSymbol selector,
-            IValue value,
+            IValueFunc func,
             SourceInfo info
         )
         {
@@ -97,8 +97,8 @@ namespace Rhea
                     ), info
                 );
             }
-            env.AddMethod(klass, selector, value);*/
-            env[klass, selector] = value;
+            env.AddMethod(klass, selector, func);*/
+            env[klass, selector] = func;
         }
         
         public static IValue GetVariable(
@@ -124,14 +124,14 @@ namespace Rhea
             SourceInfo info
         )
         {
-            IValue value;
-            if (!LookupMethod(env, klass, selector, out value))
+            IValueFunc func;
+            if (!LookupMethod(env, klass, selector, out func))
             {
                 throw new RheaException(
                     string.Format("method is not defined: {0}:{1}", klass.Name, selector.Name), info
                 );
             }
-            return value;
+            return func;
         }
         
         public static bool LookupVariable(
@@ -159,18 +159,18 @@ namespace Rhea
             this IEnv env,
             ValueSymbol klass,
             ValueSymbol selector,
-            out IValue value
+            out IValueFunc func
         )
         {
             while (!env.IsGlobal())
             {
-                if (env.TryGetMethod(klass, selector, out value))
+                if (env.TryGetMethod(klass, selector, out func))
                 {
                     return true;
                 }
                 env = env.OuterEnv;
             }
-            if (env.TryGetMethod(klass, selector, out value))
+            if (env.TryGetMethod(klass, selector, out func))
             {
                 return true;
             }
@@ -207,7 +207,7 @@ namespace Rhea
             this IEnv env,
             ValueSymbol klass,
             ValueSymbol selector,
-            IValue value,
+            IValueFunc func,
             SourceInfo info
         )
         {
@@ -215,15 +215,15 @@ namespace Rhea
             {
                 if (env.ContainsMethod(klass, selector))
                 {
-                    env[klass, selector] = value;
-                    return value;
+                    env[klass, selector] = func;
+                    return func;
                 }
                 env = env.OuterEnv;
             }
             if (env.ContainsMethod(klass, selector))
             {
-                env[klass, selector] = value;
-                return value;
+                env[klass, selector] = func;
+                return func;
             }
             throw new RheaException(
                 string.Format("method is not defined: {0}:{1}", klass.Name, selector.Name), info

@@ -19,25 +19,18 @@ namespace Rhea
             SourceInfo info
         )
         {
-            IValue value = null;
+            IValueFunc func = null;
             foreach (ValueSymbol klass in mKlasses)
             {
-                if (vm.Env.LookupMethod(klass, selector, out value))
+                if (vm.Env.LookupMethod(klass, selector, out func))
                 {
                     break;
                 }
             }
-            if (value == null)
-            {
-                throw new RheaException(
-                    string.Format("invalid selector for {0}: {1}", receiver, selector.Name), info
-                );
-            }
-            IValueFunc func = value as IValueFunc;
             if (func == null)
             {
                 throw new RheaException(
-                    string.Format("function required, but got {0}", value), info
+                    string.Format("invalid selector for {0}: {1}", receiver, selector.Name), info
                 );
             }
             List<IValue> newArgs = new List<IValue>();
