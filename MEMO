@@ -1,4 +1,4 @@
-see sample/lexer.rh
+(method|slot) is IValueFunc?
 --
 rhea in Rhea
 nil is convenient

@@ -4,25 +4,22 @@ namespace Rhea
 {
     public class ValueCont : IValueFunc
     {
-        private static ValueSymbol smKlass;
+        private static KlassHolder smKlassHolder;
         
         public ISList<IInsn> Insns { get; private set; }
         public ISList<IValue> Stack { get; private set; }
         public IEnv Env { get; private set; }
         public ISList<KeyValuePair<IValue, IValue>> Winders { get; private set; }
         
-        public static ValueSymbol GetKlass()
+        static ValueCont()
         {
-            if (smKlass == null)
-            {
-                smKlass = ValueSymbol.Generate("Cont");
-            }
-            return smKlass;
-        }
-        
-        public ValueSymbol Klass
-        {
-            get { return GetKlass(); }
+            smKlassHolder = new KlassHolder(
+                new List<ValueSymbol> {
+                    Klasses.Cont,
+                    Klasses.Func,
+                    Klasses.Object
+                }
+            );
         }
         
         public ValueCont(
@@ -36,6 +33,11 @@ namespace Rhea
             Stack = stack;
             Env = env;
             Winders = winders;
+        }
+        
+        public void Send(ValueSymbol selector, IList<IValue> args, VM vm, SourceInfo info)
+        {
+            smKlassHolder.Send(this, selector, args, vm, info);
         }
         
         public void Call(IList<IValue> args, VM vm, SourceInfo info)

@@ -1,22 +1,21 @@
+using System.Collections.Generic;
+
 namespace Rhea
 {
     public class ValueFalse : IValueBool
     {
-        private static ValueSymbol smKlass;
+        private static KlassHolder smKlassHolder;
         private static ValueFalse smInstance;
         
-        public static ValueSymbol GetKlass()
+        static ValueFalse()
         {
-            if (smKlass == null)
-            {
-                smKlass = ValueSymbol.Generate("False");
-            }
-            return smKlass;
-        }
-        
-        public ValueSymbol Klass
-        {
-            get { return GetKlass(); }
+            smKlassHolder = new KlassHolder(
+                new List<ValueSymbol> {
+                    Klasses.False,
+                    Klasses.Bool,
+                    Klasses.Object
+                }
+            );
         }
         
         public static ValueFalse Instance
@@ -33,6 +32,11 @@ namespace Rhea
         
         private ValueFalse()
         {
+        }
+        
+        public void Send(ValueSymbol selector, IList<IValue> args, VM vm, SourceInfo info)
+        {
+            smKlassHolder.Send(this, selector, args, vm, info);
         }
         
         public string Show()

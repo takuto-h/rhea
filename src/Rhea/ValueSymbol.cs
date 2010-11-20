@@ -4,29 +4,16 @@ namespace Rhea
 {
     public class ValueSymbol : IValue
     {
-        private static ValueSymbol smKlass;
+        private static KlassHolder smKlassHolder;
         private static IDictionary<string, ValueSymbol> smInstances;
         
         private bool mInterned;
         
         public string Name { get; private set; }
         
-        public static ValueSymbol GetKlass()
-        {
-            if (smKlass == null)
-            {
-                smKlass = ValueSymbol.Generate("Symbol");
-            }
-            return smKlass;
-        }
-        
-        public ValueSymbol Klass
-        {
-            get { return GetKlass(); }
-        }
-        
         static ValueSymbol()
         {
+            smKlassHolder = null;
             smInstances = new Dictionary<string, ValueSymbol>();
         }
         
@@ -34,6 +21,20 @@ namespace Rhea
         {
             mInterned = interned;
             Name = name;
+        }
+        
+        public void Send(ValueSymbol selector, IList<IValue> args, VM vm, SourceInfo info)
+        {
+            if (smKlassHolder == null)
+            {
+                smKlassHolder = new KlassHolder(
+                    new List<ValueSymbol> {
+                        Klasses.Symbol,
+                        Klasses.Object
+                    }
+                );
+            }
+            smKlassHolder.Send(this, selector, args, vm, info);
         }
         
         public static ValueSymbol Intern(string name)

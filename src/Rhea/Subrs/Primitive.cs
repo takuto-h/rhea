@@ -55,69 +55,6 @@ namespace Rhea.Subrs
             vm.Push(ValueSymbol.Generate(str.StringValue));
         }
         
-        public static void MakeObject(IList<IValue> args, VM vm, SourceInfo info)
-        {
-            ValueSymbol klass = args[0] as ValueSymbol;
-            if (klass == null)
-            {
-                throw new RheaException(
-                    string.Format("symbol required, but got {0}", args[0]),
-                    info
-                );
-            }
-            vm.Push(new ValueObject(klass));
-        }
-        
-        public static void GetSlot(IList<IValue> args, VM vm, SourceInfo info)
-        {
-            ValueObject obj = args[0] as ValueObject;
-            ValueSymbol symbol = args[1] as ValueSymbol;
-            if (obj == null)
-            {
-                throw new RheaException(
-                    string.Format("object required, but got {0}", args[0]),
-                    info
-                );
-            }
-            if (symbol == null)
-            {
-                throw new RheaException(
-                    string.Format("symbol required, but got {0}", args[1]),
-                    info
-                );
-            }
-            IValue value;
-            if (!obj.TryGetSlot(symbol, out value))
-            {
-                throw new RheaException(
-                    string.Format("slot is not defined in {0}: {1}", obj, symbol.Name),
-                    info
-                );
-            }
-            vm.Push(value);
-        }
-        
-        public static void SetSlot(IList<IValue> args, VM vm, SourceInfo info)
-        {
-            ValueObject obj = args[0] as ValueObject;
-            ValueSymbol symbol = args[1] as ValueSymbol;
-            if (obj == null)
-            {
-                throw new RheaException(
-                    string.Format("object required, but got {0}", args[0]),
-                    info
-                );
-            }
-            if (symbol == null)
-            {
-                throw new RheaException(
-                    string.Format("symbol required, but got {0}", args[1]),
-                    info
-                );
-            }
-            vm.Push(obj.SetSlot(symbol, args[2]));
-        }
-        
         public static void Load(IList<IValue> args, VM vm, SourceInfo info)
         {
             ValueString str = args[0] as ValueString;

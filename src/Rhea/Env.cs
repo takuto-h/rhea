@@ -108,21 +108,13 @@ namespace Rhea
         )
         {
             IValue value;
-            while (!env.IsGlobal())
+            if (!LookupVariable(env, symbol, out value))
             {
-                if (env.TryGetVariable(symbol, out value))
-                {
-                    return value;
-                }
-                env = env.OuterEnv;
+                throw new RheaException(
+                    string.Format("variable is not defined: {0}", symbol.Name), info
+                );
             }
-            if (env.TryGetVariable(symbol, out value))
-            {
-                return value;
-            }
-            throw new RheaException(
-                string.Format("variable is not defined: {0}", symbol.Name), info
-            );
+            return value;
         }
         
         public static IValue GetMethod(
@@ -133,21 +125,56 @@ namespace Rhea
         )
         {
             IValue value;
+            if (!LookupMethod(env, klass, selector, out value))
+            {
+                throw new RheaException(
+                    string.Format("method is not defined: {0}:{1}", klass.Name, selector.Name), info
+                );
+            }
+            return value;
+        }
+        
+        public static bool LookupVariable(
+            this IEnv env,
+            ValueSymbol symbol,
+            out IValue value
+        )
+        {
+            while (!env.IsGlobal())
+            {
+                if (env.TryGetVariable(symbol, out value))
+                {
+                    return true;
+                }
+                env = env.OuterEnv;
+            }
+            if (env.TryGetVariable(symbol, out value))
+            {
+                return true;
+            }
+            return false;
+        }
+        
+        public static bool LookupMethod(
+            this IEnv env,
+            ValueSymbol klass,
+            ValueSymbol selector,
+            out IValue value
+        )
+        {
             while (!env.IsGlobal())
             {
                 if (env.TryGetMethod(klass, selector, out value))
                 {
-                    return value;
+                    return true;
                 }
                 env = env.OuterEnv;
             }
             if (env.TryGetMethod(klass, selector, out value))
             {
-                return value;
+                return true;
             }
-            throw new RheaException(
-                string.Format("method is not defined: {0}:{1}", klass.Name, selector.Name), info
-            );
+            return false;
         }
         
         public static IValue SetVariable(

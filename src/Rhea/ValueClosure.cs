@@ -4,25 +4,22 @@ namespace Rhea
 {
     public class ValueClosure : IValueFunc
     {
-        private static ValueSymbol smKlass;
+        private static KlassHolder smKlassHolder;
         
         private IList<ValueSymbol> mParams;
         private ISList<IInsn> mInsns;
         private IEnv mEnv;
         private SourceInfo mInfo;
         
-        public static ValueSymbol GetKlass()
+        static ValueClosure()
         {
-            if (smKlass == null)
-            {
-                smKlass = ValueSymbol.Generate("Closure");
-            }
-            return smKlass;
-        }
-        
-        public ValueSymbol Klass
-        {
-            get { return GetKlass(); }
+            smKlassHolder = new KlassHolder(
+                new List<ValueSymbol> {
+                    Klasses.Closure,
+                    Klasses.Func,
+                    Klasses.Object
+                }
+            );
         }
         
         public ValueClosure(
@@ -36,6 +33,11 @@ namespace Rhea
             mInsns = insns;
             mEnv = env;
             mInfo = info;
+        }
+        
+        public void Send(ValueSymbol selector, IList<IValue> args, VM vm, SourceInfo info)
+        {
+            smKlassHolder.Send(this, selector, args, vm, info);
         }
         
         public void Call(IList<IValue> args, VM vm, SourceInfo info)

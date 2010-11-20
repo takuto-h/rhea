@@ -24,19 +24,7 @@ namespace Rhea
             }
             args.Reverse();
             IValue receiver = vm.Pop();
-            ValueSymbol klass = receiver.Klass;
-            IValue value = vm.Env.GetMethod(klass, mSelector, mInfo);
-            IValueFunc func = value as IValueFunc;
-            if (func == null)
-            {
-                throw new RheaException(
-                    string.Format("function required, but got {0}", value), mInfo
-                );
-            }
-            List<IValue> newArgs = new List<IValue>();
-            newArgs.Add(receiver);
-            newArgs.AddRange(args);
-            func.Call(newArgs, vm, mInfo);
+            receiver.Send(mSelector, args, vm, mInfo);
         }
         
         public string Show()

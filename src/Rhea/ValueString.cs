@@ -1,28 +1,31 @@
+using System.Collections.Generic;
+
 namespace Rhea
 {
     public class ValueString : IValue
     {
-        private static ValueSymbol smKlass;
+        private static KlassHolder smKlassHolder;
         
         public string StringValue { get; private set; }
         
-        public static ValueSymbol GetKlass()
+        static ValueString()
         {
-            if (smKlass == null)
-            {
-                smKlass = ValueSymbol.Generate("String");
-            }
-            return smKlass;
-        }
-        
-        public ValueSymbol Klass
-        {
-            get { return GetKlass(); }
+            smKlassHolder = new KlassHolder(
+                new List<ValueSymbol> {
+                    Klasses.String,
+                    Klasses.Object
+                }
+            );
         }
         
         public ValueString(string stringValue)
         {
             StringValue = stringValue;
+        }
+        
+        public void Send(ValueSymbol selector, IList<IValue> args, VM vm, SourceInfo info)
+        {
+            smKlassHolder.Send(this, selector, args, vm, info);
         }
         
         public string Show()
