@@ -24,8 +24,8 @@ namespace Rhea
             this.AddVariable("false", ValueFalse.Instance);
             this.AddMethod(Klasses.False, "match_bool", 3, Subrs.False.MatchBool);
             
-            this.AddVariable("None", Klasses.None);
-            this.AddVariable("none", ValueNone.Instance);
+            this.AddVariable("UndefinedObject", Klasses.UndefinedObject);
+            this.AddVariable("undefined_object", ValueUndef.Instance);
             
             this.AddVariable("Symbol", Klasses.Symbol);
             this.AddVariable("String", Klasses.String);

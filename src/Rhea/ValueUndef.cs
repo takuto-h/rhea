@@ -2,34 +2,34 @@ using System.Collections.Generic;
 
 namespace Rhea
 {
-    public class ValueNone : IValue
+    public class ValueUndef : IValue
     {
         private static KlassHolder smKlassHolder;
-        private static ValueNone smInstance;
+        private static ValueUndef smInstance;
         
-        static ValueNone()
+        static ValueUndef()
         {
             smKlassHolder = new KlassHolder(
                 new List<ValueSymbol> {
-                    Klasses.None,
+                    Klasses.UndefinedObject,
                     Klasses.Object
                 }
             );
         }
         
-        public static ValueNone Instance
+        public static ValueUndef Instance
         {
             get
             {
                 if (smInstance == null)
                 {
-                    smInstance = new ValueNone();
+                    smInstance = new ValueUndef();
                 }
                 return smInstance;
             }
         }
         
-        private ValueNone()
+        private ValueUndef()
         {
         }
         
@@ -40,7 +40,7 @@ namespace Rhea
         
         public string Show()
         {
-            return "$<none>";
+            return "$<undef>";
         }
         
         public override string ToString()

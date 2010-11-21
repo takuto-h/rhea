@@ -1,4 +1,4 @@
-make_instance(Hash)
+make_instance(Array, Hash)
 --
 rhea in Rhea
 tuple, variant
