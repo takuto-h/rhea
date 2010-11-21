@@ -5,11 +5,11 @@ namespace Rhea
     public class ValueInstance : IValue
     {
         private KlassHolder mKlassHolder;
-        private Dictionary<ValueSymbol, IValueFunc> mSlots;
+        private IDictionary<ValueSymbol, IValueFunc> mSlots;
         
         public ValueInstance(
             IList<ValueSymbol> klasses,
-            Dictionary<ValueSymbol, IValueFunc> slots
+            IDictionary<ValueSymbol, IValueFunc> slots
         )
         {
             mKlassHolder = new KlassHolder(klasses);

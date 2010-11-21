@@ -6,7 +6,7 @@ namespace Rhea
 {
     public class Lexer
     {
-        private static Dictionary<string, TokenType> smReserved;
+        private static IDictionary<string, TokenType> smReserved;
         
         private SourceReader mReader;
         private Stack<int> mOffsideLines;

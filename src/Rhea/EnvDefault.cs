@@ -32,6 +32,8 @@ namespace Rhea
             this.AddVariable("Array", Klasses.Array);
             this.AddVariable("make_array", 0, true, Subrs.Array.MakeArray);
             
+            this.AddVariable("Hash", Klasses.Hash);
+            
             this.AddVariable("String", Klasses.String);
             this.AddVariable("Closure", Klasses.Closure);
             this.AddVariable("Subr", Klasses.Subr);
