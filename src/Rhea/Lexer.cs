@@ -1,5 +1,6 @@
 using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Rhea
 {
@@ -152,6 +153,9 @@ namespace Rhea
             case '"':
                 LexString();
                 break;
+            case '|':
+                LexSpecialIdentifier();
+                break;
             default:
                 if (char.IsDigit((char)c))
                 {
@@ -173,14 +177,21 @@ namespace Rhea
             return true;
         }
         
-        private bool IsIdentifierStart(char c)
+        private static bool IsIdentifierStart(char c)
         {
             return char.IsLetter(c) || c == '_';
         }
         
-        private bool IsIdentifierPart(char c)
+        private static bool IsIdentifierPart(char c)
         {
             return char.IsLetterOrDigit(c) || c == '_';
+        }
+        
+        public static bool IsIdentifier(string identifier)
+        {
+            return identifier.Length != 0
+              && IsIdentifierStart(identifier[0])
+              && identifier.Skip(1).All(IsIdentifierPart);
         }
         
         private void LexString()
@@ -201,6 +212,27 @@ namespace Rhea
             }
             mReader.Read();
             Token = TokenType.String;
+            Value = sb.ToString();
+        }
+        
+        private void LexSpecialIdentifier()
+        {
+            StringBuilder sb = new StringBuilder();
+            mReader.Read();
+            int c = mReader.Peek();
+            while (c != '|')
+            {
+                if (c == -1)
+                {
+                    throw new RheaException(
+                        "EOF inside a special identifier", GetSourceInfo()
+                    );
+                }
+                sb.Append((char)mReader.Read());
+                c = mReader.Peek();
+            }
+            mReader.Read();
+            Token = TokenType.Identifier;
             Value = sb.ToString();
         }
         
