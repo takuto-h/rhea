@@ -1,6 +1,5 @@
 make_instance(Hash)
 --
 rhea in Rhea
-nil is convenient
 tuple, variant
 def, getenv, callce

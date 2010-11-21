@@ -13,5 +13,6 @@ namespace Rhea
         public static readonly ValueSymbol Cont = ValueSymbol.Generate("Cont");
         public static readonly ValueSymbol Func = ValueSymbol.Generate("Func");
         public static readonly ValueSymbol Object = ValueSymbol.Generate("Object");
+        public static readonly ValueSymbol None = ValueSymbol.Generate("None");
     }
 }
