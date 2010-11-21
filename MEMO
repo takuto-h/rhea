@@ -1,5 +1,4 @@
-trait must not have klasses!
-make_trait(Hash)
+make_instance(Hash)
 --
 rhea in Rhea
 nil is convenient

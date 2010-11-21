@@ -2,12 +2,12 @@ using System.Collections.Generic;
 
 namespace Rhea
 {
-    public class ValueTrait : IValue
+    public class ValueInstance : IValue
     {
         private KlassHolder mKlassHolder;
         private Dictionary<ValueSymbol, IValueFunc> mSlots;
         
-        public ValueTrait(
+        public ValueInstance(
             IList<ValueSymbol> klasses,
             Dictionary<ValueSymbol, IValueFunc> slots
         )
@@ -32,7 +32,7 @@ namespace Rhea
         
         public string Show()
         {
-            return string.Format("$<trait 0x{1:x8}>", GetHashCode());
+            return string.Format("$<instance 0x{0:x8}>", mKlassHolder, GetHashCode());
         }
         
         public override string ToString()
