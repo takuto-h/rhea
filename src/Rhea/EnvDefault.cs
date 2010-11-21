@@ -11,10 +11,10 @@ namespace Rhea
             this.AddVariable("load",         1, Subrs.Primitive.Load);
             
             this.AddVariable("Int", Klasses.Int);
-            this.AddMethod(Klasses.Int, "__add__", 2, Subrs.Int.Add);
-            this.AddMethod(Klasses.Int, "__sub__", 2, Subrs.Int.Sub);
-            this.AddMethod(Klasses.Int, "__mul__", 2, Subrs.Int.Mul);
-            this.AddMethod(Klasses.Int, "__eq__",  2, Subrs.Int.Eq);
+            this.AddMethod(Klasses.Int, "+", 2, Subrs.Int.Add);
+            this.AddMethod(Klasses.Int, "-", 2, Subrs.Int.Sub);
+            this.AddMethod(Klasses.Int, "*", 2, Subrs.Int.Mul);
+            this.AddMethod(Klasses.Int, "==",  2, Subrs.Int.Eq);
             
             this.AddVariable("True", Klasses.True);
             this.AddVariable("true", ValueTrue.Instance);

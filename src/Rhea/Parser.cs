@@ -162,7 +162,7 @@ namespace Rhea
                 switch (mHeadToken)
                 {
                 case TokenType.DoubleEqual:
-                    selector = ValueSymbol.Intern("__eq__");
+                    selector = ValueSymbol.Intern("==");
                     break;
                 }
                 LookAhead();
@@ -190,10 +190,10 @@ namespace Rhea
                 switch (mHeadToken)
                 {
                 case TokenType.Plus:
-                    selector = ValueSymbol.Intern("__add__");
+                    selector = ValueSymbol.Intern("+");
                     break;
                 case TokenType.Minus:
-                    selector = ValueSymbol.Intern("__sub__");
+                    selector = ValueSymbol.Intern("-");
                     break;
                 }
                 LookAhead();
@@ -215,7 +215,7 @@ namespace Rhea
                 switch (mHeadToken)
                 {
                 case TokenType.Asterisk:
-                    selector = ValueSymbol.Intern("__mul__");
+                    selector = ValueSymbol.Intern("*");
                     break;
                 }
                 LookAhead();
