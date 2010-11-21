@@ -10,6 +10,7 @@ namespace Rhea
         
         private string mName;
         private int mParamCount;
+        private bool mAllowRest;
         private Subr mSubrValue;
         
         static ValueSubr()
@@ -23,13 +24,17 @@ namespace Rhea
             );
         }
         
-        public ValueSubr(
-            string name, int paramCount, Subr subrValue
-        )
+        public ValueSubr(string name, int paramCount, bool allowRest, Subr subrValue)
         {
             mName = name;
             mParamCount = paramCount;
+            mAllowRest = allowRest;
             mSubrValue = subrValue;
+        }
+        
+        public ValueSubr(string name, int paramCount, Subr subrValue)
+          : this(name, paramCount, false, subrValue)
+        {
         }
         
         public void Send(ValueSymbol selector, IList<IValue> args, VM vm, SourceInfo info)
@@ -40,8 +45,10 @@ namespace Rhea
         public void Call(IList<IValue> args, VM vm, SourceInfo info)
         {
             int argCount = args.Count;
-            if (argCount != mParamCount)
+            if (argCount < mParamCount ||
+                argCount > mParamCount && !mAllowRest)
             {
+                
                 throw new RheaException(
                     this.WrongNumberOfArguments(mParamCount, argCount), info
                 );
