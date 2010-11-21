@@ -1,3 +1,4 @@
+opt, rest, key
 make_instance(Array, Hash)
 --
 rhea in Rhea
