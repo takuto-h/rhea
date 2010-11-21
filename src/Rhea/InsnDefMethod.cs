@@ -37,7 +37,9 @@ namespace Rhea
         
         public string Show()
         {
-            return string.Format("(defmethod {0} {1})", mSelector.Name, mInfo);
+            return string.Format(
+                "(defmethod {0} {1})", mSelector.Name.ToIdentifier(), mInfo
+            );
         }
         
         public override string ToString()

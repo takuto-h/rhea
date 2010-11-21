@@ -32,14 +32,10 @@ namespace Rhea
             Subr subrValue
         )
         {
+            string subrName = symbolName.ToIdentifier();
             AddVariable(
-                env,
-                symbolName,
-                new ValueSubr(
-                    string.Format("{0}", symbolName),
-                    paramCount,
-                    subrValue
-                )
+                env, symbolName,
+                new ValueSubr(subrName, paramCount, subrValue)
             );
         }
         
@@ -51,15 +47,14 @@ namespace Rhea
             Subr subrValue
         )
         {
+            string subrName = string.Format(
+                "{0}:{1}",
+                klass.Name.ToIdentifier(),
+                selectorName.ToIdentifier()
+            );
             AddMethod(
-                env,
-                klass,
-                selectorName,
-                new ValueSubr(
-                    string.Format("{0}:{1}", klass.Name, selectorName),
-                    paramCount,
-                    subrValue
-                )
+                env, klass, selectorName,
+                new ValueSubr(subrName, paramCount, subrValue)
             );
         }
         
@@ -73,7 +68,11 @@ namespace Rhea
             /*if (env.ContainsVariable(symbol))
             {
                 throw new RheaException(
-                    string.Format("variable is already defined: {0}", symbol.Name), info
+                    string.Format(
+                        "variable is already defined: {0}",
+                        symbol.Name.ToIdentifier()
+                    ),
+                    info
                 );
             }
             env.AddVariable(symbol, value);*/
@@ -93,8 +92,10 @@ namespace Rhea
                 throw new RheaException(
                     string.Format(
                         "method is already defined: {0}:{1}",
-                        klass.Name, selector.Name
-                    ), info
+                        klass.Name.ToIdentifier(),
+                        selector.Name.ToIdentifier()
+                    ),
+                    info
                 );
             }
             env.AddMethod(klass, selector, func);*/
@@ -111,7 +112,11 @@ namespace Rhea
             if (!LookupVariable(env, symbol, out value))
             {
                 throw new RheaException(
-                    string.Format("variable is not defined: {0}", symbol.Name), info
+                    string.Format(
+                        "variable is not defined: {0}",
+                        symbol.Name.ToIdentifier()
+                    ),
+                    info
                 );
             }
             return value;
@@ -128,7 +133,12 @@ namespace Rhea
             if (!LookupMethod(env, klass, selector, out func))
             {
                 throw new RheaException(
-                    string.Format("method is not defined: {0}:{1}", klass.Name, selector.Name), info
+                    string.Format(
+                        "method is not defined: {0}:{1}",
+                        klass.Name.ToIdentifier(),
+                        selector.Name.ToIdentifier()
+                    ),
+                    info
                 );
             }
             return func;
@@ -199,7 +209,11 @@ namespace Rhea
                 return value;
             }
             throw new RheaException(
-                string.Format("variable is not defined: {0}", symbol.Name), info
+                string.Format(
+                    "variable is not defined: {0}",
+                    symbol.Name.ToIdentifier()
+                ),
+                info
             );
         }
         
@@ -226,7 +240,12 @@ namespace Rhea
                 return func;
             }
             throw new RheaException(
-                string.Format("method is not defined: {0}:{1}", klass.Name, selector.Name), info
+                string.Format(
+                    "method is not defined: {0}:{1}",
+                    klass.Name.ToIdentifier(),
+                    selector.Name.ToIdentifier()
+                ),
+                info
             );
         }
     }

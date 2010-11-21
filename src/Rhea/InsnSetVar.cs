@@ -18,7 +18,9 @@ namespace Rhea
         
         public string Show()
         {
-            return string.Format("(setvar {0} {1})", mSymbol.Name, mInfo);
+            return string.Format(
+                "(setvar {0} {1})", mSymbol.Name.ToIdentifier(), mInfo
+            );
         }
         
         public override string ToString()

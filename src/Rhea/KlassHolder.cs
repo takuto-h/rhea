@@ -30,7 +30,12 @@ namespace Rhea
             if (func == null)
             {
                 throw new RheaException(
-                    string.Format("invalid selector for {0}: {1}", receiver, selector.Name), info
+                    string.Format(
+                        "invalid selector for {0}: {1}",
+                        receiver,
+                        selector.Name.ToIdentifier()
+                    ),
+                    info
                 );
             }
             List<IValue> newArgs = new List<IValue>();

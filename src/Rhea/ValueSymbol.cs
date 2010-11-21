@@ -57,9 +57,9 @@ namespace Rhea
         {
             if (!mInterned)
             {
-                return string.Format("$:{0}", Name);
+                return string.Format("$:{0}", Name.ToIdentifier());
             }
-            return string.Format(":{0}", Name);
+            return string.Format(":{0}", Name.ToIdentifier());
         }
         
         public override string ToString()
