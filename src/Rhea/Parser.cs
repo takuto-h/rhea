@@ -511,17 +511,20 @@ namespace Rhea
         {
             IList<IExpr> exprs = new List<IExpr>();
             LookAhead();
-            exprs.Add(ParseExpression());
-            while (mHeadToken == TokenType.Semicolon)
-            {
-                LookAhead();
-                exprs.Add(ParseExpression());
-            }
             if (mHeadToken != TokenType.RightBrace)
             {
-                throw new RheaException(
-                    Expected("RightBrace"), mLexer.GetSourceInfo()
-                );
+                exprs.Add(ParseExpression());
+                while (mHeadToken == TokenType.Semicolon)
+                {
+                    LookAhead();
+                    exprs.Add(ParseExpression());
+                }
+                if (mHeadToken != TokenType.RightBrace)
+                {
+                    throw new RheaException(
+                        Expected("RightBrace"), mLexer.GetSourceInfo()
+                    );
+                }
             }
             LookAhead();
             return exprs;
@@ -531,18 +534,21 @@ namespace Rhea
         {
             IList<IExpr> exprs = new List<IExpr>();
             LookAhead();
-            exprs.Add(ParseExpression());
-            while (mHeadToken == TokenType.Semicolon ||
-                   mHeadToken == TokenType.NewLine)
-            {
-                LookAhead();
-                exprs.Add(ParseExpression());
-            }
             if (mHeadToken != TokenType.EndBlock)
             {
-                throw new RheaException(
-                    Expected("EndBlock"), mLexer.GetSourceInfo()
-                );
+                exprs.Add(ParseExpression());
+                while (mHeadToken == TokenType.Semicolon ||
+                       mHeadToken == TokenType.NewLine)
+                {
+                    LookAhead();
+                    exprs.Add(ParseExpression());
+                }
+                if (mHeadToken != TokenType.EndBlock)
+                {
+                    throw new RheaException(
+                        Expected("EndBlock"), mLexer.GetSourceInfo()
+                    );
+                }
             }
             LookAhead();
             return exprs;

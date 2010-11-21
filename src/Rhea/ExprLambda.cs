@@ -22,12 +22,19 @@ namespace Rhea
         public void Compile(Compiler compiler)
         {
             Compiler bodyCompiler = new Compiler(compiler);
-            foreach (IExpr expr in mBodyExprs)
+            if (mBodyExprs.Count == 0)
             {
-                expr.Compile(bodyCompiler);
-                bodyCompiler.Push(InsnPop.Instance);
+                bodyCompiler.Push(new InsnPush(ValueNone.Instance));
             }
-            bodyCompiler.Pop();
+            else
+            {
+                foreach (IExpr expr in mBodyExprs)
+                {
+                    expr.Compile(bodyCompiler);
+                    bodyCompiler.Push(InsnPop.Instance);
+                }
+                bodyCompiler.Pop();
+            }
             bodyCompiler.Push(new InsnCall(1, mInfo));
             ISList<IInsn> insns = bodyCompiler.GetResult();
             compiler.Push(new InsnMakeClosure(mParams, insns, mInfo));
