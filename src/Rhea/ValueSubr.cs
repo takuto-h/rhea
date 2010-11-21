@@ -32,11 +32,6 @@ namespace Rhea
             mSubrValue = subrValue;
         }
         
-        public ValueSubr(string name, int paramCount, Subr subrValue)
-          : this(name, paramCount, false, subrValue)
-        {
-        }
-        
         public void Send(ValueSymbol selector, IList<IValue> args, VM vm, SourceInfo info)
         {
             smKlassHolder.Send(this, selector, args, vm, info);

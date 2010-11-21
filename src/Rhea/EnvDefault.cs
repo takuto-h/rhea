@@ -4,31 +4,33 @@ namespace Rhea
     {
         public EnvDefault()
         {
-            this.AddVariable("p",            1, Subrs.Primitive.P);
-            this.AddVariable("dynamic_wind", 3, Subrs.Primitive.DynamicWind);
-            this.AddVariable("callcc",       1, Subrs.Primitive.Callcc);
-            this.AddVariable("make_symbol",  1, Subrs.Primitive.MakeSymbol);
-            this.AddVariable("load",         1, Subrs.Primitive.Load);
+            this.AddVariable("p",            1, false, Subrs.Primitive.P);
+            this.AddVariable("dynamic_wind", 3, false, Subrs.Primitive.DynamicWind);
+            this.AddVariable("callcc",       1, false, Subrs.Primitive.Callcc);
+            this.AddVariable("make_symbol",  1, false, Subrs.Primitive.MakeSymbol);
+            this.AddVariable("make_array",   0, true, Subrs.Primitive.MakeArray);
+            this.AddVariable("load",         1, false, Subrs.Primitive.Load);
             
             this.AddVariable("Int", Klasses.Int);
-            this.AddMethod(Klasses.Int, "+", 2, Subrs.Int.Add);
-            this.AddMethod(Klasses.Int, "-", 2, Subrs.Int.Sub);
-            this.AddMethod(Klasses.Int, "*", 2, Subrs.Int.Mul);
-            this.AddMethod(Klasses.Int, "==",  2, Subrs.Int.Eq);
+            this.AddMethod(Klasses.Int, "+", 2, false, Subrs.Int.Add);
+            this.AddMethod(Klasses.Int, "-", 2, false, Subrs.Int.Sub);
+            this.AddMethod(Klasses.Int, "*", 2, false, Subrs.Int.Mul);
+            this.AddMethod(Klasses.Int, "==",  2, false, Subrs.Int.Eq);
             
             this.AddVariable("True", Klasses.True);
             this.AddVariable("true", ValueTrue.Instance);
-            this.AddMethod(Klasses.True, "match_bool", 3, Subrs.True.MatchBool);
+            this.AddMethod(Klasses.True, "match_bool", 3, false, Subrs.True.MatchBool);
             
             this.AddVariable("False", Klasses.False);
             this.AddVariable("false", ValueFalse.Instance);
-            this.AddMethod(Klasses.False, "match_bool", 3, Subrs.False.MatchBool);
+            this.AddMethod(Klasses.False, "match_bool", 3, false, Subrs.False.MatchBool);
             
             this.AddVariable("UndefinedObject", Klasses.UndefinedObject);
             this.AddVariable("undefined_object", ValueUndef.Instance);
             
             this.AddVariable("Symbol", Klasses.Symbol);
             this.AddVariable("String", Klasses.String);
+            this.AddVariable("Array", Klasses.Array);
             this.AddVariable("Closure", Klasses.Closure);
             this.AddVariable("Subr", Klasses.Subr);
             this.AddVariable("Cont", Klasses.Cont);

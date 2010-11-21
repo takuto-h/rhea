@@ -8,6 +8,7 @@ namespace Rhea
         public static readonly ValueSymbol Bool = ValueSymbol.Generate("Bool");
         public static readonly ValueSymbol Symbol = ValueSymbol.Generate("Symbol");
         public static readonly ValueSymbol String = ValueSymbol.Generate("String");
+        public static readonly ValueSymbol Array = ValueSymbol.Generate("Array");
         public static readonly ValueSymbol Closure = ValueSymbol.Generate("Closure");
         public static readonly ValueSymbol Subr = ValueSymbol.Generate("Subr");
         public static readonly ValueSymbol Cont = ValueSymbol.Generate("Cont");

@@ -55,6 +55,11 @@ namespace Rhea.Subrs
             vm.Push(ValueSymbol.Generate(str.StringValue));
         }
         
+        public static void MakeArray(IList<IValue> args, VM vm, SourceInfo info)
+        {
+            vm.Push(new ValueArray(args));
+        }
+        
         public static void Load(IList<IValue> args, VM vm, SourceInfo info)
         {
             ValueString str = args[0] as ValueString;
