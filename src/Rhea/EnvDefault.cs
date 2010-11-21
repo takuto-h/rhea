@@ -7,15 +7,13 @@ namespace Rhea
             this.AddVariable("p",            1, false, Subrs.Primitive.P);
             this.AddVariable("dynamic_wind", 3, false, Subrs.Primitive.DynamicWind);
             this.AddVariable("callcc",       1, false, Subrs.Primitive.Callcc);
-            this.AddVariable("make_symbol",  1, false, Subrs.Primitive.MakeSymbol);
-            this.AddVariable("make_array",   0, true, Subrs.Primitive.MakeArray);
             this.AddVariable("load",         1, false, Subrs.Primitive.Load);
             
             this.AddVariable("Int", Klasses.Int);
             this.AddMethod(Klasses.Int, "+", 2, false, Subrs.Int.Add);
             this.AddMethod(Klasses.Int, "-", 2, false, Subrs.Int.Sub);
             this.AddMethod(Klasses.Int, "*", 2, false, Subrs.Int.Mul);
-            this.AddMethod(Klasses.Int, "==",  2, false, Subrs.Int.Eq);
+            this.AddMethod(Klasses.Int, "==", 2, false, Subrs.Int.Eq);
             
             this.AddVariable("True", Klasses.True);
             this.AddVariable("true", ValueTrue.Instance);
@@ -29,8 +27,12 @@ namespace Rhea
             this.AddVariable("undefined_object", ValueUndef.Instance);
             
             this.AddVariable("Symbol", Klasses.Symbol);
-            this.AddVariable("String", Klasses.String);
+            this.AddVariable("make_symbol", 1, false, Subrs.Symbol.MakeSymbol);
+            
             this.AddVariable("Array", Klasses.Array);
+            this.AddVariable("make_array", 0, true, Subrs.Array.MakeArray);
+            
+            this.AddVariable("String", Klasses.String);
             this.AddVariable("Closure", Klasses.Closure);
             this.AddVariable("Subr", Klasses.Subr);
             this.AddVariable("Cont", Klasses.Cont);
