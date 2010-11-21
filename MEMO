@@ -1,5 +1,5 @@
 make_instance(Array, Hash)
 --
 rhea in Rhea
-tuple, variant
+variant, pattern matching
 def, getenv, callce
