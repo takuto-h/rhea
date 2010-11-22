@@ -12,7 +12,7 @@ namespace Rhea
         private string mName;
         private int mParamCount;
         private bool mAllowRest;
-        private bool mAllowOtherKeys;
+        private bool mAllowKeys;
         private Subr mSubrValue;
         
         static ValueSubr()
@@ -31,13 +31,13 @@ namespace Rhea
             Subr subrValue,
             int paramCount,
             bool allowRest,
-            bool allowOtherKeys
+            bool allowKeys
         )
         {
             mName = name;
             mParamCount = paramCount;
             mAllowRest = allowRest;
-            mAllowOtherKeys = allowOtherKeys;
+            mAllowKeys = allowKeys;
             mSubrValue = subrValue;
         }
         
@@ -50,14 +50,14 @@ namespace Rhea
         {
             int argCount = args.Count;
             if (argCount < mParamCount ||
-                argCount > mParamCount && !mAllowRest && !mAllowOtherKeys)
+                argCount > mParamCount && !mAllowRest && !mAllowKeys)
             {
                 throw new RheaException(
                     this.WrongNumberOfArguments(mParamCount, argCount), info
                 );
             }
             var dict = new Dictionary<IValue, IValue>();
-            if (mAllowOtherKeys)
+            if (mAllowKeys)
             {
                 foreach (IValue arg in args.Skip(mParamCount))
                 {

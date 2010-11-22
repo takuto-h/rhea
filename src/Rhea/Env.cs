@@ -31,7 +31,7 @@ namespace Rhea
             Subr subrValue,
             int paramCount = 0,
             bool allowRest = false,
-            bool allowOtherKeys = false
+            bool allowKeys = false
         )
         {
             string subrName = symbolName.ToIdentifier();
@@ -42,7 +42,7 @@ namespace Rhea
                     subrValue,
                     paramCount,
                     allowRest,
-                    allowOtherKeys
+                    allowKeys
                 )
             );
         }
@@ -54,7 +54,7 @@ namespace Rhea
             Subr subrValue,
             int paramCount = 0,
             bool allowRest = false,
-            bool allowOtherKeys = false
+            bool allowKeys = false
         )
         {
             string subrName = string.Format(
@@ -69,7 +69,7 @@ namespace Rhea
                     subrValue,
                     paramCount,
                     allowRest,
-                    allowOtherKeys
+                    allowKeys
                 )
             );
         }

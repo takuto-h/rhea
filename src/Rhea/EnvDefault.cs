@@ -33,6 +33,7 @@ namespace Rhea
             this.AddVariable("make_array", Subrs.Array.MakeArray, allowRest: true);
             
             this.AddVariable("Hash", Klasses.Hash);
+            this.AddVariable("make_hash", Subrs.Hash.MakeHash, allowKeys: true);
             
             this.AddVariable("String", Klasses.String);
             this.AddVariable("Closure", Klasses.Closure);
