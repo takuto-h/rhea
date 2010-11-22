@@ -32,7 +32,7 @@ namespace Rhea
         
         public string Show()
         {
-            return string.Format("$<instance 0x{0:x8}>", mKlassHolder, GetHashCode());
+            return string.Format("$<instance 0x{0:x8}>", GetHashCode());
         }
         
         public override string ToString()

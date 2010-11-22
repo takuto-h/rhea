@@ -7,7 +7,7 @@ namespace Rhea
     {
         private static KlassHolder smKlassHolder;
         
-        private IDictionary<IValue, IValue> mHashValue;
+        public IDictionary<IValue, IValue> HashValue { get; private set; }
         
         static ValueHash()
         {
@@ -21,7 +21,7 @@ namespace Rhea
         
         public ValueHash(IDictionary<IValue, IValue> hashValue)
         {
-            mHashValue = hashValue;
+            HashValue = hashValue;
         }
         
         public void Send(ValueSymbol selector, IList<IValue> args, VM vm, SourceInfo info)
@@ -31,14 +31,14 @@ namespace Rhea
         
         public string Show()
         {
-            if (mHashValue.Count == 0)
+            if (HashValue.Count == 0)
             {
                 return "{}";
             }
             return string.Format(
                 "{{{0}}}",
-                mHashValue.Skip(1).Aggregate(
-                    ShowKeyValuePair(mHashValue.ElementAt(0)),
+                HashValue.Skip(1).Aggregate(
+                    ShowKeyValuePair(HashValue.ElementAt(0)),
                     (acc, elem) => string.Format("{0}, {1}", acc, ShowKeyValuePair(elem))
                 )
             );

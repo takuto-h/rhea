@@ -7,7 +7,7 @@ namespace Rhea
     {
         private static KlassHolder smKlassHolder;
         
-        private IList<IValue> mArrayValue;
+        public IList<IValue> ArrayValue { get; private set; }
         
         static ValueArray()
         {
@@ -19,20 +19,9 @@ namespace Rhea
             );
         }
         
-        public IValue this[int index]
-        {
-            get { return mArrayValue[index]; }
-            set { mArrayValue[index] = value; }
-        }
-        
-        public int Count
-        {
-            get { return mArrayValue.Count; }
-        }
-        
         public ValueArray(IList<IValue> arrayValue)
         {
-            mArrayValue = arrayValue;
+            ArrayValue = arrayValue;
         }
         
         public void Send(ValueSymbol selector, IList<IValue> args, VM vm, SourceInfo info)
@@ -42,14 +31,14 @@ namespace Rhea
         
         public string Show()
         {
-            if (mArrayValue.Count == 0)
+            if (ArrayValue.Count == 0)
             {
                 return "[]";
             }
             return string.Format(
                 "[{0}]",
-                mArrayValue.Skip(1).Aggregate(
-                    mArrayValue[0].ToString(),
+                ArrayValue.Skip(1).Aggregate(
+                    ArrayValue[0].ToString(),
                     (acc, elem) => string.Format("{0}, {1}", acc, elem)
                 )
             );

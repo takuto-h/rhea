@@ -41,6 +41,8 @@ namespace Rhea
             this.AddVariable("Cont", Klasses.Cont);
             this.AddVariable("Func", Klasses.Func);
             this.AddVariable("Object", Klasses.Object);
+            
+            this.AddVariable("make_instance", Subrs.Instance.MakeInstance, 2);
         }
     }
 }
