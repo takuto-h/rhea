@@ -4,9 +4,9 @@ namespace Rhea.Subrs
 {
     public static class Array
     {
-        public static void MakeArray(IList<IValue> args, VM vm, SourceInfo info)
+        public static void MakeArray(Arguments args, VM vm, SourceInfo info)
         {
-            vm.Push(new ValueArray(args));
+            vm.Push(new ValueArray(args.List));
         }
     }
 }

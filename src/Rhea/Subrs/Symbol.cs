@@ -4,7 +4,7 @@ namespace Rhea.Subrs
 {
     public static class Symbol
     {
-        public static void MakeSymbol(IList<IValue> args, VM vm, SourceInfo info)
+        public static void MakeSymbol(Arguments args, VM vm, SourceInfo info)
         {
             ValueString str = args[0] as ValueString;
             if (str == null)

@@ -4,7 +4,7 @@ namespace Rhea.Subrs
 {
     public static class False
     {
-        public static void MatchBool(IList<IValue> args, VM vm, SourceInfo info)
+        public static void MatchBool(Arguments args, VM vm, SourceInfo info)
         {
             IValueFunc func = args[2] as IValueFunc;
             if (func == null)

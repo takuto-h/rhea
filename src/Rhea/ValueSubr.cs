@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Rhea
 {
-    public delegate void Subr(IList<IValue> args, VM vm, SourceInfo info);
+    public delegate void Subr(Arguments args, VM vm, SourceInfo info);
     
     public class ValueSubr : IValueFunc
     {
@@ -43,12 +43,14 @@ namespace Rhea
             if (argCount < mParamCount ||
                 argCount > mParamCount && !mAllowRest)
             {
-                
                 throw new RheaException(
                     this.WrongNumberOfArguments(mParamCount, argCount), info
                 );
             }
-            mSubrValue(args, vm, info);
+            var newArgs = new Arguments(
+                args, new Dictionary<IValue, IValue>()
+            );
+            mSubrValue(newArgs, vm, info);
         }
         
         public string Show()

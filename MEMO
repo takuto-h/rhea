@@ -1,3 +1,5 @@
+keyword arguments by alist
+- ValueSubr#mAllowOtherKeys
 opt, rest, key
 make_instance(Array, Hash)
 --

@@ -5,13 +5,13 @@ namespace Rhea.Subrs
 {
     public static class Primitive
     {
-        public static void P(IList<IValue> args, VM vm, SourceInfo info)
+        public static void P(Arguments args, VM vm, SourceInfo info)
         {
             Console.WriteLine(args[0]);
             vm.Push(args[0]);
         }
         
-        public static void DynamicWind(IList<IValue> args, VM vm, SourceInfo info)
+        public static void DynamicWind(Arguments args, VM vm, SourceInfo info)
         {
             ValueCont cont = vm.GetCont();
             var winder = new KeyValuePair<IValue, IValue>(args[0], args[2]);
@@ -27,7 +27,7 @@ namespace Rhea.Subrs
             vm.Stack = SList.List<IValue>(args[0], cont);
         }
         
-        public static void Callcc(IList<IValue> args, VM vm, SourceInfo info)
+        public static void Callcc(Arguments args, VM vm, SourceInfo info)
         {
             IValueFunc func = args[0] as IValueFunc;
             if (func == null)
@@ -42,7 +42,7 @@ namespace Rhea.Subrs
             func.Call(newArgs, vm, info);
         }
         
-        public static void Load(IList<IValue> args, VM vm, SourceInfo info)
+        public static void Load(Arguments args, VM vm, SourceInfo info)
         {
             ValueString str = args[0] as ValueString;
             if (str == null)

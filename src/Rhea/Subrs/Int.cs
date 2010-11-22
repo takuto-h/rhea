@@ -4,7 +4,7 @@ namespace Rhea.Subrs
 {
     public static class Int
     {
-        private static void Check(IList<IValue> args, int count, SourceInfo info)
+        private static void Check(Arguments args, int count, SourceInfo info)
         {
             for (int i = 0; i < count; i++)
             {
@@ -18,7 +18,7 @@ namespace Rhea.Subrs
             }
         }
         
-        public static void Add(IList<IValue> args, VM vm, SourceInfo info)
+        public static void Add(Arguments args, VM vm, SourceInfo info)
         {
             Check(args, 2, info);
             ValueInt integer1 = (ValueInt)args[0];
@@ -29,7 +29,7 @@ namespace Rhea.Subrs
             vm.Push(newInteger);
         }
         
-        public static void Sub(IList<IValue> args, VM vm, SourceInfo info)
+        public static void Sub(Arguments args, VM vm, SourceInfo info)
         {
             Check(args, 2, info);
             ValueInt integer1 = (ValueInt)args[0];
@@ -40,7 +40,7 @@ namespace Rhea.Subrs
             vm.Push(newInteger);
         }
         
-        public static void Mul(IList<IValue> args, VM vm, SourceInfo info)
+        public static void Mul(Arguments args, VM vm, SourceInfo info)
         {
             Check(args, 2, info);
             ValueInt integer1 = (ValueInt)args[0];
@@ -51,7 +51,7 @@ namespace Rhea.Subrs
             vm.Push(newInteger);
         }
         
-        public static void Eq(IList<IValue> args, VM vm, SourceInfo info)
+        public static void Eq(Arguments args, VM vm, SourceInfo info)
         {
             Check(args, 2, info);
             ValueInt integer1 = (ValueInt)args[0];
