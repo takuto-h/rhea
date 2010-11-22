@@ -7,6 +7,11 @@ namespace Rhea
         private KlassHolder mKlassHolder;
         private IDictionary<ValueSymbol, IValueFunc> mSlots;
         
+        public IList<ValueSymbol> KlassList
+        {
+            get { return mKlassHolder.KlassList; }
+        }
+        
         public ValueInstance(
             IList<ValueSymbol> klasses,
             IDictionary<ValueSymbol, IValueFunc> slots

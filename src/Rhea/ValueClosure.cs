@@ -11,6 +11,11 @@ namespace Rhea
         private IEnv mEnv;
         private SourceInfo mInfo;
         
+        public IList<ValueSymbol> KlassList
+        {
+            get { return smKlassHolder.KlassList; }
+        }
+        
         static ValueClosure()
         {
             smKlassHolder = new KlassHolder(

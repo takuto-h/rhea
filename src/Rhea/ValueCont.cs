@@ -11,6 +11,11 @@ namespace Rhea
         public IEnv Env { get; private set; }
         public ISList<KeyValuePair<IValue, IValue>> Winders { get; private set; }
         
+        public IList<ValueSymbol> KlassList
+        {
+            get { return smKlassHolder.KlassList; }
+        }
+        
         static ValueCont()
         {
             smKlassHolder = new KlassHolder(

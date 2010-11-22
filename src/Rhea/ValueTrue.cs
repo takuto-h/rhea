@@ -7,6 +7,11 @@ namespace Rhea
         private static KlassHolder smKlassHolder;
         private static ValueTrue smInstance;
         
+        public IList<ValueSymbol> KlassList
+        {
+            get { return smKlassHolder.KlassList; }
+        }
+        
         static ValueTrue()
         {
             smKlassHolder = new KlassHolder(

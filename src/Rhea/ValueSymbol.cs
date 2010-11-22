@@ -11,6 +11,11 @@ namespace Rhea
         
         public string Name { get; private set; }
         
+        public IList<ValueSymbol> KlassList
+        {
+            get { return smKlassHolder.KlassList; }
+        }
+        
         static ValueSymbol()
         {
             smKlassHolder = null;

@@ -4,11 +4,11 @@ namespace Rhea
 {
     public class KlassHolder
     {
-        private IList<ValueSymbol> mKlasses;
+        public IList<ValueSymbol> KlassList { get; private set; }
         
-        public KlassHolder(IList<ValueSymbol> klasses)
+        public KlassHolder(IList<ValueSymbol> klassList)
         {
-            mKlasses = klasses;
+            KlassList = klassList;
         }
         
         public void Send(
@@ -20,7 +20,7 @@ namespace Rhea
         )
         {
             IValueFunc func = null;
-            foreach (ValueSymbol klass in mKlasses)
+            foreach (ValueSymbol klass in KlassList)
             {
                 if (vm.Env.LookupMethod(klass, selector, out func))
                 {

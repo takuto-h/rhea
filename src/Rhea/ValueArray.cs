@@ -9,6 +9,11 @@ namespace Rhea
         
         public IList<IValue> Value { get; private set; }
         
+        public IList<ValueSymbol> KlassList
+        {
+            get { return smKlassHolder.KlassList; }
+        }
+        
         static ValueArray()
         {
             smKlassHolder = new KlassHolder(

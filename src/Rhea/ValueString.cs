@@ -8,6 +8,11 @@ namespace Rhea
         
         public string Value { get; private set; }
         
+        public IList<ValueSymbol> KlassList
+        {
+            get { return smKlassHolder.KlassList; }
+        }
+        
         static ValueString()
         {
             smKlassHolder = new KlassHolder(

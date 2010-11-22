@@ -9,6 +9,11 @@ namespace Rhea
         
         public IDictionary<IValue, IValue> Value { get; private set; }
         
+        public IList<ValueSymbol> KlassList
+        {
+            get { return smKlassHolder.KlassList; }
+        }
+        
         static ValueHash()
         {
             smKlassHolder = new KlassHolder(

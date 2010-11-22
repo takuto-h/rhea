@@ -15,6 +15,11 @@ namespace Rhea
         private bool mAllowKeys;
         private Subr mSubrValue;
         
+        public IList<ValueSymbol> KlassList
+        {
+            get { return smKlassHolder.KlassList; }
+        }
+        
         static ValueSubr()
         {
             smKlassHolder = new KlassHolder(
