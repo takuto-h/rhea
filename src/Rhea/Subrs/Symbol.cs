@@ -14,7 +14,7 @@ namespace Rhea.Subrs
                     info
                 );
             }
-            vm.Push(ValueSymbol.Generate(str.StringValue));
+            vm.Push(ValueSymbol.Generate(str.Value));
         }
     }
 }

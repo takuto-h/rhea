@@ -52,7 +52,7 @@ namespace Rhea.Subrs
                     info
                 );
             }
-            string fileName = str.StringValue;
+            string fileName = str.Value;
             Interpreter interp = new Interpreter(vm.Env);
             bool result = interp.InterpretFile(fileName);
             vm.Push(result.ToValueBool());

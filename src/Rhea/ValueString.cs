@@ -6,7 +6,7 @@ namespace Rhea
     {
         private static KlassHolder smKlassHolder;
         
-        public string StringValue { get; private set; }
+        public string Value { get; private set; }
         
         static ValueString()
         {
@@ -18,9 +18,9 @@ namespace Rhea
             );
         }
         
-        public ValueString(string stringValue)
+        public ValueString(string value)
         {
-            StringValue = stringValue;
+            Value = value;
         }
         
         public void Send(ValueSymbol selector, IList<IValue> args, VM vm, SourceInfo info)
@@ -30,7 +30,7 @@ namespace Rhea
         
         public string Show()
         {
-            return string.Format("\"{0}\"", StringValue);
+            return string.Format("\"{0}\"", Value);
         }
         
         public override string ToString()

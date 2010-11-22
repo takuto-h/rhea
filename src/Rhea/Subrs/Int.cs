@@ -24,7 +24,7 @@ namespace Rhea.Subrs
             ValueInt integer1 = (ValueInt)args[0];
             ValueInt integer2 = (ValueInt)args[1];
             ValueInt newInteger = new ValueInt(
-                integer1.IntValue + integer2.IntValue
+                integer1.Value + integer2.Value
             );
             vm.Push(newInteger);
         }
@@ -35,7 +35,7 @@ namespace Rhea.Subrs
             ValueInt integer1 = (ValueInt)args[0];
             ValueInt integer2 = (ValueInt)args[1];
             ValueInt newInteger = new ValueInt(
-                integer1.IntValue - integer2.IntValue
+                integer1.Value - integer2.Value
             );
             vm.Push(newInteger);
         }
@@ -46,7 +46,7 @@ namespace Rhea.Subrs
             ValueInt integer1 = (ValueInt)args[0];
             ValueInt integer2 = (ValueInt)args[1];
             ValueInt newInteger = new ValueInt(
-                integer1.IntValue * integer2.IntValue
+                integer1.Value * integer2.Value
             );
             vm.Push(newInteger);
         }
@@ -56,7 +56,7 @@ namespace Rhea.Subrs
             Check(args, 2, info);
             ValueInt integer1 = (ValueInt)args[0];
             ValueInt integer2 = (ValueInt)args[1];
-            vm.Push((integer1.IntValue == integer2.IntValue).ToValueBool());
+            vm.Push((integer1.Value == integer2.Value).ToValueBool());
         }
     }
 }
