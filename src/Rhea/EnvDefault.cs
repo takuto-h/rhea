@@ -4,33 +4,33 @@ namespace Rhea
     {
         public EnvDefault()
         {
-            this.AddVariable("p",            1, false, Subrs.Primitive.P);
-            this.AddVariable("dynamic_wind", 3, false, Subrs.Primitive.DynamicWind);
-            this.AddVariable("callcc",       1, false, Subrs.Primitive.Callcc);
-            this.AddVariable("load",         1, false, Subrs.Primitive.Load);
+            this.AddVariable("p", Subrs.Primitive.P, 1);
+            this.AddVariable("dynamic_wind", Subrs.Primitive.DynamicWind, 3);
+            this.AddVariable("callcc", Subrs.Primitive.Callcc, 1);
+            this.AddVariable("load", Subrs.Primitive.Load, 1);
             
             this.AddVariable("Int", Klasses.Int);
-            this.AddMethod(Klasses.Int, "+", 2, false, Subrs.Int.Add);
-            this.AddMethod(Klasses.Int, "-", 2, false, Subrs.Int.Sub);
-            this.AddMethod(Klasses.Int, "*", 2, false, Subrs.Int.Mul);
-            this.AddMethod(Klasses.Int, "==", 2, false, Subrs.Int.Eq);
+            this.AddMethod(Klasses.Int, "+", Subrs.Int.Add, 2);
+            this.AddMethod(Klasses.Int, "-", Subrs.Int.Sub, 2);
+            this.AddMethod(Klasses.Int, "*", Subrs.Int.Mul, 2);
+            this.AddMethod(Klasses.Int, "==", Subrs.Int.Eq, 2);
             
             this.AddVariable("True", Klasses.True);
             this.AddVariable("true", ValueTrue.Instance);
-            this.AddMethod(Klasses.True, "match_bool", 3, false, Subrs.True.MatchBool);
+            this.AddMethod(Klasses.True, "match_bool", Subrs.True.MatchBool, 3);
             
             this.AddVariable("False", Klasses.False);
             this.AddVariable("false", ValueFalse.Instance);
-            this.AddMethod(Klasses.False, "match_bool", 3, false, Subrs.False.MatchBool);
+            this.AddMethod(Klasses.False, "match_bool", Subrs.False.MatchBool, 3);
             
             this.AddVariable("UndefinedObject", Klasses.UndefinedObject);
             this.AddVariable("undefined_object", ValueUndef.Instance);
             
             this.AddVariable("Symbol", Klasses.Symbol);
-            this.AddVariable("make_symbol", 1, false, Subrs.Symbol.MakeSymbol);
+            this.AddVariable("make_symbol", Subrs.Symbol.MakeSymbol, 1);
             
             this.AddVariable("Array", Klasses.Array);
-            this.AddVariable("make_array", 0, true, Subrs.Array.MakeArray);
+            this.AddVariable("make_array", Subrs.Array.MakeArray, allowRest: true);
             
             this.AddVariable("Hash", Klasses.Hash);
             

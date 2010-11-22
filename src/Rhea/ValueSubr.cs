@@ -28,10 +28,10 @@ namespace Rhea
         
         public ValueSubr(
             string name,
+            Subr subrValue,
             int paramCount,
             bool allowRest,
-            Subr subrValue,
-            bool allowOtherKeys = false
+            bool allowOtherKeys
         )
         {
             mName = name;

@@ -28,15 +28,22 @@ namespace Rhea
         public static void AddVariable(
             this IEnv env,
             string symbolName,
-            int paramCount,
-            bool allowRest,
-            Subr subrValue
+            Subr subrValue,
+            int paramCount = 0,
+            bool allowRest = false,
+            bool allowOtherKeys = false
         )
         {
             string subrName = symbolName.ToIdentifier();
             AddVariable(
                 env, symbolName,
-                new ValueSubr(subrName, paramCount, allowRest, subrValue)
+                new ValueSubr(
+                    subrName,
+                    subrValue,
+                    paramCount,
+                    allowRest,
+                    allowOtherKeys
+                )
             );
         }
         
@@ -44,9 +51,10 @@ namespace Rhea
             this IEnv env,
             ValueSymbol klass,
             string selectorName,
-            int paramCount,
-            bool allowRest,
-            Subr subrValue
+            Subr subrValue,
+            int paramCount = 0,
+            bool allowRest = false,
+            bool allowOtherKeys = false
         )
         {
             string subrName = string.Format(
@@ -56,7 +64,13 @@ namespace Rhea
             );
             AddMethod(
                 env, klass, selectorName,
-                new ValueSubr(subrName, paramCount, allowRest, subrValue)
+                new ValueSubr(
+                    subrName,
+                    subrValue,
+                    paramCount,
+                    allowRest,
+                    allowOtherKeys
+                )
             );
         }
         
