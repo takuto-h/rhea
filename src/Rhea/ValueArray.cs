@@ -19,6 +19,17 @@ namespace Rhea
             );
         }
         
+        public IValue this[int index]
+        {
+            get { return mArrayValue[index]; }
+            set { mArrayValue[index] = value; }
+        }
+        
+        public int Count
+        {
+            get { return mArrayValue.Count; }
+        }
+        
         public ValueArray(IList<IValue> arrayValue)
         {
             mArrayValue = arrayValue;

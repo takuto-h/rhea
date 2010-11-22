@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Rhea
 {
@@ -11,6 +12,7 @@ namespace Rhea
         private string mName;
         private int mParamCount;
         private bool mAllowRest;
+        private bool mAllowOtherKeys;
         private Subr mSubrValue;
         
         static ValueSubr()
@@ -24,11 +26,18 @@ namespace Rhea
             );
         }
         
-        public ValueSubr(string name, int paramCount, bool allowRest, Subr subrValue)
+        public ValueSubr(
+            string name,
+            int paramCount,
+            bool allowRest,
+            Subr subrValue,
+            bool allowOtherKeys = false
+        )
         {
             mName = name;
             mParamCount = paramCount;
             mAllowRest = allowRest;
+            mAllowOtherKeys = allowOtherKeys;
             mSubrValue = subrValue;
         }
         
@@ -41,15 +50,28 @@ namespace Rhea
         {
             int argCount = args.Count;
             if (argCount < mParamCount ||
-                argCount > mParamCount && !mAllowRest)
+                argCount > mParamCount && !mAllowRest && !mAllowOtherKeys)
             {
                 throw new RheaException(
                     this.WrongNumberOfArguments(mParamCount, argCount), info
                 );
             }
-            var newArgs = new Arguments(
-                args, new Dictionary<IValue, IValue>()
-            );
+            var dict = new Dictionary<IValue, IValue>();
+            if (mAllowOtherKeys)
+            {
+                foreach (IValue arg in args.Skip(mParamCount))
+                {
+                    ValueArray pair = arg as ValueArray;
+                    if (pair == null || pair.Count != 2)
+                    {
+                        throw new RheaException(
+                            "keyword arguments should occur pairwise", info
+                        );
+                    }
+                    dict.Add(pair[0], pair[1]);
+                }
+            }
+            var newArgs = new Arguments(args, dict);
             mSubrValue(newArgs, vm, info);
         }
         
