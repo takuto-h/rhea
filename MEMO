@@ -1,3 +1,4 @@
+BUG: irh:001> & #=> unhandled exception (from Parser..ctor)
 keyword arguments by alist
 opt, rest, key
 make_instance(Array, Hash)
