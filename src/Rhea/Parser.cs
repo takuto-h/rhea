@@ -22,11 +22,11 @@ namespace Rhea
         public Parser(Lexer lexer)
         {
             mLexer = lexer;
-            LookAhead();
         }
         
         public IExpr Parse()
         {
+            LookAhead();
             if (mHeadToken == TokenType.EOF)
             {
                 return null;
@@ -40,10 +40,8 @@ namespace Rhea
             switch (mHeadToken)
             {
             case TokenType.EOF:
-                break;
             case TokenType.Semicolon:
             case TokenType.NewLine:
-                LookAhead();
                 break;
             default:
                 throw new RheaException(

@@ -78,51 +78,51 @@ namespace Rhea
         
         private bool Interpret(SourceReader reader, bool interactive)
         {
-            Lexer lexer = new Lexer(reader);
-            Parser parser = new Parser(lexer);
-            while (true)
+            try
             {
-                ISList<IInsn> insns;
-                if (!Compile(parser, out insns))
+                Lexer lexer = new Lexer(reader);
+                Parser parser = new Parser(lexer);
+                while (true)
                 {
-                    return false;
+                    ISList<IInsn> insns = Compile(parser);
+                    if (insns == null)
+                    {
+                        return false;
+                    }
+                    IValue result = Run(insns);
+                    if (result == null)
+                    {
+                        return false;
+                    }
+                    if (interactive)
+                    {
+                        Console.WriteLine(" => {0}", result);
+                    }
                 }
-                if (insns == null)
-                {
-                    return true;
-                }
-                IValue result = Run(insns);
-                if (result == null)
-                {
-                    return false;
-                }
-                if (interactive)
-                {
-                    Console.WriteLine(" => {0}", result);
-                }
+            }
+            catch (EndOfStreamException)
+            {
+                return true;
             }
         }
         
-        private bool Compile(Parser parser, out ISList<IInsn> insns)
+        private ISList<IInsn> Compile(Parser parser)
         {
             try
             {
                 IExpr expr = parser.Parse();
                 if (expr == null)
                 {
-                    insns = null;
-                    return true;
+                    throw new EndOfStreamException();
                 }
                 Compiler compiler = new Compiler();
                 expr.Compile(compiler);
-                insns = compiler.GetResult();
-                return true;
+                return compiler.GetResult();
             }
             catch (RheaException e)
             {
                 Console.WriteLine("{0}: {1}", e.Info, e.Message);
-                insns = null;
-                return false;
+                return null;
             }
         }
         
@@ -134,22 +134,23 @@ namespace Rhea
                 mEnv,
                 SList.Nil<KeyValuePair<IValue, IValue>>()
             );
-        BEGIN:
-            try
+            while (true)
             {
-                return vm.Run();
-            }
-            catch (RheaException e)
-            {
-                Console.WriteLine("{0}: {1}", e.Info, e.Message);
-                ValueCont cont = new ValueCont(
-                    SList.Nil<IInsn>(),
-                    SList.Nil<IValue>(),
-                    vm.Env,
-                    SList.Nil<KeyValuePair<IValue, IValue>>()
-                );
-                vm.SetCont(null, cont, e.Info);
-                goto BEGIN;
+                try
+                {
+                    return vm.Run();
+                }
+                catch (RheaException e)
+                {
+                    Console.WriteLine("{0}: {1}", e.Info, e.Message);
+                    ValueCont cont = new ValueCont(
+                        SList.Nil<IInsn>(),
+                        SList.Nil<IValue>(),
+                        vm.Env,
+                        SList.Nil<KeyValuePair<IValue, IValue>>()
+                    );
+                    vm.SetCont(null, cont, e.Info);
+                }
             }
         }
     }
