@@ -46,7 +46,7 @@ namespace Rhea
         
         public string Show()
         {
-            return "$<false>";
+            return "false";
         }
         
         public override string ToString()

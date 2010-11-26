@@ -26,6 +26,8 @@ namespace Rhea
             smReserved = new Dictionary<string, TokenType>();
             smReserved.Add("def", TokenType.Def);
             smReserved.Add("end", TokenType.End);
+            smReserved.Add("true", TokenType.True);
+            smReserved.Add("false", TokenType.False);
         }
         
         public Lexer(SourceReader reader)

@@ -383,6 +383,14 @@ namespace Rhea
             case TokenType.LeftParen:
                 expr = ParseParenthesizedExpression();
                 break;
+            case TokenType.True:
+                expr = new ExprConst(ValueTrue.Instance);
+                LookAhead();
+                break;
+            case TokenType.False:
+                expr = new ExprConst(ValueFalse.Instance);
+                LookAhead();
+                break;
             default:
                 throw new RheaException(Unexpected(), mLexer.GetSourceInfo());
             }
