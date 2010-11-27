@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Rhea
 {
-    public class ValueFalse : IValueBool
+    public class ValueFalse : IValue
     {
         private static KlassHolder smKlassHolder;
         private static ValueFalse smInstance;
@@ -17,7 +17,6 @@ namespace Rhea
             smKlassHolder = new KlassHolder(
                 new List<ValueSymbol> {
                     Klasses.False,
-                    Klasses.Bool,
                     Klasses.Object
                 }
             );

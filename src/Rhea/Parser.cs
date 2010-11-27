@@ -391,6 +391,10 @@ namespace Rhea
                 expr = new ExprConst(ValueFalse.Instance);
                 LookAhead();
                 break;
+            case TokenType.Nil:
+                expr = new ExprConst(ValueNil.Instance);
+                LookAhead();
+                break;
             default:
                 throw new RheaException(Unexpected(), mLexer.GetSourceInfo());
             }

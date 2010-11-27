@@ -16,13 +16,8 @@ namespace Rhea
             this.AddMethod(Klasses.Int, "==", Subrs.Int.Eq, 2);
             
             this.AddVariable("True", Klasses.True);
-            this.AddMethod(Klasses.True, "match_bool", Subrs.True.MatchBool, 3);
-            
             this.AddVariable("False", Klasses.False);
-            this.AddMethod(Klasses.False, "match_bool", Subrs.False.MatchBool, 3);
-            
-            this.AddVariable("UndefinedObject", Klasses.UndefinedObject);
-            this.AddVariable("undefined_object", ValueUndef.Instance);
+            this.AddVariable("Nil", Klasses.Nil);
             
             this.AddVariable("Symbol", Klasses.Symbol);
             this.AddVariable("make_symbol", Subrs.Symbol.MakeSymbol, 1);

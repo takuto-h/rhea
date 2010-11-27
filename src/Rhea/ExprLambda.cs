@@ -24,7 +24,7 @@ namespace Rhea
             Compiler bodyCompiler = new Compiler(compiler);
             if (mBodyExprs.Count == 0)
             {
-                bodyCompiler.Push(new InsnPush(ValueUndef.Instance));
+                bodyCompiler.Push(new InsnPush(ValueNil.Instance));
             }
             else
             {

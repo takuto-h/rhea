@@ -2,39 +2,39 @@ using System.Collections.Generic;
 
 namespace Rhea
 {
-    public class ValueUndef : IValue
+    public class ValueNil : IValue
     {
         private static KlassHolder smKlassHolder;
-        private static ValueUndef smInstance;
+        private static ValueNil smInstance;
         
         public IList<ValueSymbol> KlassList
         {
             get { return smKlassHolder.KlassList; }
         }
         
-        static ValueUndef()
+        static ValueNil()
         {
             smKlassHolder = new KlassHolder(
                 new List<ValueSymbol> {
-                    Klasses.UndefinedObject,
+                    Klasses.Nil,
                     Klasses.Object
                 }
             );
         }
         
-        public static ValueUndef Instance
+        public static ValueNil Instance
         {
             get
             {
                 if (smInstance == null)
                 {
-                    smInstance = new ValueUndef();
+                    smInstance = new ValueNil();
                 }
                 return smInstance;
             }
         }
         
-        private ValueUndef()
+        private ValueNil()
         {
         }
         
@@ -45,7 +45,7 @@ namespace Rhea
         
         public string Show()
         {
-            return "$<undef>";
+            return "nil";
         }
         
         public override string ToString()

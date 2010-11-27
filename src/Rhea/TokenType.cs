@@ -16,8 +16,9 @@ namespace Rhea
         End             = -9,
         True            = -10,
         False           = -11,
+        Nil             = -12,
         
-        DoubleEqual     = -12,
+        DoubleEqual     = -13,
         
         ExclamationMark = 33,
         Dollar          = 36,

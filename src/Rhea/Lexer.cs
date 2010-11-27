@@ -28,6 +28,7 @@ namespace Rhea
             smReserved.Add("end", TokenType.End);
             smReserved.Add("true", TokenType.True);
             smReserved.Add("false", TokenType.False);
+            smReserved.Add("nil", TokenType.Nil);
         }
         
         public Lexer(SourceReader reader)
