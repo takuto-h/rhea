@@ -6,8 +6,8 @@ def True:match_bool = ^(self, then, else){ then() }
 def False:match_bool = ^(self, then, else){ else() }
 def Nil:match_bool = False:match_bool
 
-def if = ^(bool, when_true, when_false):
-  bool.match_bool(when_true, when_false)
+def if = ^(bool, then, else):
+  bool.match_bool(then, else)
 end
 
 def Int:times = ^(self, func):

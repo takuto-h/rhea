@@ -38,13 +38,13 @@ namespace Rhea
         {
             if (Value.Count == 0)
             {
-                return "%{}";
+                return "{}";
             }
             return string.Format(
-                "%{{{0}}}",
+                "{{{0}}}",
                 Value.Skip(1).Aggregate(
                     ShowKeyValuePair(Value.ElementAt(0)),
-                    (acc, elem) => string.Format("{0}; {1}", acc, ShowKeyValuePair(elem))
+                    (acc, elem) => string.Format("{0}, {1}", acc, ShowKeyValuePair(elem))
                 )
             );
         }

@@ -38,13 +38,13 @@ namespace Rhea
         {
             if (Value.Count == 0)
             {
-                return "&{}";
+                return "[]";
             }
             return string.Format(
-                "&{{{0}}}",
+                "[{0}]",
                 Value.Skip(1).Aggregate(
                     Value[0].ToString(),
-                    (acc, elem) => string.Format("{0}; {1}", acc, elem)
+                    (acc, elem) => string.Format("{0}, {1}", acc, elem)
                 )
             );
         }
