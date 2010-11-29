@@ -24,9 +24,13 @@ namespace Rhea
             
             this.AddVariable("Array", Klasses.Array);
             this.AddVariable("make_array", Subrs.Array.MakeArray, allowRest: true);
+            this.AddMethod(Klasses.Array, "[]", Subrs.Array.GetItem, 2);
+            this.AddMethod(Klasses.Array, "[]=", Subrs.Array.SetItem, 3);
             
             this.AddVariable("Hash", Klasses.Hash);
             this.AddVariable("make_hash", Subrs.Hash.MakeHash, allowKeys: true);
+            this.AddMethod(Klasses.Hash, "[]", Subrs.Hash.GetItem, 2);
+            this.AddMethod(Klasses.Hash, "[]=", Subrs.Hash.SetItem, 3);
             
             this.AddVariable("String", Klasses.String);
             this.AddVariable("Closure", Klasses.Closure);
