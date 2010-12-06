@@ -117,6 +117,10 @@ namespace Rhea
                 {
                     return ParseMethodAssignment((ExprGetMethod)expr);
                 }
+                else if (expr is ExprSend)
+                {
+                    return ParseSubscriptionAssignment((ExprSend)expr);
+                }
                 throw new RheaException(Unexpected(), mLexer.GetSourceInfo());
             }
             return expr;
@@ -141,6 +145,21 @@ namespace Rhea
                 methodRef.KlassExpr,
                 methodRef.Selector,
                 ParseExpression(),
+                info
+            );
+        }
+        
+        private IExpr ParseSubscriptionAssignment(ExprSend sendExpr)
+        {
+            SourceInfo info = mLexer.GetSourceInfo();
+            List<IExpr> argExprs = new List<IExpr>();
+            argExprs.AddRange(sendExpr.ArgExprs);
+            LookAhead();
+            argExprs.Add(ParseExpression());
+            return new ExprSend(
+                sendExpr.RecvExpr,
+                ValueSymbol.Intern("[]="),
+                argExprs,
                 info
             );
         }

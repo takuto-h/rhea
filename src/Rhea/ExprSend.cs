@@ -4,9 +4,9 @@ namespace Rhea
 {
     public class ExprSend : IExpr
     {
-        private IExpr mRecvExpr;
-        private ValueSymbol mSelector;
-        private IList<IExpr> mArgExprs;
+        public IExpr RecvExpr { get; private set; }
+        public ValueSymbol Selector { get; private set; }
+        public IList<IExpr> ArgExprs { get; private set; }
         private SourceInfo mInfo;
         
         public ExprSend(
@@ -16,20 +16,20 @@ namespace Rhea
             SourceInfo info
         )
         {
-            mRecvExpr = recvExpr;
-            mSelector = selector;
-            mArgExprs = argExprs;
+            RecvExpr = recvExpr;
+            Selector = selector;
+            ArgExprs = argExprs;
             mInfo = info;
         }
         
         public void Compile(Compiler compiler)
         {
-            mRecvExpr.Compile(compiler);
-            foreach (IExpr argExpr in mArgExprs)
+            RecvExpr.Compile(compiler);
+            foreach (IExpr argExpr in ArgExprs)
             {
                 argExpr.Compile(compiler);
             }
-            compiler.Push(new InsnSend(mSelector, mArgExprs.Count, mInfo));
+            compiler.Push(new InsnSend(Selector, ArgExprs.Count, mInfo));
         }
     }
 }
