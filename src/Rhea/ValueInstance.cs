@@ -5,7 +5,7 @@ namespace Rhea
     public class ValueInstance : IValue
     {
         private KlassHolder mKlassHolder;
-        private IDictionary<ValueSymbol, IValueFunc> mSlots;
+        private IDictionary<ValueSymbol, IValueFunc> mMethods;
         
         public IList<ValueSymbol> KlassList
         {
@@ -14,17 +14,17 @@ namespace Rhea
         
         public ValueInstance(
             IList<ValueSymbol> klasses,
-            IDictionary<ValueSymbol, IValueFunc> slots
+            IDictionary<ValueSymbol, IValueFunc> methods
         )
         {
             mKlassHolder = new KlassHolder(klasses);
-            mSlots = slots;
+            mMethods = methods;
         }
         
         public void Send(ValueSymbol selector, IList<IValue> args, VM vm, SourceInfo info)
         {
             IValueFunc func;
-            if (mSlots.TryGetValue(selector, out func))
+            if (mMethods.TryGetValue(selector, out func))
             {
                 List<IValue> newArgs = new List<IValue>();
                 newArgs.Add(this);
