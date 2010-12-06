@@ -239,7 +239,8 @@ namespace Rhea
                    mHeadToken == TokenType.LeftBrace ||
                    mHeadToken == TokenType.Identifier ||
                    mHeadToken == TokenType.Dot ||
-                   mHeadToken == TokenType.Colon)
+                   mHeadToken == TokenType.Colon ||
+                   mHeadToken == TokenType.LeftBracket)
             {
                 switch (mHeadToken)
                 {
@@ -255,6 +256,9 @@ namespace Rhea
                     break;
                 case TokenType.Colon:
                     expr = ParseMethodReference(expr);
+                    break;
+                case TokenType.LeftBracket:
+                    expr = ParseSubscription(expr);
                     break;
                 }
             }
@@ -354,6 +358,23 @@ namespace Rhea
             SourceInfo info = mLexer.GetSourceInfo();
             LookAhead();
             return new ExprGetMethod(klassExpr, selector, info);
+        }
+        
+        private IExpr ParseSubscription(IExpr recvExpr)
+        {
+            ValueSymbol selector = ValueSymbol.Intern("[]");
+            List<IExpr> argExprs = new List<IExpr>();
+            SourceInfo info = mLexer.GetSourceInfo();
+            LookAhead();
+            argExprs.Add(ParseExpression());
+            if (mHeadToken != TokenType.RightBracket)
+            {
+                throw new RheaException(
+                    Expected("RightBracket"), mLexer.GetSourceInfo()
+                );
+            }
+            LookAhead();
+            return new ExprSend(recvExpr, selector, argExprs, info);
         }
         
         private IExpr ParseAtom()
