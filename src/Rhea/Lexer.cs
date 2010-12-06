@@ -128,6 +128,8 @@ namespace Rhea
             case '-':
             case '.':
             case ';':
+            case '[':
+            case ']':
             case '^':
             case '{':
             case '}':
